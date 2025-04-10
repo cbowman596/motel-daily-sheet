@@ -33,15 +33,16 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom }) => {
   
   return (
     <tr className={cn("border border-gray-300", getRowColor(room.type, room.roomNumber))}>
-      <td className="border border-gray-300 p-1 text-center">
+      <td className="border border-gray-300 p-1 text-center w-8">
         <input 
           type="text" 
           value={room.type} 
           onChange={(e) => handleChange('type', e.target.value)}
           className="w-full bg-transparent text-center focus:outline-none"
+          maxLength={2}
         />
       </td>
-      <td className="border border-gray-300 p-1 text-center">
+      <td className="border border-gray-300 p-1 text-center w-8">
         <input 
           type="text" 
           value={room.roomNumber} 
@@ -50,7 +51,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom }) => {
           readOnly
         />
       </td>
-      <td className="border border-gray-300 p-1">
+      <td className="border border-gray-300 p-1 w-1/4">
         <input 
           type="text" 
           value={room.name} 
@@ -58,15 +59,16 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom }) => {
           className="w-full bg-transparent focus:outline-none"
         />
       </td>
-      <td className="border border-gray-300 p-1 text-center">
+      <td className="border border-gray-300 p-1 text-center w-8">
         <input 
           type="text" 
           value={room.pmt} 
           onChange={(e) => handleChange('pmt', e.target.value)}
           className="w-full bg-transparent text-center focus:outline-none"
+          maxLength={2}
         />
       </td>
-      <td className="border border-gray-300 p-1 text-center">
+      <td className="border border-gray-300 p-1 text-center w-16">
         <input 
           type="text" 
           value={room.rate} 
@@ -74,7 +76,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom }) => {
           className="w-full bg-transparent text-center focus:outline-none"
         />
       </td>
-      <td className="border border-gray-300 p-1 text-center">
+      <td className="border border-gray-300 p-1 text-center w-16">
         <input 
           type="text" 
           value={room.total} 
@@ -82,7 +84,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom }) => {
           className="w-full bg-transparent text-center focus:outline-none"
         />
       </td>
-      <td className="border border-gray-300 p-1 text-center">
+      <td className="border border-gray-300 p-1 text-center w-16">
         <input 
           type="text" 
           value={room.checkIn} 
@@ -90,7 +92,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom }) => {
           className="w-full bg-transparent text-center focus:outline-none"
         />
       </td>
-      <td className="border border-gray-300 p-1 text-center">
+      <td className="border border-gray-300 p-1 text-center w-16">
         <input 
           type="text" 
           value={room.checkOut} 
@@ -98,7 +100,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom }) => {
           className="w-full bg-transparent text-center focus:outline-none"
         />
       </td>
-      <td className="border border-gray-300 p-1">
+      <td className="border border-gray-300 p-1 w-1/4">
         <input 
           type="text" 
           value={room.vehicleDesc} 

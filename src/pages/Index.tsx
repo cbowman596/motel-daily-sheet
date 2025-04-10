@@ -106,15 +106,15 @@ const Index = () => {
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-gray-100">
-                <th className="border border-gray-300 p-2 text-sm">Type</th>
-                <th className="border border-gray-300 p-2 text-sm">Room #</th>
-                <th className="border border-gray-300 p-2 text-sm">Name</th>
-                <th className="border border-gray-300 p-2 text-sm">PMT</th>
-                <th className="border border-gray-300 p-2 text-sm">Rate</th>
-                <th className="border border-gray-300 p-2 text-sm">Total</th>
-                <th className="border border-gray-300 p-2 text-sm">Check-In</th>
-                <th className="border border-gray-300 p-2 text-sm">Check-Out</th>
-                <th className="border border-gray-300 p-2 text-sm">Vehicle Desc</th>
+                <th className="border border-gray-300 p-2 text-sm w-8">Type</th>
+                <th className="border border-gray-300 p-2 text-sm w-8">Room #</th>
+                <th className="border border-gray-300 p-2 text-sm w-1/4">Name</th>
+                <th className="border border-gray-300 p-2 text-sm w-8">PMT</th>
+                <th className="border border-gray-300 p-2 text-sm w-16">Rate</th>
+                <th className="border border-gray-300 p-2 text-sm w-16">Total</th>
+                <th className="border border-gray-300 p-2 text-sm w-16">Check-In</th>
+                <th className="border border-gray-300 p-2 text-sm w-16">Check-Out</th>
+                <th className="border border-gray-300 p-2 text-sm w-1/4">Vehicle Desc</th>
               </tr>
             </thead>
             <tbody>
