@@ -75,6 +75,11 @@ const Index = () => {
             font-size: 11px;
             font-weight: bold;
           }
+          .date-display {
+            color: white;
+            font-weight: bold;
+            margin-right: 4px;
+          }
           .footer {
             margin-top: 4px;
             padding: 4px;
@@ -144,6 +149,18 @@ const Index = () => {
         const actionButtonsDiv = clonedContent.querySelector('.max-w-6xl.mx-auto.mt-4');
         if (actionButtonsDiv) {
           actionButtonsDiv.remove();
+        }
+        
+        // Replace calendar button and dropdowns with static date display in header
+        const headerElement = clonedContent.querySelector('.bg-motel-header');
+        if (headerElement) {
+          const dateSelectors = headerElement.querySelector('.flex.items-center.mt-2.md\\:mt-0')?.firstElementChild;
+          if (dateSelectors) {
+            const dateDisplay = document.createElement('div');
+            dateDisplay.className = 'date-display';
+            dateDisplay.textContent = `${month} ${day}`;
+            dateSelectors.parentNode?.replaceChild(dateDisplay, dateSelectors);
+          }
         }
         
         // Ensure color styling is preserved for rows
