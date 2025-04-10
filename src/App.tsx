@@ -8,10 +8,11 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import React from "react";
 
+// Initialize QueryClient outside of component
 const queryClient = new QueryClient();
 
-// Create a functional component for the app content
-const AppContent = () => {
+// Content component with routes
+const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Index />} />
@@ -21,20 +22,18 @@ const AppContent = () => {
   );
 };
 
-// Main App component with properly nested providers
+// Main App component
 const App = () => {
   return (
-    <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <HashRouter>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <AppContent />
-          </TooltipProvider>
-        </HashRouter>
-      </QueryClientProvider>
-    </React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <HashRouter>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <AppRoutes />
+        </TooltipProvider>
+      </HashRouter>
+    </QueryClientProvider>
   );
 };
 
