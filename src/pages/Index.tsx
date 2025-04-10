@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import MotelHeader from '@/components/MotelHeader';
 import MotelRow from '@/components/MotelRow';
 import MotelFooter from '@/components/MotelFooter';
@@ -17,7 +17,31 @@ const Index = () => {
   const [footerValues, setFooterValues] = useLocalStorage<FooterValues>('motelFooterValues', initialFooterValues);
   const [saveStatus, setSaveStatus] = useState('');
   const [selectedRoomIds, setSelectedRoomIds] = useState<number[]>([]);
+  const [roomTotals, setRoomTotals] = useState({ nightly: 0, weekly: 0, monthly: 0, airbnb: 0 });
   const printRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    const totals = {
+      nightly: 0,
+      weekly: 0,
+      monthly: 0,
+      airbnb: 0
+    };
+    
+    rooms.forEach(room => {
+      if (room.type === 'W') {
+        totals.weekly++;
+      } else if (room.type === 'M' || Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) {
+        totals.monthly++;
+      } else if (room.type === 'A') {
+        totals.airbnb++;
+      } else {
+        totals.nightly++;
+      }
+    });
+    
+    setRoomTotals(totals);
+  }, [rooms]);
   
   const toggleRoomSelection = (id: number) => {
     setSelectedRoomIds(prev => 
@@ -277,6 +301,7 @@ const Index = () => {
           setMonth={setMonth} 
           day={day}
           setDay={setDay}
+          totals={roomTotals}
         />
         
         <div className="px-4 py-2 border-b">

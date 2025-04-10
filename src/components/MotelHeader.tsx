@@ -1,4 +1,6 @@
 
+"use client"
+
 import React from 'react';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
@@ -15,9 +17,15 @@ interface MotelHeaderProps {
   setMonth: (month: string) => void;
   day: number;
   setDay: (day: number) => void;
+  totals: {
+    nightly: number;
+    weekly: number;
+    monthly: number;
+    airbnb: number;
+  };
 }
 
-const MotelHeader: React.FC<MotelHeaderProps> = ({ month, setMonth, day, setDay }) => {
+const MotelHeader: React.FC<MotelHeaderProps> = ({ month, setMonth, day, setDay, totals }) => {
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June', 
     'July', 'August', 'September', 'October', 'November', 'December'
@@ -41,7 +49,13 @@ const MotelHeader: React.FC<MotelHeaderProps> = ({ month, setMonth, day, setDay 
         <h1 className="text-2xl font-bold text-white">Coyote Motel West</h1>
       </div>
       <div className="flex items-center mt-2 md:mt-0">
-        <div className="mr-4 flex items-center">
+        <div className="text-white space-x-4 mr-4">
+          <span title="Nightly">N/{totals.nightly}</span>
+          <span title="Weekly">W/{totals.weekly}</span>
+          <span title="Monthly">M/{totals.monthly}</span>
+          <span title="Airbnb">A/{totals.airbnb}</span>
+        </div>
+        <div className="flex items-center">
           <select 
             value={month} 
             onChange={(e) => setMonth(e.target.value)}
@@ -74,16 +88,10 @@ const MotelHeader: React.FC<MotelHeaderProps> = ({ month, setMonth, day, setDay 
                 mode="single"
                 selected={selectedDate}
                 onSelect={handleDateSelect}
-                className="border rounded-md"
+                className="border rounded-md pointer-events-auto"
               />
             </SheetContent>
           </Sheet>
-        </div>
-        <div className="text-white space-x-4">
-          <span>N/</span>
-          <span>W/</span>
-          <span>M/</span>
-          <span>A</span>
         </div>
       </div>
     </div>
