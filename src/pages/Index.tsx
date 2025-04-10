@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import MotelHeader from '@/components/MotelHeader';
 import MotelRow from '@/components/MotelRow';
@@ -29,14 +30,15 @@ const Index = () => {
     };
     
     rooms.forEach(room => {
-      if (room.type === 'W') {
+      // Only count rooms marked specifically as type N for nightly
+      if (room.type === 'N') {
+        totals.nightly++;
+      } else if (room.type === 'W') {
         totals.weekly++;
       } else if (room.type === 'M' || Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) {
         totals.monthly++;
       } else if (room.type === 'A') {
         totals.airbnb++;
-      } else {
-        totals.nightly++;
       }
     });
     

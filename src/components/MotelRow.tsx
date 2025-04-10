@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { RoomData } from '@/types';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -30,6 +30,17 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
     if (Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) return 'bg-motel-yellow';
     return '';
   };
+
+  // Calculate total automatically for nightly rooms
+  useEffect(() => {
+    if (room.type === 'N' && room.rate) {
+      const baseRate = parseFloat(room.rate) || 0;
+      const total = (baseRate * 1.049).toFixed(2); // Add 4.9% to rate
+      if (total !== room.total) {
+        updateRoom(room.id, 'total', total);
+      }
+    }
+  }, [room.type, room.rate, room.id, room.total, updateRoom]);
 
   const handleChange = (field: string, value: string) => {
     updateRoom(room.id, field, value);
@@ -102,6 +113,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
           value={room.total} 
           onChange={(e) => handleChange('total', e.target.value)}
           className="w-full bg-transparent text-center focus:outline-none"
+          readOnly={room.type === 'N'} // Make total readonly for nightly rooms
         />
       </td>
       <td className="border border-gray-300 p-1 text-center w-16">
