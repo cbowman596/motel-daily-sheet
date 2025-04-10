@@ -10,7 +10,18 @@ import React from "react";
 
 const queryClient = new QueryClient();
 
-// Wrap the entire application with the necessary providers
+// Create a functional component for the app content
+const AppContent = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<Index />} />
+      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+};
+
+// Main App component with properly nested providers
 const App = () => {
   return (
     <React.StrictMode>
@@ -19,11 +30,7 @@ const App = () => {
           <TooltipProvider>
             <Toaster />
             <Sonner />
-            <Routes>
-              <Route path="/" element={<Index />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <AppContent />
           </TooltipProvider>
         </HashRouter>
       </QueryClientProvider>
