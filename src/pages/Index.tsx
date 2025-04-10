@@ -157,6 +157,10 @@ const Index = () => {
           .select-column {
             display: none; /* Hide select column when printing */
           }
+          * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
         `);
         printWindow.document.write('</style></head><body>');
         
@@ -205,17 +209,41 @@ const Index = () => {
           selectHeader.classList.add('select-column');
         }
         
-        const selectedRows = clonedContent.querySelectorAll('tr');
-        selectedRows.forEach(row => {
+        const tableRows = clonedContent.querySelectorAll('tr');
+        tableRows.forEach(row => {
           if (row.classList.contains('ring-2')) {
             row.classList.remove('ring-2', 'ring-blue-500');
           }
           
           const style = row.getAttribute('style');
           if (style && style.includes('background-color')) {
-            row.style.backgroundColor = window.getComputedStyle(row).backgroundColor;
-            row.style.color = window.getComputedStyle(row).color;
+            const computedStyle = window.getComputedStyle(row);
+            row.style.backgroundColor = computedStyle.backgroundColor;
+            row.style.color = computedStyle.color;
+            row.style.webkitPrintColorAdjust = 'exact';
+            row.style.printColorAdjust = 'exact';
+          } 
+          else if (row.classList.contains('bg-motel-purple')) {
+            row.style.backgroundColor = '#6c5fc7';
+            row.style.color = 'white';
+            row.style.webkitPrintColorAdjust = 'exact';
+            row.style.printColorAdjust = 'exact';
+          } 
+          else if (row.classList.contains('bg-motel-yellow')) {
+            row.style.backgroundColor = '#fcd34d';
+            row.style.webkitPrintColorAdjust = 'exact';
+            row.style.printColorAdjust = 'exact';
           }
+          
+          const cells = row.querySelectorAll('td');
+          cells.forEach(cell => {
+            if (row.style.backgroundColor) {
+              cell.style.backgroundColor = row.style.backgroundColor;
+              cell.style.color = row.style.color || '';
+              cell.style.webkitPrintColorAdjust = 'exact';
+              cell.style.printColorAdjust = 'exact';
+            }
+          });
         });
         
         printWindow.document.write(clonedContent.innerHTML);
