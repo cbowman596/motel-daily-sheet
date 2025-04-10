@@ -46,31 +46,109 @@ const Index = () => {
         printWindow.document.write('<html><head><title>Coyote Motel West - Room Sheet</title>');
         printWindow.document.write('<style>');
         printWindow.document.write(`
+          @page { size: landscape; margin: 10mm; }
+          body { font-family: Arial, sans-serif; }
           table { border-collapse: collapse; width: 100%; }
-          th, td { border: 1px solid black; padding: 4px; }
-          .purple { background-color: #6c5fc7; color: white; }
-          .yellow { background-color: #fcd34d; }
-          .no-input { border: none; background: none; width: 100%; }
-          @media print {
-            button, .no-print { display: none !important; }
-            body { margin: 0; padding: 15px; }
+          th { 
+            border: 1px solid black; 
+            padding: 4px; 
+            background-color: #e5e7eb; 
+            font-size: 0.875rem;
+            text-align: center;
+          }
+          td { 
+            border: 1px solid black; 
+            padding: 4px; 
+            height: 24px;
+          }
+          .header {
+            background-color: #4c9eeb;
+            color: white;
+            padding: 10px;
+            border-radius: 6px 6px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+          }
+          .footer {
+            margin-top: 10px;
+            padding: 10px;
+            border-top: 1px solid #e5e7eb;
+          }
+          .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+          }
+          .footer-flex {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+          }
+          .color-legend {
+            display: flex;
+            flex-direction: column;
+          }
+          .color-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 4px;
+          }
+          .color-swatch {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+          }
+          .purple {
+            background-color: #6c5fc7 !important;
+            color: white !important;
+          }
+          .yellow {
+            background-color: #fcd34d !important;
+          }
+          .footer-section {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.5rem;
+          }
+          .text-right {
+            text-align: right;
           }
         `);
         printWindow.document.write('</style></head><body>');
         
-        // Clone the content without input elements
+        // Create a modified version of the content for printing
         const clonedContent = content.cloneNode(true) as HTMLElement;
+        
+        // Handle inputs: replace with text but preserve their values
         const inputs = clonedContent.querySelectorAll('input');
         inputs.forEach(input => {
           const span = document.createElement('span');
           span.textContent = input.value;
+          span.style.width = '100%';
+          span.style.display = 'inline-block';
+          if (input.classList.contains('text-center')) {
+            span.style.textAlign = 'center';
+          }
           input.parentNode?.replaceChild(span, input);
         });
         
         // Remove action buttons
-        const buttons = clonedContent.querySelectorAll('button');
-        buttons.forEach(button => {
-          button.remove();
+        const actionButtonsDiv = clonedContent.querySelector('.max-w-6xl.mx-auto.mt-4');
+        if (actionButtonsDiv) {
+          actionButtonsDiv.remove();
+        }
+        
+        // Ensure color styling is preserved for rows
+        const rows = clonedContent.querySelectorAll('tr');
+        rows.forEach(row => {
+          if (row.classList.contains('bg-motel-purple')) {
+            row.classList.add('purple');
+          } else if (row.classList.contains('bg-motel-yellow')) {
+            row.classList.add('yellow');
+          }
         });
         
         printWindow.document.write(clonedContent.innerHTML);
