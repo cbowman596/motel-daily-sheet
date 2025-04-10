@@ -1,18 +1,8 @@
-
-import React, { useState } from 'react';
+import React from 'react';
+import { FooterValues } from '@/types';
 
 interface MotelFooterProps {
-  values: {
-    showers: string;
-    bhd: string;
-    refunds: string;
-    motel: string;
-    returns: string;
-    airbnb: string;
-    cash: string;
-    card: string;
-    gt: string;
-  };
+  values: FooterValues;
   updateFooterValue: (field: string, value: string) => void;
 }
 

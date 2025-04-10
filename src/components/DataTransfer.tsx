@@ -4,10 +4,22 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { RoomData } from '@/components/MotelRow';
 
+interface FooterValues {
+  showers: string;
+  bhd: string;
+  refunds: string;
+  motel: string;
+  returns: string;
+  airbnb: string;
+  cash: string;
+  card: string;
+  gt: string;
+}
+
 interface DataTransferProps {
   roomsData: RoomData[];
-  footerValues: Record<string, string>;
-  importData: (importedRooms: RoomData[], importedFooterValues: Record<string, string>) => void;
+  footerValues: FooterValues;
+  importData: (importedRooms: RoomData[], importedFooterValues: FooterValues) => void;
 }
 
 const DataTransfer: React.FC<DataTransferProps> = ({ roomsData, footerValues, importData }) => {
@@ -54,8 +66,21 @@ const DataTransfer: React.FC<DataTransferProps> = ({ roomsData, footerValues, im
           throw new Error('Invalid data format');
         }
         
+        // Ensure footerValues has all required properties
+        const importedFooterValues: FooterValues = {
+          showers: parsedData.footerValues.showers || '',
+          bhd: parsedData.footerValues.bhd || '',
+          refunds: parsedData.footerValues.refunds || '',
+          motel: parsedData.footerValues.motel || '',
+          returns: parsedData.footerValues.returns || '',
+          airbnb: parsedData.footerValues.airbnb || '',
+          cash: parsedData.footerValues.cash || '',
+          card: parsedData.footerValues.card || '',
+          gt: parsedData.footerValues.gt || ''
+        };
+        
         // Import the data
-        importData(parsedData.rooms, parsedData.footerValues);
+        importData(parsedData.rooms, importedFooterValues);
         toast.success('Data imported successfully');
         
         // Reset file input

@@ -1,5 +1,5 @@
 
-import { RoomData } from '@/components/MotelRow';
+import { RoomData, FooterValues } from '@/types';
 
 // Initial data for the motel sheet
 export const initialRooms: RoomData[] = [
@@ -37,7 +37,7 @@ export const initialRooms: RoomData[] = [
   { id: 32, type: '', roomNumber: 'Loft', name: 'AirBNB', pmt: '', rate: '', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
 ];
 
-export const initialFooterValues = {
+export const initialFooterValues: FooterValues = {
   showers: '',
   bhd: '',
   refunds: '',

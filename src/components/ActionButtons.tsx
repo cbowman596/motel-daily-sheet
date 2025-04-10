@@ -5,13 +5,25 @@ import { toast } from 'sonner';
 import { RoomData } from '@/components/MotelRow';
 import DataTransfer from './DataTransfer';
 
+interface FooterValues {
+  showers: string;
+  bhd: string;
+  refunds: string;
+  motel: string;
+  returns: string;
+  airbnb: string;
+  cash: string;
+  card: string;
+  gt: string;
+}
+
 interface ActionButtonsProps {
   handleSave: () => void;
   handlePrint: () => void;
   handleReset: () => void;
   roomsData: RoomData[];
-  footerValues: Record<string, string>;
-  handleDataImport: (importedRooms: RoomData[], importedFooterValues: Record<string, string>) => void;
+  footerValues: FooterValues;
+  handleDataImport: (importedRooms: RoomData[], importedFooterValues: FooterValues) => void;
 }
 
 const ActionButtons: React.FC<ActionButtonsProps> = ({ 
