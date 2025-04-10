@@ -10,26 +10,25 @@ import React from "react";
 
 const queryClient = new QueryClient();
 
-const AppContent = () => {
+// Wrap the entire application with the necessary providers
+const App = () => {
   return (
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <HashRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </HashRouter>
-    </TooltipProvider>
+    <React.StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <HashRouter>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <Routes>
+              <Route path="/" element={<Index />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </TooltipProvider>
+        </HashRouter>
+      </QueryClientProvider>
+    </React.StrictMode>
   );
 };
-
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AppContent />
-  </QueryClientProvider>
-);
 
 export default App;
