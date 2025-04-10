@@ -1,5 +1,12 @@
 
-import { RoomData } from '@/components/MotelRow';
+import { RoomData as OriginalRoomData } from '@/components/MotelRow';
+
+// Extend the RoomData type to include color information
+export interface RoomData extends Omit<OriginalRoomData, 'id'> {
+  id: number;
+  backgroundColor?: string;
+  textColor?: string;
+}
 
 export interface FooterValues {
   showers: string;
@@ -12,5 +19,3 @@ export interface FooterValues {
   card: string;
   gt: string;
 }
-
-export type { RoomData };

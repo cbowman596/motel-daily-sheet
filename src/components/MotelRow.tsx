@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { cn } from '@/lib/utils';
 
@@ -13,17 +12,28 @@ export interface RoomData {
   checkIn: string;
   checkOut: string;
   vehicleDesc: string;
+  backgroundColor?: string;
+  textColor?: string;
 }
 
 interface MotelRowProps {
   room: RoomData;
   updateRoom: (id: number, field: string, value: string) => void;
+  isSelected: boolean;
+  onToggleSelect: (id: number) => void;
 }
 
-const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom }) => {
-  const getRowColor = (type: string, roomNumber: string) => {
-    if (type === 'M') return 'bg-motel-purple text-white';
-    if (Number(roomNumber) === 16 || Number(roomNumber) === 27) return 'bg-motel-yellow';
+const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onToggleSelect }) => {
+  const getRowColor = () => {
+    if (room.backgroundColor) {
+      return {
+        backgroundColor: room.backgroundColor,
+        color: room.textColor || 'inherit'
+      };
+    }
+    
+    if (room.type === 'M') return 'bg-motel-purple text-white';
+    if (Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) return 'bg-motel-yellow';
     return '';
   };
 
@@ -32,7 +42,19 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom }) => {
   };
   
   return (
-    <tr className={cn("border border-gray-300", getRowColor(room.type, room.roomNumber))}>
+    <tr 
+      className={cn(
+        "border border-gray-300", 
+        typeof getRowColor() === 'string' ? getRowColor() : '',
+        isSelected ? 'ring-2 ring-blue-500' : ''
+      )}
+      style={typeof getRowColor() === 'object' ? getRowColor() : {}}
+      onClick={(e) => {
+        if ((e.target as HTMLElement).tagName !== 'INPUT') {
+          onToggleSelect(room.id);
+        }
+      }}
+    >
       <td className="border border-gray-300 p-1 text-center w-8">
         <input 
           type="text" 
@@ -40,6 +62,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom }) => {
           onChange={(e) => handleChange('type', e.target.value)}
           className="w-full bg-transparent text-center focus:outline-none"
           maxLength={2}
+          onClick={(e) => e.stopPropagation()}
         />
       </td>
       <td className="border border-gray-300 p-1 text-center w-8">
@@ -49,6 +72,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom }) => {
           onChange={(e) => handleChange('roomNumber', e.target.value)}
           className="w-full bg-transparent text-center focus:outline-none"
           readOnly
+          onClick={(e) => e.stopPropagation()}
         />
       </td>
       <td className="border border-gray-300 p-1 w-1/4">
@@ -57,6 +81,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom }) => {
           value={room.name} 
           onChange={(e) => handleChange('name', e.target.value)}
           className="w-full bg-transparent focus:outline-none"
+          onClick={(e) => e.stopPropagation()}
         />
       </td>
       <td className="border border-gray-300 p-1 text-center w-8">
@@ -66,6 +91,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom }) => {
           onChange={(e) => handleChange('pmt', e.target.value)}
           className="w-full bg-transparent text-center focus:outline-none"
           maxLength={2}
+          onClick={(e) => e.stopPropagation()}
         />
       </td>
       <td className="border border-gray-300 p-1 text-center w-16">
@@ -74,6 +100,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom }) => {
           value={room.rate} 
           onChange={(e) => handleChange('rate', e.target.value)}
           className="w-full bg-transparent text-center focus:outline-none"
+          onClick={(e) => e.stopPropagation()}
         />
       </td>
       <td className="border border-gray-300 p-1 text-center w-16">
@@ -82,6 +109,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom }) => {
           value={room.total} 
           onChange={(e) => handleChange('total', e.target.value)}
           className="w-full bg-transparent text-center focus:outline-none"
+          onClick={(e) => e.stopPropagation()}
         />
       </td>
       <td className="border border-gray-300 p-1 text-center w-16">
@@ -90,6 +118,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom }) => {
           value={room.checkIn} 
           onChange={(e) => handleChange('checkIn', e.target.value)}
           className="w-full bg-transparent text-center focus:outline-none"
+          onClick={(e) => e.stopPropagation()}
         />
       </td>
       <td className="border border-gray-300 p-1 text-center w-16">
@@ -98,6 +127,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom }) => {
           value={room.checkOut} 
           onChange={(e) => handleChange('checkOut', e.target.value)}
           className="w-full bg-transparent text-center focus:outline-none"
+          onClick={(e) => e.stopPropagation()}
         />
       </td>
       <td className="border border-gray-300 p-1 w-1/4">
@@ -106,6 +136,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom }) => {
           value={room.vehicleDesc} 
           onChange={(e) => handleChange('vehicleDesc', e.target.value)}
           className="w-full bg-transparent focus:outline-none"
+          onClick={(e) => e.stopPropagation()}
         />
       </td>
     </tr>

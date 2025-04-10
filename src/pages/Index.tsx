@@ -4,19 +4,53 @@ import MotelHeader from '@/components/MotelHeader';
 import MotelRow, { RoomData } from '@/components/MotelRow';
 import MotelFooter from '@/components/MotelFooter';
 import ActionButtons from '@/components/ActionButtons';
+import ColorPicker from '@/components/ColorPicker';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { initialRooms, initialFooterValues } from '@/data/initialData';
 import { toast } from 'sonner';
+import { FooterValues } from '@/types';
 
 const Index = () => {
   const today = new Date();
   const [month, setMonth] = useState(today.toLocaleString('default', { month: 'long' }));
   const [day, setDay] = useState(today.getDate());
   const [rooms, setRooms] = useLocalStorage<RoomData[]>('motelRooms', initialRooms);
-  const [footerValues, setFooterValues] = useLocalStorage('motelFooterValues', initialFooterValues);
+  const [footerValues, setFooterValues] = useLocalStorage<FooterValues>('motelFooterValues', initialFooterValues);
   const [saveStatus, setSaveStatus] = useState('');
+  const [selectedRoomIds, setSelectedRoomIds] = useState<number[]>([]);
   const printRef = useRef<HTMLDivElement>(null);
   
+  // Toggle room selection
+  const toggleRoomSelection = (id: number) => {
+    setSelectedRoomIds(prev => 
+      prev.includes(id) 
+        ? prev.filter(roomId => roomId !== id) 
+        : [...prev, id]
+    );
+  };
+  
+  // Apply color to selected rooms
+  const applyColorToRooms = (roomIds: number[], bgColor: string, textColor: string) => {
+    setRooms(rooms.map(room => 
+      roomIds.includes(room.id) 
+        ? { ...room, backgroundColor: bgColor, textColor: textColor } 
+        : room
+    ));
+    // Clear selection after applying color
+    setSelectedRoomIds([]);
+  };
+  
+  // Clear colors from selected rooms
+  const clearRoomColors = (roomIds: number[]) => {
+    setRooms(rooms.map(room => 
+      roomIds.includes(room.id) 
+        ? { ...room, backgroundColor: undefined, textColor: undefined } 
+        : room
+    ));
+    // Clear selection after clearing colors
+    setSelectedRoomIds([]);
+  };
+
   // Update a room's data
   const updateRoom = (id: number, field: string, value: string) => {
     setRooms(rooms.map(room => 
@@ -38,12 +72,12 @@ const Index = () => {
   };
   
   // Handle data import
-  const handleDataImport = (importedRooms: RoomData[], importedFooterValues: Record<string, string>) => {
+  const handleDataImport = (importedRooms: RoomData[], importedFooterValues: FooterValues) => {
     setRooms(importedRooms);
     setFooterValues(importedFooterValues);
   };
 
-  // Handle print button
+  // Handle print button with preserved custom colors
   const handlePrint = () => {
     const content = printRef.current;
     if (content) {
@@ -151,7 +185,7 @@ const Index = () => {
           input.parentNode?.replaceChild(span, input);
         });
         
-        // Remove action buttons
+        // Remove action buttons and color picker
         const actionButtonsDiv = clonedContent.querySelector('.max-w-6xl.mx-auto.mt-4');
         if (actionButtonsDiv) {
           actionButtonsDiv.remove();
@@ -169,13 +203,11 @@ const Index = () => {
           }
         }
         
-        // Ensure color styling is preserved for rows
-        const rows = clonedContent.querySelectorAll('tr');
-        rows.forEach(row => {
-          if (row.classList.contains('bg-motel-purple')) {
-            row.classList.add('purple');
-          } else if (row.classList.contains('bg-motel-yellow')) {
-            row.classList.add('yellow');
+        // Remove the selection styling for print
+        const selectedRows = clonedContent.querySelectorAll('tr');
+        selectedRows.forEach(row => {
+          if (row.classList.contains('ring-2')) {
+            row.classList.remove('ring-2', 'ring-blue-500');
           }
         });
         
@@ -207,6 +239,17 @@ const Index = () => {
           setDay={setDay}
         />
         
+        {/* Color Picker (outside the print area) */}
+        {selectedRoomIds.length > 0 && (
+          <div className="px-4 py-2 border-b">
+            <ColorPicker 
+              selectedRooms={selectedRoomIds}
+              applyColorToRooms={applyColorToRooms}
+              clearRoomColors={clearRoomColors}
+            />
+          </div>
+        )}
+        
         {/* Main Table */}
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
@@ -228,7 +271,9 @@ const Index = () => {
                 <MotelRow 
                   key={room.id} 
                   room={room} 
-                  updateRoom={updateRoom} 
+                  updateRoom={updateRoom}
+                  isSelected={selectedRoomIds.includes(room.id)}
+                  onToggleSelect={toggleRoomSelection}
                 />
               ))}
             </tbody>
