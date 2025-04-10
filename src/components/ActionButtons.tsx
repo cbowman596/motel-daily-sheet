@@ -1,21 +1,8 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { RoomData } from '@/components/MotelRow';
+import { RoomData, FooterValues } from '@/types';
 import DataTransfer from './DataTransfer';
-
-interface FooterValues {
-  showers: string;
-  bhd: string;
-  refunds: string;
-  motel: string;
-  returns: string;
-  airbnb: string;
-  cash: string;
-  card: string;
-  gt: string;
-}
 
 interface ActionButtonsProps {
   handleSave: () => void;

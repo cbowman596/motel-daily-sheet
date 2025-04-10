@@ -29,7 +29,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
     return '';
   };
 
-  const handleChange = (field: keyof RoomData, value: string) => {
+  const handleChange = (field: string, value: string) => {
     updateRoom(room.id, field, value);
   };
   

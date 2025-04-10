@@ -1,14 +1,14 @@
 
 import React, { useState, useRef } from 'react';
 import MotelHeader from '@/components/MotelHeader';
-import MotelRow, { RoomData } from '@/components/MotelRow';
+import MotelRow from '@/components/MotelRow';
 import MotelFooter from '@/components/MotelFooter';
 import ActionButtons from '@/components/ActionButtons';
 import ColorPicker from '@/components/ColorPicker';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { initialRooms, initialFooterValues } from '@/data/initialData';
 import { toast } from 'sonner';
-import { FooterValues } from '@/types';
+import { RoomData, FooterValues } from '@/types';
 
 const Index = () => {
   const today = new Date();

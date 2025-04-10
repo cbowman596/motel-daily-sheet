@@ -1,20 +1,7 @@
-
 import React, { useRef } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { RoomData } from '@/components/MotelRow';
-
-interface FooterValues {
-  showers: string;
-  bhd: string;
-  refunds: string;
-  motel: string;
-  returns: string;
-  airbnb: string;
-  cash: string;
-  card: string;
-  gt: string;
-}
+import { RoomData, FooterValues } from '@/types';
 
 interface DataTransferProps {
   roomsData: RoomData[];

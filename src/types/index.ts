@@ -1,9 +1,16 @@
 
-import { RoomData as OriginalRoomData } from '@/components/MotelRow';
-
-// Extend the RoomData type to include color information
-export interface RoomData extends Omit<OriginalRoomData, 'id'> {
+// Define RoomData interface directly in types file rather than importing it
+export interface RoomData {
   id: number;
+  type: string;
+  roomNumber: string;
+  name: string;
+  pmt: string;
+  rate: string;
+  total: string;
+  checkIn: string;
+  checkOut: string;
+  vehicleDesc: string;
   backgroundColor?: string;
   textColor?: string;
 }
