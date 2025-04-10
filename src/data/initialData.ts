@@ -1,0 +1,50 @@
+
+import { RoomData } from '@/components/MotelRow';
+
+// Initial data for the motel sheet
+export const initialRooms: RoomData[] = [
+  { id: 1, type: '', roomNumber: '1', name: '', pmt: '', rate: '', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 2, type: '', roomNumber: '2', name: '', pmt: '', rate: '', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 3, type: 'M', roomNumber: '3', name: 'Truth', pmt: '', rate: '1500/M', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 4, type: 'M', roomNumber: '4', name: 'Christopher', pmt: '', rate: '1500/M', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 5, type: '', roomNumber: '5', name: '', pmt: '', rate: '', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 6, type: '', roomNumber: '6', name: '', pmt: '', rate: '', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 7, type: '', roomNumber: '7', name: '', pmt: '', rate: '', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 8, type: 'M', roomNumber: '8', name: 'Dean', pmt: '', rate: '1500/M', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 9, type: 'M', roomNumber: '9', name: 'Cindy&Dean', pmt: '', rate: '1500/M', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 10, type: 'M', roomNumber: '10', name: 'Alan', pmt: '', rate: '800/M', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 11, type: '', roomNumber: '11', name: '', pmt: '', rate: '', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 12, type: '', roomNumber: '12', name: '', pmt: '', rate: '', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 13, type: '', roomNumber: '13', name: '', pmt: '', rate: '', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 14, type: '', roomNumber: '14', name: '', pmt: '', rate: '', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 15, type: '', roomNumber: '15', name: '', pmt: '', rate: '', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 16, type: '', roomNumber: '16', name: 'Carrie', pmt: '', rate: '700/M', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 17, type: '', roomNumber: '17', name: '', pmt: '', rate: '', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 18, type: '', roomNumber: '18', name: '', pmt: '', rate: '', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 19, type: '', roomNumber: '19', name: '', pmt: '', rate: '', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 20, type: 'M', roomNumber: '20', name: 'Edith & Kyle', pmt: '', rate: '1500/M', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 21, type: '', roomNumber: '21', name: '', pmt: '', rate: '', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 22, type: '', roomNumber: '22', name: '', pmt: '', rate: '', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 23, type: 'M', roomNumber: '23', name: 'Long', pmt: '', rate: '800/M', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 24, type: '', roomNumber: '24', name: '', pmt: '', rate: '', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 25, type: '', roomNumber: '25', name: '', pmt: '', rate: '', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 26, type: 'M', roomNumber: '26', name: 'Tim M.', pmt: '', rate: '750/M', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 27, type: '', roomNumber: '27', name: 'Billy & Jacque', pmt: '', rate: '300/wk', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 28, type: '', roomNumber: '28', name: 'AirBNB', pmt: '', rate: '', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 29, type: '', roomNumber: '29', name: 'AirBNB', pmt: '', rate: '', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 30, type: '', roomNumber: '30', name: 'AirBNB', pmt: '', rate: '', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 31, type: '', roomNumber: 'Cabin', name: 'AirBNB', pmt: '', rate: '', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+  { id: 32, type: '', roomNumber: 'Loft', name: 'AirBNB', pmt: '', rate: '', total: '', checkIn: '', checkOut: '', vehicleDesc: '' },
+];
+
+export const initialFooterValues = {
+  showers: '',
+  bhd: '',
+  refunds: '',
+  motel: '',
+  returns: '',
+  airbnb: '',
+  cash: '',
+  card: '',
+  gt: '',
+};

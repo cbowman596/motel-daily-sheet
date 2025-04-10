@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,13 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Custom colors for motel sheet
+				motel: {
+					purple: '#6c5fc7',
+					blue: '#3b82f6',
+					yellow: '#fcd34d',
+					header: '#4c9eeb'
 				}
 			},
 			borderRadius: {
@@ -84,11 +92,17 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'save-flash': {
+					'0%': { opacity: '0' },
+					'50%': { opacity: '1' },
+					'100%': { opacity: '0' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'save-flash': 'save-flash 2s ease-in-out'
 			}
 		}
 	},
