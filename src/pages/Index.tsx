@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import MotelHeader from '@/components/MotelHeader';
 import MotelRow from '@/components/MotelRow';
@@ -20,7 +19,6 @@ const Index = () => {
   const [selectedRoomIds, setSelectedRoomIds] = useState<number[]>([]);
   const printRef = useRef<HTMLDivElement>(null);
   
-  // Toggle room selection
   const toggleRoomSelection = (id: number) => {
     setSelectedRoomIds(prev => 
       prev.includes(id) 
@@ -29,55 +27,45 @@ const Index = () => {
     );
   };
   
-  // Apply color to selected rooms
   const applyColorToRooms = (roomIds: number[], bgColor: string, textColor: string) => {
     setRooms(rooms.map(room => 
       roomIds.includes(room.id) 
         ? { ...room, backgroundColor: bgColor, textColor: textColor } 
         : room
     ));
-    // Clear selection after applying color
     setSelectedRoomIds([]);
   };
   
-  // Clear colors from selected rooms
   const clearRoomColors = (roomIds: number[]) => {
     setRooms(rooms.map(room => 
       roomIds.includes(room.id) 
         ? { ...room, backgroundColor: undefined, textColor: undefined } 
         : room
     ));
-    // Clear selection after clearing colors
     setSelectedRoomIds([]);
   };
 
-  // Update a room's data
   const updateRoom = (id: number, field: string, value: string) => {
     setRooms(rooms.map(room => 
       room.id === id ? { ...room, [field]: value } : room
     ));
   };
 
-  // Update footer values
   const updateFooterValue = (field: string, value: string) => {
     setFooterValues({ ...footerValues, [field]: value });
   };
 
-  // Handle save button
   const handleSave = () => {
-    // Data is already saved via the useLocalStorage hook
     setSaveStatus('Saved!');
     toast.success('Sheet data saved successfully!');
     setTimeout(() => setSaveStatus(''), 2000);
   };
   
-  // Handle data import
   const handleDataImport = (importedRooms: RoomData[], importedFooterValues: FooterValues) => {
     setRooms(importedRooms);
     setFooterValues(importedFooterValues);
   };
 
-  // Handle print button with preserved custom colors
   const handlePrint = () => {
     const content = printRef.current;
     if (content) {
@@ -169,10 +157,8 @@ const Index = () => {
         `);
         printWindow.document.write('</style></head><body>');
         
-        // Create a modified version of the content for printing
         const clonedContent = content.cloneNode(true) as HTMLElement;
         
-        // Handle inputs: replace with text but preserve their values
         const inputs = clonedContent.querySelectorAll('input');
         inputs.forEach(input => {
           const span = document.createElement('span');
@@ -185,13 +171,11 @@ const Index = () => {
           input.parentNode?.replaceChild(span, input);
         });
         
-        // Remove action buttons and color picker
         const actionButtonsDiv = clonedContent.querySelector('.max-w-6xl.mx-auto.mt-4');
         if (actionButtonsDiv) {
           actionButtonsDiv.remove();
         }
         
-        // Replace calendar button and dropdowns with static date display in header
         const headerElement = clonedContent.querySelector('.bg-motel-header');
         if (headerElement) {
           const dateSelectors = headerElement.querySelector('.flex.items-center.mt-2.md\\:mt-0')?.firstElementChild;
@@ -203,7 +187,6 @@ const Index = () => {
           }
         }
         
-        // Remove the selection styling for print
         const selectedRows = clonedContent.querySelectorAll('tr');
         selectedRows.forEach(row => {
           if (row.classList.contains('ring-2')) {
@@ -222,7 +205,6 @@ const Index = () => {
     }
   };
 
-  // Reset the sheet to default values
   const handleReset = () => {
     setRooms(initialRooms);
     setFooterValues(initialFooterValues);
@@ -231,7 +213,6 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">
       <div className="max-w-6xl mx-auto bg-white shadow rounded-md" ref={printRef}>
-        {/* Header */}
         <MotelHeader 
           month={month} 
           setMonth={setMonth} 
@@ -239,22 +220,19 @@ const Index = () => {
           setDay={setDay}
         />
         
-        {/* Color Picker (outside the print area) */}
-        {selectedRoomIds.length > 0 && (
-          <div className="px-4 py-2 border-b">
-            <ColorPicker 
-              selectedRooms={selectedRoomIds}
-              applyColorToRooms={applyColorToRooms}
-              clearRoomColors={clearRoomColors}
-            />
-          </div>
-        )}
+        <div className="px-4 py-2 border-b">
+          <ColorPicker 
+            selectedRooms={selectedRoomIds}
+            applyColorToRooms={applyColorToRooms}
+            clearRoomColors={clearRoomColors}
+          />
+        </div>
         
-        {/* Main Table */}
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-gray-100">
+                <th className="border border-gray-300 p-2 text-sm w-8">Select</th>
                 <th className="border border-gray-300 p-2 text-sm w-8">Type</th>
                 <th className="border border-gray-300 p-2 text-sm w-8">Room #</th>
                 <th className="border border-gray-300 p-2 text-sm w-1/4">Name</th>
@@ -280,13 +258,11 @@ const Index = () => {
           </table>
         </div>
         
-        {/* Footer */}
         <div className="p-4 border-t">
           <MotelFooter values={footerValues} updateFooterValue={updateFooterValue} />
         </div>
       </div>
       
-      {/* Action Buttons */}
       <div className="max-w-6xl mx-auto mt-4">
         <div className="flex justify-between items-center">
           <div className={`text-green-600 font-medium ${saveStatus ? 'animate-save-flash' : 'opacity-0'}`}>
