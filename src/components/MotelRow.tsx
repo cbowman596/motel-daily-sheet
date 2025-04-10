@@ -25,6 +25,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
   
   const getRowClass = () => {
     if (room.backgroundColor) return '';
+    if (room.type === 'W') return 'bg-blue-100';
     if (room.type === 'M') return 'bg-motel-purple text-white';
     if (Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) return 'bg-motel-yellow';
     return '';
