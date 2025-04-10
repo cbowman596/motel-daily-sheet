@@ -220,19 +220,16 @@ const Index = () => {
             const computedStyle = window.getComputedStyle(row);
             row.style.backgroundColor = computedStyle.backgroundColor;
             row.style.color = computedStyle.color;
-            row.style.webkitPrintColorAdjust = 'exact';
-            row.style.printColorAdjust = 'exact';
+            row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact;`);
           } 
           else if (row.classList.contains('bg-motel-purple')) {
             row.style.backgroundColor = '#6c5fc7';
             row.style.color = 'white';
-            row.style.webkitPrintColorAdjust = 'exact';
-            row.style.printColorAdjust = 'exact';
+            row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact;`);
           } 
           else if (row.classList.contains('bg-motel-yellow')) {
             row.style.backgroundColor = '#fcd34d';
-            row.style.webkitPrintColorAdjust = 'exact';
-            row.style.printColorAdjust = 'exact';
+            row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact;`);
           }
           
           const cells = row.querySelectorAll('td');
@@ -240,8 +237,7 @@ const Index = () => {
             if (row.style.backgroundColor) {
               cell.style.backgroundColor = row.style.backgroundColor;
               cell.style.color = row.style.color || '';
-              cell.style.webkitPrintColorAdjust = 'exact';
-              cell.style.printColorAdjust = 'exact';
+              cell.setAttribute('style', `${cell.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact;`);
             }
           });
         });
