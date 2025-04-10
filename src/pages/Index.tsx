@@ -36,6 +36,12 @@ const Index = () => {
     toast.success('Sheet data saved successfully!');
     setTimeout(() => setSaveStatus(''), 2000);
   };
+  
+  // Handle data import
+  const handleDataImport = (importedRooms: RoomData[], importedFooterValues: Record<string, string>) => {
+    setRooms(importedRooms);
+    setFooterValues(importedFooterValues);
+  };
 
   // Handle print button
   const handlePrint = () => {
@@ -244,7 +250,10 @@ const Index = () => {
           <ActionButtons 
             handleSave={handleSave} 
             handlePrint={handlePrint} 
-            handleReset={handleReset} 
+            handleReset={handleReset}
+            roomsData={rooms}
+            footerValues={footerValues}
+            handleDataImport={handleDataImport} 
           />
         </div>
       </div>
