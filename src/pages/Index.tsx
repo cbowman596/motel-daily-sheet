@@ -154,6 +154,9 @@ const Index = () => {
           .text-right {
             text-align: right;
           }
+          .select-column {
+            display: none; /* Hide select column when printing */
+          }
         `);
         printWindow.document.write('</style></head><body>');
         
@@ -187,10 +190,31 @@ const Index = () => {
           }
         }
         
+        const colorPickerDiv = clonedContent.querySelector('.px-4.py-2.border-b');
+        if (colorPickerDiv) {
+          colorPickerDiv.remove();
+        }
+        
+        const selectCheckboxes = clonedContent.querySelectorAll('td:first-child');
+        selectCheckboxes.forEach(selectCell => {
+          selectCell.classList.add('select-column');
+        });
+        
+        const selectHeader = clonedContent.querySelectorAll('th')[0];
+        if (selectHeader) {
+          selectHeader.classList.add('select-column');
+        }
+        
         const selectedRows = clonedContent.querySelectorAll('tr');
         selectedRows.forEach(row => {
           if (row.classList.contains('ring-2')) {
             row.classList.remove('ring-2', 'ring-blue-500');
+          }
+          
+          const style = row.getAttribute('style');
+          if (style && style.includes('background-color')) {
+            row.style.backgroundColor = window.getComputedStyle(row).backgroundColor;
+            row.style.color = window.getComputedStyle(row).color;
           }
         });
         
