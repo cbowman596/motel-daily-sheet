@@ -1,20 +1,7 @@
+
 import React from 'react';
 import { cn } from '@/lib/utils';
-
-export interface RoomData {
-  id: number;
-  type: string;
-  roomNumber: string;
-  name: string;
-  pmt: string;
-  rate: string;
-  total: string;
-  checkIn: string;
-  checkOut: string;
-  vehicleDesc: string;
-  backgroundColor?: string;
-  textColor?: string;
-}
+import { RoomData } from '@/types';
 
 interface MotelRowProps {
   room: RoomData;
@@ -24,14 +11,19 @@ interface MotelRowProps {
 }
 
 const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onToggleSelect }) => {
-  const getRowColor = () => {
+  // Refactored to handle CSS classes and style properties separately
+  const getRowStyle = () => {
     if (room.backgroundColor) {
       return {
         backgroundColor: room.backgroundColor,
         color: room.textColor || 'inherit'
       };
     }
-    
+    return {};
+  };
+  
+  const getRowClass = () => {
+    if (room.backgroundColor) return '';
     if (room.type === 'M') return 'bg-motel-purple text-white';
     if (Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) return 'bg-motel-yellow';
     return '';
@@ -45,10 +37,10 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
     <tr 
       className={cn(
         "border border-gray-300", 
-        typeof getRowColor() === 'string' ? getRowColor() : '',
+        getRowClass(),
         isSelected ? 'ring-2 ring-blue-500' : ''
       )}
-      style={typeof getRowColor() === 'object' ? getRowColor() : {}}
+      style={getRowStyle()}
       onClick={(e) => {
         if ((e.target as HTMLElement).tagName !== 'INPUT') {
           onToggleSelect(room.id);
