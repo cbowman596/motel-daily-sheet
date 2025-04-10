@@ -9,7 +9,9 @@ import { initialRooms, initialFooterValues } from '@/data/initialData';
 import { toast } from 'sonner';
 
 const Index = () => {
-  const [month, setMonth] = useState('April');
+  const today = new Date();
+  const [month, setMonth] = useState(today.toLocaleString('default', { month: 'long' }));
+  const [day, setDay] = useState(today.getDate());
   const [rooms, setRooms] = useLocalStorage<RoomData[]>('motelRooms', initialRooms);
   const [footerValues, setFooterValues] = useLocalStorage('motelFooterValues', initialFooterValues);
   const [saveStatus, setSaveStatus] = useState('');
@@ -92,7 +94,12 @@ const Index = () => {
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">
       <div className="max-w-6xl mx-auto bg-white shadow rounded-md" ref={printRef}>
         {/* Header */}
-        <MotelHeader month={month} setMonth={setMonth} />
+        <MotelHeader 
+          month={month} 
+          setMonth={setMonth} 
+          day={day}
+          setDay={setDay}
+        />
         
         {/* Main Table */}
         <div className="overflow-x-auto">
