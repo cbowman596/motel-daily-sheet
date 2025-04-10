@@ -46,46 +46,51 @@ const Index = () => {
         printWindow.document.write('<html><head><title>Coyote Motel West - Room Sheet</title>');
         printWindow.document.write('<style>');
         printWindow.document.write(`
-          @page { size: landscape; margin: 10mm; }
-          body { font-family: Arial, sans-serif; }
+          @page { size: portrait; margin: 5mm; }
+          body { font-family: Arial, sans-serif; font-size: 10px; }
           table { border-collapse: collapse; width: 100%; }
           th { 
             border: 1px solid black; 
-            padding: 4px; 
+            padding: 2px; 
             background-color: #e5e7eb; 
-            font-size: 0.875rem;
+            font-size: 9px;
             text-align: center;
+            font-weight: bold;
           }
           td { 
             border: 1px solid black; 
-            padding: 4px; 
-            height: 24px;
+            padding: 2px; 
+            height: 16px;
+            font-size: 9px;
           }
           .header {
             background-color: #4c9eeb;
             color: white;
-            padding: 10px;
-            border-radius: 6px 6px 0 0;
+            padding: 4px;
+            border-radius: 4px 4px 0 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 4px;
+            font-size: 11px;
+            font-weight: bold;
           }
           .footer {
-            margin-top: 10px;
-            padding: 10px;
+            margin-top: 4px;
+            padding: 4px;
             border-top: 1px solid #e5e7eb;
+            font-size: 9px;
           }
           .footer-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
+            gap: 0.5rem;
           }
           .footer-flex {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-top: 1rem;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
           }
           .color-legend {
             display: flex;
@@ -94,12 +99,12 @@ const Index = () => {
           .color-item {
             display: flex;
             align-items: center;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
           }
           .color-swatch {
-            width: 16px;
-            height: 16px;
-            margin-right: 8px;
+            width: 10px;
+            height: 10px;
+            margin-right: 4px;
           }
           .purple {
             background-color: #6c5fc7 !important;
@@ -111,7 +116,7 @@ const Index = () => {
           .footer-section {
             display: grid;
             grid-template-columns: auto 1fr;
-            gap: 0.5rem;
+            gap: 0.25rem;
           }
           .text-right {
             text-align: right;
