@@ -1,3 +1,4 @@
+
 import React, { useRef } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -13,23 +14,28 @@ const DataTransfer: React.FC<DataTransferProps> = ({ roomsData, footerValues, im
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleExport = () => {
-    const exportData = {
-      rooms: roomsData,
-      footerValues: footerValues,
-      exportDate: new Date().toISOString()
-    };
-    
-    const dataStr = JSON.stringify(exportData, null, 2);
-    const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(dataStr)}`;
-    
-    const exportFileDefaultName = `motel_data_export_${new Date().toLocaleDateString().replace(/\//g, '-')}.json`;
-    
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
-    linkElement.click();
-    
-    toast.success('Data exported successfully');
+    try {
+      const exportData = {
+        rooms: roomsData,
+        footerValues: footerValues,
+        exportDate: new Date().toISOString()
+      };
+      
+      const dataStr = JSON.stringify(exportData, null, 2);
+      const dataUri = `data:application/json;charset=utf-8,${encodeURIComponent(dataStr)}`;
+      
+      const exportFileDefaultName = `motel_data_export_${new Date().toLocaleDateString().replace(/\//g, '-')}.json`;
+      
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportFileDefaultName);
+      linkElement.click();
+      
+      toast.success('Data exported successfully');
+    } catch (error) {
+      console.error('Export error:', error);
+      toast.error('Error exporting data. Please try again.');
+    }
   };
   
   const handleImportClick = () => {
