@@ -147,7 +147,7 @@ const Index = () => {
             background-color: #fcd34d !important;
           }
           .blue {
-            background-color: #dbeafe !important;
+            background-color: #3b82f6 !important;
           }
           .footer-section {
             display: grid;
@@ -234,8 +234,12 @@ const Index = () => {
             row.style.backgroundColor = '#fcd34d';
             row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact;`);
           }
+          else if (row.classList.contains('bg-motel-blue')) {
+            row.style.backgroundColor = '#3b82f6';
+            row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact;`);
+          }
           else if (row.classList.contains('bg-blue-100')) {
-            row.style.backgroundColor = '#dbeafe';
+            row.style.backgroundColor = '#3b82f6';
             row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact;`);
           }
           
