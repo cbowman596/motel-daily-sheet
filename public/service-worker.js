@@ -1,14 +1,13 @@
 
-// Service Worker for Motel Daily Sheet
+// Service Worker for Snappy Sheet Saver
 const CACHE_NAME = 'motel-sheet-cache-v1';
 const urlsToCache = [
-  './',
-  './index.html',
-  './manifest.json',
-  './favicon.ico',
-  './src/main.tsx',
-  './src/App.tsx',
-  './src/index.css'
+  '/',
+  '/index.html',
+  '/src/main.tsx',
+  '/src/App.tsx',
+  '/src/index.css',
+  '/favicon.ico',
   // Add other assets that need to be cached
 ];
 
