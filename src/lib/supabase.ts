@@ -5,7 +5,12 @@ import { RoomData, FooterValues } from '@/types';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+// Check if environment variables are defined
+if (!supabaseUrl || !supabaseKey) {
+  console.error('Missing Supabase environment variables. Make sure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are defined in your .env.local file.');
+}
+
+export const supabase = createClient(supabaseUrl || '', supabaseKey || '');
 
 // Room data functions
 export const saveRooms = async (rooms: RoomData[], userId: string) => {
