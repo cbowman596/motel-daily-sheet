@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { RoomData } from '@/types';
@@ -31,6 +32,27 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
     return '';
   };
 
+  // Get room location based on room number
+  const getLocation = () => {
+    const roomNum = Number(room.roomNumber);
+    if (roomNum >= 1 && roomNum <= 6) return 'FB';
+    if (roomNum >= 7 && roomNum <= 12) return 'BR';
+    if (roomNum >= 13 && roomNum <= 19) return 'FT';
+    if (roomNum >= 20 && roomNum <= 26) return 'BT';
+    if (roomNum >= 28 && roomNum <= 30) return 'ST';
+    if (roomNum === 27) return 'LFT'; // Room 27 is the Loft
+    if (roomNum === 16) return 'CAB'; // Room 16 is the Cabin
+    return '';
+  };
+
+  // Set initial location when component mounts
+  useEffect(() => {
+    if (!room.location) {
+      const location = getLocation();
+      updateRoom(room.id, 'location', location);
+    }
+  }, [room.id, room.roomNumber, room.location, updateRoom]);
+
   // Calculate total automatically for nightly rooms
   useEffect(() => {
     if (room.type === 'N' && room.rate) {
@@ -63,6 +85,15 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
             className="mr-1"
           />
         </div>
+      </td>
+      <td className="border border-gray-300 p-1 text-center w-10">
+        <input 
+          type="text" 
+          value={room.location || getLocation()} 
+          onChange={(e) => handleChange('location', e.target.value)}
+          className="w-full bg-transparent text-center focus:outline-none font-medium text-black" 
+          maxLength={3}
+        />
       </td>
       <td className="border border-gray-300 p-1 text-center w-8">
         <input 

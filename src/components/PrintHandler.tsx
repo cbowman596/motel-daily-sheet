@@ -245,6 +245,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       <table>
         <thead>
           <tr>
+            <th>Loc</th>
             <th>Type</th>
             <th>Room #</th>
             <th>Name</th>
@@ -273,8 +274,22 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         rowClass = 'yellow';
       }
       
+      // Determine the location based on room number
+      const getLocation = () => {
+        const roomNum = Number(room.roomNumber);
+        if (roomNum >= 1 && roomNum <= 6) return 'FB';
+        if (roomNum >= 7 && roomNum <= 12) return 'BR';
+        if (roomNum >= 13 && roomNum <= 19) return 'FT';
+        if (roomNum >= 20 && roomNum <= 26) return 'BT';
+        if (roomNum >= 28 && roomNum <= 30) return 'ST';
+        if (roomNum === 27) return 'LFT';
+        if (roomNum === 16) return 'CAB';
+        return '';
+      };
+      
       tableHtml += `
         <tr class="${rowClass}" style="${rowStyle}">
+          <td style="text-align: center;">${room.location || getLocation()}</td>
           <td style="text-align: center;">${room.type}</td>
           <td style="text-align: center;">${room.roomNumber}</td>
           <td>${room.name}</td>

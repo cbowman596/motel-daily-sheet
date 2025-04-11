@@ -13,6 +13,7 @@ export interface RoomData {
   vehicleDesc: string;
   backgroundColor?: string;
   textColor?: string;
+  location?: string; // Added location property
 }
 
 export interface FooterValues {
