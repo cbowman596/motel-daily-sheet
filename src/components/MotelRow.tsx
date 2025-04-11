@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { RoomData } from '@/types';
@@ -12,16 +11,14 @@ interface MotelRowProps {
 }
 
 const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onToggleSelect }) => {
-  // Refactored to handle CSS classes and style properties separately
   const getRowStyle = () => {
     if (room.backgroundColor) {
       return {
         backgroundColor: room.backgroundColor,
-        // Always keep text black regardless of background color
         color: '#000000'
       };
     }
-    return { color: '#000000' }; // Ensure text is black even when no background color
+    return { color: '#000000' };
   };
   
   const getRowClass = () => {
@@ -32,7 +29,6 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
     return '';
   };
 
-  // Get room location based on room number
   const getLocation = () => {
     const roomNum = Number(room.roomNumber);
     if (roomNum >= 1 && roomNum <= 6) return 'FB';
@@ -40,16 +36,15 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
     if (roomNum >= 13 && roomNum <= 19) return 'FT';
     if (roomNum >= 20 && roomNum <= 26) return 'BT';
     if (roomNum >= 28 && roomNum <= 30) return 'ST';
-    if (roomNum === 27) return 'LFT'; // Room 27 is the Loft
-    if (roomNum === 16) return 'CAB'; // Room 16 is the Cabin
+    if (roomNum === 27) return 'LFT';
+    if (roomNum === 16) return 'CAB';
     return '';
   };
   
-  // Get room type based on room number
   const getRoomType = () => {
     const roomNum = Number(room.roomNumber);
     if (roomNum === 1) return '1K Kit';
-    if ([13, 19].includes(roomNum)) return '2Q Kit';
+    if ([6, 13, 19].includes(roomNum)) return '2Q Kit';
     if ([2, 3, 4, 5, 7, 8, 14, 15, 17, 18, 20, 21, 22].includes(roomNum)) return '1Q Kit';
     if ([24, 25, 26, 28, 29, 30].includes(roomNum)) return '1Q';
     if ([9, 10, 11].includes(roomNum)) return '1F Kit';
@@ -59,7 +54,6 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
     return '';
   };
 
-  // Set initial location and room type when component mounts
   useEffect(() => {
     if (!room.location) {
       const location = getLocation();
@@ -72,11 +66,10 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
     }
   }, [room.id, room.roomNumber, room.location, room.roomType, updateRoom]);
 
-  // Calculate total automatically for nightly rooms
   useEffect(() => {
     if (room.type === 'N' && room.rate) {
       const baseRate = parseFloat(room.rate) || 0;
-      const total = (baseRate * 1.049).toFixed(2); // Add 4.9% to rate
+      const total = (baseRate * 1.049).toFixed(2);
       if (total !== room.total) {
         updateRoom(room.id, 'total', total);
       }

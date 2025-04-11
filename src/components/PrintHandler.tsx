@@ -292,7 +292,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       const getRoomType = () => {
         const roomNum = Number(room.roomNumber);
         if (roomNum === 1) return '1K Kit';
-        if ([13, 19].includes(roomNum)) return '2Q Kit';
+        if ([6, 13, 19].includes(roomNum)) return '2Q Kit';
         if ([2, 3, 4, 5, 7, 8, 14, 15, 17, 18, 20, 21, 22].includes(roomNum)) return '1Q Kit';
         if ([24, 25, 26, 28, 29, 30].includes(roomNum)) return '1Q';
         if ([9, 10, 11].includes(roomNum)) return '1F Kit';
