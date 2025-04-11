@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { RoomData, FooterValues } from '@/types';
 
@@ -172,7 +171,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         text-align: center;
       }
       .select-column {
-        display: none; /* Hide select column when printing */
+        display: none;
       }
       * {
         -webkit-print-color-adjust: exact !important;
@@ -230,10 +229,15 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       .header-cell {
         color: #FFFFFF !important;
       }
+      td.bg-motel-purple, td.bg-motel-blue, td.bg-motel-yellow {
+        color: #FFFFFF !important;
+      }
+      td:not(.colored-cell) {
+        color: #000000 !important;
+      }
     `);
     printWindow.document.write('</style></head><body>');
     
-    // Create header section with current date
     const headerHtml = `
       <div class="print-container">
         <div class="header">
@@ -250,7 +254,6 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         </div>
     `;
     
-    // Create table with rooms data in new column order
     let tableHtml = `
       <table>
         <thead>
@@ -273,15 +276,12 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
     
     rooms.forEach(room => {
       let rowClass = '';
-      let rowStyle = '';
       let coloredCellClass = '';
       const roomNum = Number(room.roomNumber);
       
-      // Apply row styles based on room type
       if (room.backgroundColor) {
-        // Custom background color - only apply to specific columns
-        rowStyle = ''; // No full row background
-        coloredCellClass = 'colored-cell'; // Text color for colored cells
+        rowClass = ''; 
+        coloredCellClass = 'colored-cell';
       } else if (room.type === 'W') {
         rowClass = 'blue';
         coloredCellClass = 'blue-text';
@@ -293,7 +293,6 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         coloredCellClass = ''; // Yellow has black text
       }
       
-      // Determine the location based on room number
       const getLocation = () => {
         if (roomNum >= 1 && roomNum <= 6) return 'FB';
         if (roomNum >= 7 && roomNum <= 12) return 'BR';
@@ -305,7 +304,6 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         return '';
       };
       
-      // Get room type based on room number
       const getRoomType = () => {
         if (roomNum === 1) return '1K Kit';
         if ([6, 13, 19].includes(roomNum)) return '2Q Kit';
@@ -318,19 +316,16 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         return '';
       };
       
-      // Create individual cell classes for the colored columns
       const roomNumberCellClass = rowClass ? `${rowClass} ${coloredCellClass}` : '';
       const locationCellClass = rowClass ? `${rowClass} ${coloredCellClass}` : '';
       const roomTypeCellClass = rowClass ? `${rowClass} ${coloredCellClass}` : '';
       const typeCellClass = rowClass ? `${rowClass} ${coloredCellClass}` : '';
 
-      // Apply cell-specific background styles for custom colors
       const roomNumberCellStyle = room.backgroundColor ? `background-color: ${room.backgroundColor};` : '';
       const locationCellStyle = room.backgroundColor ? `background-color: ${room.backgroundColor};` : '';
       const roomTypeCellStyle = room.backgroundColor ? `background-color: ${room.backgroundColor};` : '';
       const typeCellStyle = room.backgroundColor ? `background-color: ${room.backgroundColor};` : '';
 
-      // Apply text color for custom colored cells
       const coloredTextStyle = room.backgroundColor ? 'color: #FFFFFF !important;' : '';
 
       tableHtml += `
@@ -363,7 +358,6 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       </table>
     `;
     
-    // Create footer section
     const footerHtml = `
       <div class="footer">
         <div class="footer-grid">
