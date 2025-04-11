@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { RoomData } from '@/types';
@@ -23,14 +22,13 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
   };
   
   const getRowClass = () => {
-    if (room.backgroundColor) return '';
+    if (room.backgroundColor) return 'text-white';
     if (room.type === 'W') return 'bg-motel-blue text-white';
     if (room.type === 'M') return 'bg-motel-purple text-white';
     if (Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) return 'bg-motel-yellow';
     return '';
   };
 
-  // These functions are now only used if location or roomType are missing
   const getLocation = () => {
     const roomNum = Number(room.roomNumber);
     if (roomNum >= 1 && roomNum <= 6) return 'FB';
@@ -56,7 +54,6 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
     return '';
   };
   
-  // Check and update location/roomType if missing
   useEffect(() => {
     if (!room.location) {
       const location = getLocation();
@@ -69,7 +66,6 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
     }
   }, [room.id, room.roomNumber, room.location, room.roomType, updateRoom]);
 
-  // Calculate total based on rate for N type rooms
   useEffect(() => {
     if (room.type === 'N' && room.rate) {
       const baseRate = parseFloat(room.rate) || 0;
@@ -86,7 +82,6 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
   
   const rowStyle = getRowStyle();
   
-  // Always use white text for special background colors
   const inputStyle = {
     color: (room.backgroundColor || room.type === 'W' || room.type === 'M') ? '#FFFFFF' : 'inherit'
   };
