@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -193,4 +192,19 @@ tr td input {
   tr td:not([class*="bg-motel"]):not([class*="blue"]):not([class*="purple"]):not([class*="yellow"]) input {
     color: #000000 !important;
   }
+}
+
+/* Ensure white text on colored backgrounds */
+.bg-motel-purple, .bg-motel-blue {
+  color: #FFFFFF !important;
+}
+
+/* Ensure input text matches cell text color */
+.bg-motel-purple input, .bg-motel-blue input {
+  color: #FFFFFF !important;
+}
+
+/* Special handling for yellow rows (keep black text) */
+.bg-motel-yellow, .bg-motel-yellow input {
+  color: #000000 !important;
 }
