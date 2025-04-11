@@ -37,7 +37,7 @@ const Index = () => {
         totals.nightly++;
       } else if (room.type === 'W') {
         totals.weekly++;
-      } else if (room.type === 'M' || Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) {
+      } else if (room.type === 'M') {
         totals.monthly++;
       } else if (room.type === 'A') {
         totals.airbnb++;
