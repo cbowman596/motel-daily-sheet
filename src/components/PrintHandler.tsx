@@ -42,7 +42,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         padding: 0;
       }
       .print-container {
-        padding: 3mm 4mm 3mm 4mm;
+        padding: 3mm 4mm;
       }
       table { 
         border-collapse: collapse; 
@@ -121,7 +121,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       }
       .purple, .bg-motel-purple {
         background-color: #6c5fc7 !important;
-        color: #000000 !important;
+        color: #FFFFFF !important;
         font-weight: 600 !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
@@ -135,7 +135,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       }
       .blue, .bg-motel-blue {
         background-color: #3b82f6 !important;
-        color: #000000 !important;
+        color: #FFFFFF !important;
         font-weight: 600 !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
@@ -158,12 +158,12 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         width: 100%;
         background: transparent;
         border: none;
-        color: #000000 !important;
+        color: inherit !important;
         font-weight: 600 !important;
         font-size: 9px !important;
       }
       span {
-        color: #000000 !important;
+        color: inherit !important;
         font-weight: 600 !important;
         font-size: 9px !important;
       }
@@ -223,6 +223,12 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       .gap-2 {
         gap: 1px;
       }
+      .colored-row {
+        color: #FFFFFF !important;
+      }
+      .colored-row * {
+        color: #FFFFFF !important;
+      }
     `);
     printWindow.document.write('</style></head><body>');
     
@@ -267,15 +273,22 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
     rooms.forEach(room => {
       let rowClass = '';
       let rowStyle = '';
+      let textColor = '#000000';
       
       if (room.backgroundColor) {
-        rowStyle = `background-color: ${room.backgroundColor}; color: #000000;`;
+        // For custom background colors, use white text
+        rowStyle = `background-color: ${room.backgroundColor};`;
+        textColor = '#FFFFFF';
       } else if (room.type === 'W') {
         rowClass = 'blue';
+        textColor = '#FFFFFF';
       } else if (room.type === 'M') {
         rowClass = 'purple';
+        textColor = '#FFFFFF';
       } else if (Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) {
         rowClass = 'yellow';
+        // Yellow background keeps black text for better contrast
+        textColor = '#000000';
       }
       
       // Determine the location based on room number
@@ -306,18 +319,18 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       };
       
       tableHtml += `
-        <tr class="${rowClass}" style="${rowStyle}">
-          <td style="text-align: center;">${room.location || getLocation()}</td>
-          <td style="text-align: center;">${room.roomType || getRoomType()}</td>
-          <td style="text-align: center;">${room.type}</td>
-          <td style="text-align: center;">${room.roomNumber}</td>
-          <td>${room.name}</td>
-          <td style="text-align: center;">${room.pmt}</td>
-          <td style="text-align: center;">${room.rate}</td>
-          <td style="text-align: center;">${room.total}</td>
-          <td style="text-align: center;">${room.checkIn}</td>
-          <td style="text-align: center;">${room.checkOut}</td>
-          <td>${room.vehicleDesc}</td>
+        <tr class="${rowClass}" style="${rowStyle} color: ${textColor};">
+          <td style="text-align: center; color: ${textColor};">${room.location || getLocation()}</td>
+          <td style="text-align: center; color: ${textColor};">${room.roomType || getRoomType()}</td>
+          <td style="text-align: center; color: ${textColor};">${room.type}</td>
+          <td style="text-align: center; color: ${textColor};">${room.roomNumber}</td>
+          <td style="color: ${textColor};">${room.name}</td>
+          <td style="text-align: center; color: ${textColor};">${room.pmt}</td>
+          <td style="text-align: center; color: ${textColor};">${room.rate}</td>
+          <td style="text-align: center; color: ${textColor};">${room.total}</td>
+          <td style="text-align: center; color: ${textColor};">${room.checkIn}</td>
+          <td style="text-align: center; color: ${textColor};">${room.checkOut}</td>
+          <td style="color: ${textColor};">${room.vehicleDesc}</td>
         </tr>
       `;
     });

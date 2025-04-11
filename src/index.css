@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -128,11 +129,22 @@
   }
   
   input, span, div {
-    color: #000000 !important;
+    color: inherit !important;
     font-weight: 600 !important;
   }
   
-  .bg-motel-purple, .bg-motel-blue, .bg-motel-yellow, .bg-motel-header {
+  .bg-motel-purple, .bg-motel-blue {
+    color: #FFFFFF !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  
+  .bg-motel-purple *, .bg-motel-blue * {
+    color: #FFFFFF !important;
+  }
+  
+  .bg-motel-yellow, .bg-motel-header {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     color-adjust: exact !important;

@@ -15,7 +15,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
     if (room.backgroundColor) {
       return {
         backgroundColor: room.backgroundColor,
-        color: '#000000'
+        color: room.textColor || '#FFFFFF'
       };
     }
     return { color: '#000000' };
@@ -23,8 +23,8 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
   
   const getRowClass = () => {
     if (room.backgroundColor) return '';
-    if (room.type === 'W') return 'bg-motel-blue';
-    if (room.type === 'M') return 'bg-motel-purple';
+    if (room.type === 'W') return 'bg-motel-blue text-white';
+    if (room.type === 'M') return 'bg-motel-purple text-white';
     if (Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) return 'bg-motel-yellow';
     return '';
   };
@@ -80,6 +80,11 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
     updateRoom(room.id, field, value);
   };
   
+  const rowStyle = getRowStyle();
+  const inputStyle = {
+    color: rowStyle.color
+  };
+  
   return (
     <tr 
       className={cn(
@@ -87,7 +92,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
         getRowClass(),
         isSelected ? 'ring-2 ring-blue-500' : ''
       )}
-      style={getRowStyle()}
+      style={rowStyle}
     >
       <td className="border border-gray-300 p-1 text-center w-8">
         <div className="flex items-center justify-center">
@@ -103,7 +108,8 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
           type="text" 
           value={room.location || getLocation()} 
           onChange={(e) => handleChange('location', e.target.value)}
-          className="w-full bg-transparent text-center focus:outline-none font-medium text-black"
+          className="w-full bg-transparent text-center focus:outline-none font-medium"
+          style={inputStyle}
           maxLength={3}
         />
       </td>
@@ -112,7 +118,8 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
           type="text" 
           value={room.roomType || getRoomType()} 
           onChange={(e) => handleChange('roomType', e.target.value)}
-          className="w-full bg-transparent text-center focus:outline-none font-medium text-black"
+          className="w-full bg-transparent text-center focus:outline-none font-medium"
+          style={inputStyle}
           maxLength={8}
         />
       </td>
@@ -121,7 +128,8 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
           type="text" 
           value={room.type} 
           onChange={(e) => handleChange('type', e.target.value)}
-          className="w-full bg-transparent text-center focus:outline-none font-medium text-black"
+          className="w-full bg-transparent text-center focus:outline-none font-medium"
+          style={inputStyle}
           maxLength={2}
         />
       </td>
@@ -130,7 +138,8 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
           type="text" 
           value={room.roomNumber} 
           onChange={(e) => handleChange('roomNumber', e.target.value)}
-          className="w-full bg-transparent text-center focus:outline-none font-medium text-black"
+          className="w-full bg-transparent text-center focus:outline-none font-medium"
+          style={inputStyle}
           readOnly
         />
       </td>
@@ -139,7 +148,8 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
           type="text" 
           value={room.name} 
           onChange={(e) => handleChange('name', e.target.value)}
-          className="w-full bg-transparent focus:outline-none font-medium text-black"
+          className="w-full bg-transparent focus:outline-none font-medium"
+          style={inputStyle}
         />
       </td>
       <td className="border border-gray-300 p-1 text-center w-8">
@@ -147,7 +157,8 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
           type="text" 
           value={room.pmt} 
           onChange={(e) => handleChange('pmt', e.target.value)}
-          className="w-full bg-transparent text-center focus:outline-none font-medium text-black"
+          className="w-full bg-transparent text-center focus:outline-none font-medium"
+          style={inputStyle}
           maxLength={2}
         />
       </td>
@@ -156,7 +167,8 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
           type="text" 
           value={room.rate} 
           onChange={(e) => handleChange('rate', e.target.value)}
-          className="w-full bg-transparent text-center focus:outline-none font-medium text-black"
+          className="w-full bg-transparent text-center focus:outline-none font-medium"
+          style={inputStyle}
         />
       </td>
       <td className="border border-gray-300 p-1 text-center w-16">
@@ -164,7 +176,8 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
           type="text" 
           value={room.total} 
           onChange={(e) => handleChange('total', e.target.value)}
-          className="w-full bg-transparent text-center focus:outline-none font-medium text-black"
+          className="w-full bg-transparent text-center focus:outline-none font-medium"
+          style={inputStyle}
           readOnly={room.type === 'N'}
         />
       </td>
@@ -173,7 +186,8 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
           type="text" 
           value={room.checkIn} 
           onChange={(e) => handleChange('checkIn', e.target.value)}
-          className="w-full bg-transparent text-center focus:outline-none font-medium text-black"
+          className="w-full bg-transparent text-center focus:outline-none font-medium"
+          style={inputStyle}
         />
       </td>
       <td className="border border-gray-300 p-1 text-center w-16">
@@ -181,7 +195,8 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
           type="text" 
           value={room.checkOut} 
           onChange={(e) => handleChange('checkOut', e.target.value)}
-          className="w-full bg-transparent text-center focus:outline-none font-medium text-black"
+          className="w-full bg-transparent text-center focus:outline-none font-medium"
+          style={inputStyle}
         />
       </td>
       <td className="border border-gray-300 p-1 w-1/4">
@@ -189,7 +204,8 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
           type="text" 
           value={room.vehicleDesc} 
           onChange={(e) => handleChange('vehicleDesc', e.target.value)}
-          className="w-full bg-transparent focus:outline-none font-medium text-black"
+          className="w-full bg-transparent focus:outline-none font-medium"
+          style={inputStyle}
         />
       </td>
     </tr>
