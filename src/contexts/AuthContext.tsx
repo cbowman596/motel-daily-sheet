@@ -120,28 +120,57 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
 
-      if (!data) {
-        console.log('User not found');
-        toast.error('User not found. Please ask an admin to create your account.');
-        setLoading(false);
-        return;
-      }
-
-      localStorage.setItem('nameUser', JSON.stringify(data));
-      setNameUser(data as NameUser);
-      
-      // Construct email from name for authentication
+      // Create an email format for authentication
       const email = `${name.toLowerCase().replace(/\s+/g, '-')}@example.com`;
+      console.log('Using email for auth:', email);
+
+      if (!data) {
+        console.log('User not found in name_users table, attempting to create it');
+        
+        // Instead of showing error, try to create the user automatically
+        const { data: newNameUser, error: createError } = await supabase
+          .from('name_users')
+          .insert([{ name: name }])
+          .select()
+          .single();
+          
+        if (createError || !newNameUser) {
+          console.error('Error creating name user:', createError);
+          toast.error('Error creating account. Please try again or contact admin.');
+          setLoading(false);
+          return;
+        }
+        
+        console.log('Successfully created name user:', newNameUser);
+        localStorage.setItem('nameUser', JSON.stringify(newNameUser));
+        setNameUser(newNameUser as NameUser);
+      } else {
+        // User found in name_users table
+        console.log('User found in name_users table:', data);
+        localStorage.setItem('nameUser', JSON.stringify(data));
+        setNameUser(data as NameUser);
+      }
       
-      const { error: authError } = await supabase.auth.signInWithPassword({
+      // Try to sign in with auth
+      const { error: signInError } = await supabase.auth.signInWithPassword({
         email: email,
         password: 'password123'
       });
       
-      if (authError) {
-        console.log('Auth error, attempting signup:', authError);
-        await signUpWithName(name);
-        return;
+      if (signInError) {
+        console.log('Auth sign in failed, attempting sign up:', signInError);
+        // If sign in fails, try to create the auth user
+        const { error: signUpError } = await supabase.auth.signUp({
+          email,
+          password: 'password123'
+        });
+        
+        if (signUpError) {
+          console.error('Auth sign up error:', signUpError);
+          toast.error('Error creating authentication account. Please try again.');
+          setLoading(false);
+          return;
+        }
       }
 
       toast.success(`Welcome, ${name}!`);
