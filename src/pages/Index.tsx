@@ -98,49 +98,64 @@ const Index = () => {
         printWindow.document.write('<html><head><title>Coyote Motel West - Room Sheet</title>');
         printWindow.document.write('<style>');
         printWindow.document.write(`
-          @page { size: portrait; margin: 5mm; }
-          body { font-family: Arial, sans-serif; font-size: 10px; color: #000000; }
-          table { border-collapse: collapse; width: 100%; }
+          @page { 
+            size: landscape; 
+            margin: 10mm 5mm; 
+            scale: 0.9;
+          }
+          body { 
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            color: #000000; 
+            width: 100%;
+            margin: 0;
+            padding: 0;
+          }
+          table { 
+            border-collapse: collapse; 
+            width: 100%; 
+            table-layout: fixed;
+          }
           th { 
             border: 1px solid black; 
-            padding: 2px; 
-            background-color: #e5e7eb; 
-            font-size: 9px;
+            padding: 4px;
+            background-color: #f3f4f6; 
+            font-size: 10px;
             text-align: center;
             font-weight: bold;
             color: #000000;
           }
           td { 
             border: 1px solid black; 
-            padding: 2px; 
-            height: 16px;
-            font-size: 9px;
-            font-weight: 500;
+            padding: 4px; 
+            height: 20px;
+            font-size: 10px;
+            font-weight: 600;
             color: #000000;
           }
           .header {
             background-color: #4c9eeb;
             color: white;
-            padding: 4px;
+            padding: 6px;
             border-radius: 4px 4px 0 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 4px;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: bold;
           }
           .date-display {
             color: white;
             font-weight: bold;
-            margin-right: 4px;
+            margin-right: 8px;
           }
           .footer {
             margin-top: 4px;
             padding: 4px;
             border-top: 1px solid #e5e7eb;
-            font-size: 9px;
-            font-weight: 500;
+            font-size: 10px;
+            font-weight: 600;
             color: #000000;
           }
           .footer-grid {
@@ -164,24 +179,24 @@ const Index = () => {
             margin-bottom: 2px;
           }
           .color-swatch {
-            width: 10px;
-            height: 10px;
-            margin-right: 4px;
+            width: 12px;
+            height: 12px;
+            margin-right: 6px;
           }
           .purple {
             background-color: #6c5fc7 !important;
             color: #000000 !important;
-            font-weight: 500 !important;
+            font-weight: 600 !important;
           }
           .yellow {
             background-color: #fcd34d !important;
             color: #000000 !important;
-            font-weight: 500 !important;
+            font-weight: 600 !important;
           }
           .blue {
             background-color: #3b82f6 !important;
             color: #000000 !important;
-            font-weight: 500 !important;
+            font-weight: 600 !important;
           }
           .footer-section {
             display: grid;
@@ -191,6 +206,20 @@ const Index = () => {
           .text-right {
             text-align: right;
           }
+          input {
+            box-sizing: border-box;
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #000000;
+            font-weight: 600;
+          }
+          input[type="text"] {
+            font-size: 10px;
+          }
+          .text-center, input.text-center {
+            text-align: center;
+          }
           .select-column {
             display: none; /* Hide select column when printing */
           }
@@ -199,9 +228,19 @@ const Index = () => {
             print-color-adjust: exact !important;
             color-adjust: exact !important;
           }
+          .max-w-6xl {
+            width: 100%;
+          }
+          .bg-white {
+            background-color: white;
+          }
+          .bg-motel-purple { background-color: #6c5fc7 !important; }
+          .bg-motel-blue { background-color: #3b82f6 !important; }
+          .bg-motel-yellow { background-color: #fcd34d !important; }
+          .bg-motel-header { background-color: #4c9eeb !important; }
           span {
             color: #000000 !important;
-            font-weight: 500 !important;
+            font-weight: 600 !important;
           }
         `);
         printWindow.document.write('</style></head><body>');
@@ -215,11 +254,28 @@ const Index = () => {
           span.style.width = '100%';
           span.style.display = 'inline-block';
           span.style.color = '#000000';
-          span.style.fontWeight = '500';
+          span.style.fontWeight = '600';
+          
           if (input.classList.contains('text-center')) {
             span.style.textAlign = 'center';
           }
+          
           input.parentNode?.replaceChild(span, input);
+        });
+        
+        const checkboxes = clonedContent.querySelectorAll('[data-state]');
+        checkboxes.forEach(checkbox => {
+          checkbox.parentNode?.removeChild(checkbox);
+        });
+        
+        const selectColumnHeaders = clonedContent.querySelectorAll('th');
+        if (selectColumnHeaders.length > 0) {
+          selectColumnHeaders[0].style.display = 'none';
+        }
+        
+        const selectColumnCells = clonedContent.querySelectorAll('td:first-child');
+        selectColumnCells.forEach(cell => {
+          cell.style.display = 'none';
         });
         
         const tableRows = clonedContent.querySelectorAll('tr');
@@ -230,41 +286,35 @@ const Index = () => {
           
           const style = row.getAttribute('style');
           if (style && style.includes('background-color')) {
-            const computedStyle = window.getComputedStyle(row);
-            row.style.backgroundColor = computedStyle.backgroundColor;
+            const bgColor = style.match(/background-color:\s*([^;]+)/)?.[1];
+            row.style.backgroundColor = bgColor || '';
             row.style.color = '#000000';
-            row.style.fontWeight = '500';
+            row.style.fontWeight = '600';
             row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
           } 
           else if (row.classList.contains('bg-motel-purple')) {
             row.style.backgroundColor = '#6c5fc7';
             row.style.color = '#000000';
-            row.style.fontWeight = '500';
+            row.style.fontWeight = '600';
             row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
           } 
           else if (row.classList.contains('bg-motel-yellow')) {
             row.style.backgroundColor = '#fcd34d';
             row.style.color = '#000000';
-            row.style.fontWeight = '500';
+            row.style.fontWeight = '600';
             row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
           }
           else if (row.classList.contains('bg-motel-blue')) {
             row.style.backgroundColor = '#3b82f6';
             row.style.color = '#000000';
-            row.style.fontWeight = '500';
-            row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
-          }
-          else if (row.classList.contains('bg-blue-100')) {
-            row.style.backgroundColor = '#3b82f6';
-            row.style.color = '#000000';
-            row.style.fontWeight = '500';
+            row.style.fontWeight = '600';
             row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
           }
           
           const cells = row.querySelectorAll('td');
           cells.forEach(cell => {
             cell.style.color = '#000000';
-            cell.style.fontWeight = '500';
+            cell.style.fontWeight = '600';
             
             if (row.style.backgroundColor) {
               cell.style.backgroundColor = row.style.backgroundColor;
@@ -272,6 +322,16 @@ const Index = () => {
             }
           });
         });
+        
+        const actionButtonsContainer = clonedContent.querySelector('[class*="flex justify-between"]');
+        if (actionButtonsContainer) {
+          actionButtonsContainer.parentNode?.removeChild(actionButtonsContainer);
+        }
+        
+        const colorPickerContainer = clonedContent.querySelector('.px-4.py-2.border-b');
+        if (colorPickerContainer) {
+          colorPickerContainer.parentNode?.removeChild(colorPickerContainer);
+        }
         
         printWindow.document.write(clonedContent.innerHTML);
         printWindow.document.write('</body></html>');
