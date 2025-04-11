@@ -25,7 +25,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
         if (error) {
           console.error('Supabase connection error:', error);
           setConnectionError(true);
-          toast.error('Could not connect to the database. Please connect your Supabase project.');
+          toast.error('Could not connect to the database.');
         } else {
           console.log("Supabase connection successful!");
           setConnectionError(false);
@@ -58,20 +58,17 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
   if (connectionError) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4 text-center">
-        <h1 className="text-2xl font-bold mb-4">Supabase Connection Error</h1>
+        <h1 className="text-2xl font-bold mb-4">Database Connection Error</h1>
         <p className="mb-6 text-red-600">
-          Unable to connect to the database. Please make sure your Supabase project is connected.
+          Unable to connect to the database. Please refresh the page to try again.
         </p>
         <div className="space-y-4">
-          <p className="text-sm text-gray-600">
-            To connect your Supabase project, click the green Supabase button in the top right of the Lovable interface.
-          </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-4">
             <Button
               onClick={() => window.location.reload()}
               className="bg-green-600 hover:bg-green-700"
             >
-              Try Again
+              Refresh Page
             </Button>
             <Button
               variant="outline"

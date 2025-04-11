@@ -1,17 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
 import { RoomData, FooterValues } from '@/types';
 
-// Get Supabase environment variables
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// Use the direct Supabase URL and key
+const supabaseUrl = "https://ktdplwbjeyounqtuygeb.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt0ZHBsd2JqZXlvdW5xdHV5Z2ViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQzNDU4NDcsImV4cCI6MjA1OTkyMTg0N30.SeGuu1EY5lBXGR1DpOQjFGO-otqM4OzMEtd7qOaiY1U";
 
-// Check if environment variables are defined
-if (!supabaseUrl || !supabaseKey) {
-  console.error('Missing Supabase environment variables. Please connect your Supabase project in the Lovable interface.');
-}
-
-// Create Supabase client with fallback empty strings to prevent runtime errors
-export const supabase = createClient(supabaseUrl || '', supabaseKey || '');
+// Create Supabase client
+export const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Room data functions
 export const saveRooms = async (rooms: RoomData[], userId: string) => {
