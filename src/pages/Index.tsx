@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import MotelHeader from '@/components/MotelHeader';
 import MotelRow from '@/components/MotelRow';
@@ -101,12 +100,12 @@ const Index = () => {
         printWindow.document.write(`
           @page { 
             size: landscape; 
-            margin: 3mm 2mm;
-            scale: 0.8;
+            margin: 2mm;
+            scale: 0.75;
           }
           body { 
             font-family: Arial, sans-serif;
-            font-size: 8px;
+            font-size: 7px;
             color: #000000 !important; 
             width: 100%;
             margin: 0;
@@ -116,35 +115,38 @@ const Index = () => {
             border-collapse: collapse; 
             width: 100%; 
             table-layout: fixed;
+            page-break-inside: avoid;
           }
           th { 
             border: 1px solid black; 
-            padding: 2px;
+            padding: 1px;
             background-color: #f3f4f6; 
-            font-size: 8px;
+            font-size: 7px;
             text-align: center;
             font-weight: bold;
             color: #000000 !important;
           }
           td { 
             border: 1px solid black; 
-            padding: 2px; 
-            height: 16px;
-            font-size: 8px;
+            padding: 1px; 
+            height: 15px;
+            font-size: 7px;
             font-weight: 600;
             color: #000000 !important;
           }
           .header {
             background-color: #4c9eeb;
             color: white;
-            padding: 3px;
+            padding: 2px;
             border-radius: 4px 4px 0 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2px;
-            font-size: 9px;
+            margin-bottom: 1px;
+            font-size: 8px;
             font-weight: bold;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
           }
           .date-display {
             color: white;
@@ -153,22 +155,22 @@ const Index = () => {
           }
           .footer {
             margin-top: 1px;
-            padding: 2px;
+            padding: 1px;
             border-top: 1px solid #e5e7eb;
-            font-size: 8px;
+            font-size: 7px;
             font-weight: 600;
             color: #000000 !important;
           }
           .footer-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 0.25rem;
+            gap: 1px;
           }
           .footer-flex {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 0.25rem;
-            margin-top: 0.25rem;
+            gap: 1px;
+            margin-top: 1px;
           }
           .color-legend {
             display: flex;
@@ -177,32 +179,43 @@ const Index = () => {
           .color-item {
             display: flex;
             align-items: center;
-            margin-bottom: 2px;
+            margin-bottom: 1px;
           }
           .color-swatch {
-            width: 8px;
-            height: 8px;
-            margin-right: 3px;
+            width: 7px;
+            height: 7px;
+            margin-right: 2px;
           }
-          .purple {
+          .purple, .bg-motel-purple {
             background-color: #6c5fc7 !important;
             color: #000000 !important;
             font-weight: 600 !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
           }
-          .yellow {
+          .yellow, .bg-motel-yellow {
             background-color: #fcd34d !important;
             color: #000000 !important;
             font-weight: 600 !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
           }
-          .blue {
+          .blue, .bg-motel-blue {
             background-color: #3b82f6 !important;
             color: #000000 !important;
             font-weight: 600 !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+          .bg-motel-header {
+            background-color: #4c9eeb !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
           }
           .footer-section {
             display: grid;
             grid-template-columns: auto 1fr;
-            gap: 0.25rem;
+            gap: 1px;
           }
           .text-right {
             text-align: right;
@@ -214,12 +227,12 @@ const Index = () => {
             border: none;
             color: #000000 !important;
             font-weight: 600 !important;
-            font-size: 8px !important;
+            font-size: 7px !important;
           }
           span {
             color: #000000 !important;
             font-weight: 600 !important;
-            font-size: 8px !important;
+            font-size: 7px !important;
           }
           .text-center, input.text-center {
             text-align: center;
@@ -238,19 +251,15 @@ const Index = () => {
           .bg-white {
             background-color: white;
           }
-          .bg-motel-purple { background-color: #6c5fc7 !important; }
-          .bg-motel-blue { background-color: #3b82f6 !important; }
-          .bg-motel-yellow { background-color: #fcd34d !important; }
-          .bg-motel-header { background-color: #4c9eeb !important; }
           p, div, label {
             color: #000000 !important;
             font-weight: 600 !important;
-            font-size: 8px !important;
+            font-size: 7px !important;
           }
           .footer-values {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 4px;
+            gap: 2px;
           }
           .footer-item {
             display: flex;
@@ -258,16 +267,28 @@ const Index = () => {
           }
           .footer-label {
             font-weight: bold;
-            margin-right: 4px;
+            margin-right: 2px;
           }
           .footer-value {
             font-weight: bold;
           }
           .p-4 {
-            padding: 2px;
+            padding: 1px;
           }
           .border-t {
             border-top: 1px solid #e5e7eb;
+          }
+          .mt-2 {
+            margin-top: 1px;
+          }
+          .mb-4 {
+            margin-bottom: 1px;
+          }
+          .gap-4 {
+            gap: 1px;
+          }
+          .gap-2 {
+            gap: 1px;
           }
         `);
         printWindow.document.write('</style></head><body>');
@@ -282,7 +303,7 @@ const Index = () => {
           span.style.display = 'inline-block';
           span.style.color = '#000000';
           span.style.fontWeight = '600';
-          span.style.fontSize = '8px';
+          span.style.fontSize = '7px';
           
           if (input.classList.contains('text-center')) {
             span.style.textAlign = 'center';
@@ -322,36 +343,36 @@ const Index = () => {
             (row as HTMLElement).style.backgroundColor = bgColor || '';
             (row as HTMLElement).style.color = '#000000';
             (row as HTMLElement).style.fontWeight = '600';
-            (row as HTMLElement).setAttribute('style', `${(row as HTMLElement).getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
+            (row as HTMLElement).setAttribute('style', `${(row as HTMLElement).getAttribute('style') || ''}; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;`);
           } 
           else if ((row as HTMLElement).classList.contains('bg-motel-purple')) {
             (row as HTMLElement).style.backgroundColor = '#6c5fc7';
             (row as HTMLElement).style.color = '#000000';
             (row as HTMLElement).style.fontWeight = '600';
-            (row as HTMLElement).setAttribute('style', `${(row as HTMLElement).getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
+            (row as HTMLElement).setAttribute('style', `${(row as HTMLElement).getAttribute('style') || ''}; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;`);
           } 
           else if ((row as HTMLElement).classList.contains('bg-motel-yellow')) {
             (row as HTMLElement).style.backgroundColor = '#fcd34d';
             (row as HTMLElement).style.color = '#000000';
             (row as HTMLElement).style.fontWeight = '600';
-            (row as HTMLElement).setAttribute('style', `${(row as HTMLElement).getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
+            (row as HTMLElement).setAttribute('style', `${(row as HTMLElement).getAttribute('style') || ''}; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;`);
           }
           else if ((row as HTMLElement).classList.contains('bg-motel-blue')) {
             (row as HTMLElement).style.backgroundColor = '#3b82f6';
             (row as HTMLElement).style.color = '#000000';
             (row as HTMLElement).style.fontWeight = '600';
-            (row as HTMLElement).setAttribute('style', `${(row as HTMLElement).getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
+            (row as HTMLElement).setAttribute('style', `${(row as HTMLElement).getAttribute('style') || ''}; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;`);
           }
           
           const cells = row.querySelectorAll('td');
           cells.forEach(cell => {
             (cell as HTMLElement).style.color = '#000000';
             (cell as HTMLElement).style.fontWeight = '600';
-            (cell as HTMLElement).style.fontSize = '8px';
+            (cell as HTMLElement).style.fontSize = '7px';
             
             if ((row as HTMLElement).style.backgroundColor) {
               (cell as HTMLElement).style.backgroundColor = (row as HTMLElement).style.backgroundColor;
-              (cell as HTMLElement).setAttribute('style', `${(cell as HTMLElement).getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
+              (cell as HTMLElement).setAttribute('style', `${(cell as HTMLElement).getAttribute('style') || ''}; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;`);
             }
           });
         });
@@ -366,28 +387,38 @@ const Index = () => {
           colorPickerContainer.parentNode.removeChild(colorPickerContainer);
         }
         
-        // Improve footer styling
         const footerContainer = clonedContent.querySelector('.p-4.border-t');
         if (footerContainer) {
-          (footerContainer as HTMLElement).style.padding = '2px';
-          (footerContainer as HTMLElement).style.marginTop = '1px';
+          const footerElement = footerContainer as HTMLElement;
+          footerElement.style.padding = '1px';
+          footerElement.style.marginTop = '1px';
+          
+          const footerGrids = footerElement.querySelectorAll('.grid');
+          footerGrids.forEach(grid => {
+            const gridElement = grid as HTMLElement;
+            if (gridElement.classList.contains('grid-cols-3')) {
+              gridElement.style.display = 'grid';
+              gridElement.style.gridTemplateColumns = '1fr 1fr 1fr';
+              gridElement.style.gap = '1px';
+            }
+          });
           
           const footerElements = footerContainer.querySelectorAll('*');
           footerElements.forEach(element => {
-            (element as HTMLElement).style.color = '#000000';
-            (element as HTMLElement).style.fontWeight = '600';
-            (element as HTMLElement).style.fontSize = '8px';
+            const el = element as HTMLElement;
+            el.style.color = '#000000';
+            el.style.fontWeight = '600';
+            el.style.fontSize = '7px';
             
-            // Make sure all input values are properly formatted
-            if ((element as HTMLElement).tagName.toLowerCase() === 'input') {
-              const input = element as HTMLInputElement;
+            if (el.tagName.toLowerCase() === 'input') {
+              const input = el as HTMLInputElement;
               const span = document.createElement('span');
               span.textContent = input.value;
               span.style.width = '100%';
               span.style.display = 'inline-block';
               span.style.color = '#000000';
               span.style.fontWeight = '600';
-              span.style.fontSize = '8px';
+              span.style.fontSize = '7px';
               
               if (input.parentNode) {
                 input.parentNode.replaceChild(span, input);

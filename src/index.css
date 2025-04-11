@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -97,5 +98,40 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@media print {
+  @page {
+    size: landscape;
+    margin: 3mm 2mm;
+    scale: 0.75;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    font-size: 8px;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+  
+  .print\:border-t {
+    border-top: 1px solid #e5e7eb;
+  }
+  
+  table {
+    page-break-inside: avoid;
+  }
+  
+  input, span, div {
+    color: #000000 !important;
+    font-weight: 600 !important;
+  }
+  
+  .bg-motel-purple, .bg-motel-blue, .bg-motel-yellow, .bg-motel-header {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
   }
 }
