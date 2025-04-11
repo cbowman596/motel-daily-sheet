@@ -53,7 +53,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
     if (room.roomNumber === 'Loft') return '1Q';
     return '';
   };
-
+  
   useEffect(() => {
     if (!room.location) {
       const location = getLocation();
@@ -151,7 +151,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
           maxLength={2}
         />
       </td>
-      <td className="border border-gray-300 p-1 text-center w-16">
+      <td className="border border-gray-300 p-1 text-center w-20">
         <input 
           type="text" 
           value={room.rate} 
