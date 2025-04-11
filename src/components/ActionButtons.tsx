@@ -49,7 +49,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
     setIsSaving(true);
     try {
       await handleSave();
-      toast.success('Data saved to Firebase successfully');
+      // Toast will be triggered by the Firebase service only
     } catch (error) {
       toast.error('Failed to save data to Firebase');
       console.error('Save error:', error);

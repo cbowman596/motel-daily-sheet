@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 export function useFirebaseStorage<T>(key: string, initialValue: T, sheetId: string = "default"): [T, (value: T) => void, boolean] {
   const [storedValue, setStoredValue] = useState<T>(initialValue);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [saveInProgress, setSaveInProgress] = useState<boolean>(false);
 
   // Load data from Firebase on initial mount
   useEffect(() => {
@@ -35,7 +36,13 @@ export function useFirebaseStorage<T>(key: string, initialValue: T, sheetId: str
 
   // Save to Firebase
   const setValue = useCallback(async (value: T) => {
+    // Prevent multiple concurrent save operations
+    if (saveInProgress) {
+      return;
+    }
+    
     try {
+      setSaveInProgress(true);
       setStoredValue(value);
       
       // Determine which part of the data we're updating
@@ -59,8 +66,10 @@ export function useFirebaseStorage<T>(key: string, initialValue: T, sheetId: str
     } catch (error) {
       console.error(`Error saving ${key} to Firebase:`, error);
       toast.error('Failed to save data to cloud');
+    } finally {
+      setSaveInProgress(false);
     }
-  }, [key, sheetId, initialValue]);
+  }, [key, sheetId, initialValue, saveInProgress]);
 
   return [storedValue, setValue, isLoading];
 }
