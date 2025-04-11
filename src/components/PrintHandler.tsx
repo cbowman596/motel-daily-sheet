@@ -1,5 +1,5 @@
 
-import React, { useRef } from 'react';
+import React from 'react';
 import { RoomData, FooterValues } from '@/types';
 
 interface PrintHandlerProps {
@@ -224,7 +224,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
     `);
     printWindow.document.write('</style></head><body>');
     
-    // Create header section
+    // Create header section with current date
     const headerHtml = `
       <div class="header">
         <div><h1 style="font-size: 10px; margin: 0; padding: 0;">Coyote Motel West</h1></div>
