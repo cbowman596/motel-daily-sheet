@@ -19,14 +19,16 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
     const checkSupabaseConnection = async () => {
       try {
         // Simple query to check if Supabase is connected
+        console.log("Testing Supabase connection...");
         const { error } = await supabase.from('rooms').select('count', { count: 'exact', head: true });
         
         if (error) {
-          if (error.message.includes('connection') || error.message.includes('FetchError')) {
-            setConnectionError(true);
-            toast.error('Could not connect to the database. Please connect your Supabase project.');
-            console.error('Supabase connection error:', error);
-          }
+          console.error('Supabase connection error:', error);
+          setConnectionError(true);
+          toast.error('Could not connect to the database. Please connect your Supabase project.');
+        } else {
+          console.log("Supabase connection successful!");
+          setConnectionError(false);
         }
       } catch (err) {
         console.error('Error checking Supabase connection:', err);
@@ -43,6 +45,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
     }
   }, [user]);
   
+  // Display loading spinner while checking authentication or connection
   if (loading || (checkingConnection && !connectionError)) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -51,6 +54,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
     );
   }
   
+  // Display connection error screen
   if (connectionError) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4 text-center">
@@ -62,18 +66,20 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
           <p className="text-sm text-gray-600">
             To connect your Supabase project, click the green Supabase button in the top right of the Lovable interface.
           </p>
-          <Button
-            onClick={() => window.location.reload()}
-            className="bg-green-600 hover:bg-green-700"
-          >
-            Try Again
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => window.location.href = '/login'}
-          >
-            Back to Login
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mt-4">
+            <Button
+              onClick={() => window.location.reload()}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              Try Again
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => window.location.href = '/login'}
+            >
+              Back to Login
+            </Button>
+          </div>
         </div>
       </div>
     );
