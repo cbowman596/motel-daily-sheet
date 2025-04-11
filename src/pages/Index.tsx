@@ -7,6 +7,8 @@ import DataManager from '@/components/DataManager';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { initialRooms, initialFooterValues } from '@/data/initialData';
 import { RoomData, FooterValues } from '@/types';
+import { decodeDataFromUrl } from '@/utils/urlUtils';
+import { toast } from 'sonner';
 
 const Index = () => {
   // Date state
@@ -22,6 +24,35 @@ const Index = () => {
   
   // Print reference
   const printRef = useRef<HTMLDivElement>(null);
+
+  // Check for URL parameters on mount
+  useEffect(() => {
+    const checkForUrlData = () => {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const encodedData = urlParams.get('data');
+        
+        if (encodedData) {
+          const decodedData = decodeDataFromUrl(encodedData);
+          
+          if (decodedData) {
+            setRooms(decodedData.rooms);
+            setFooterValues(decodedData.footerValues);
+            toast.success('Data loaded from URL successfully');
+            
+            // Clear the URL parameter to avoid reloading on refresh
+            const newUrl = window.location.pathname;
+            window.history.replaceState({}, document.title, newUrl);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading data from URL:', error);
+        toast.error('Failed to load data from URL');
+      }
+    };
+    
+    checkForUrlData();
+  }, [setRooms, setFooterValues]);
   
   // Calculate room totals
   useEffect(() => {

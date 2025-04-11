@@ -1,8 +1,11 @@
 
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { RoomData, FooterValues } from '@/types';
+import { encodeDataToUrl } from '@/utils/urlUtils';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Input } from '@/components/ui/input';
 
 interface DataTransferProps {
   roomsData: RoomData[];
@@ -12,6 +15,7 @@ interface DataTransferProps {
 
 const DataTransfer: React.FC<DataTransferProps> = ({ roomsData, footerValues, importData }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [shareUrl, setShareUrl] = useState<string>('');
 
   const handleExport = () => {
     try {
@@ -35,6 +39,37 @@ const DataTransfer: React.FC<DataTransferProps> = ({ roomsData, footerValues, im
     } catch (error) {
       console.error('Export error:', error);
       toast.error('Error exporting data. Please try again.');
+    }
+  };
+  
+  const generateShareableUrl = () => {
+    try {
+      const encodedData = encodeDataToUrl(roomsData, footerValues);
+      const url = new URL(window.location.href);
+      
+      // Clear existing search params and set the new data
+      url.search = '';
+      url.searchParams.set('data', encodedData);
+      
+      setShareUrl(url.toString());
+      return url.toString();
+    } catch (error) {
+      console.error('Error generating shareable URL:', error);
+      toast.error('Failed to generate URL. Data might be too large.');
+      return '';
+    }
+  };
+  
+  const handleShareUrl = () => {
+    const url = generateShareableUrl();
+    if (url) {
+      navigator.clipboard.writeText(url)
+        .then(() => {
+          toast.success('Shareable URL copied to clipboard');
+        })
+        .catch(() => {
+          toast.error('Failed to copy URL. Please copy it manually.');
+        });
     }
   };
   
@@ -90,7 +125,7 @@ const DataTransfer: React.FC<DataTransferProps> = ({ roomsData, footerValues, im
   };
   
   return (
-    <div className="flex gap-2">
+    <div className="flex flex-wrap gap-2">
       <Button 
         onClick={handleExport}
         variant="outline"
@@ -107,6 +142,39 @@ const DataTransfer: React.FC<DataTransferProps> = ({ roomsData, footerValues, im
       >
         Import Data
       </Button>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            onClick={generateShareableUrl}
+            variant="outline"
+            size="sm"
+            className="bg-green-100 hover:bg-green-200 text-green-900 border-green-300"
+          >
+            Share URL
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-4 max-w-sm">
+          <div className="space-y-2">
+            <h4 className="font-medium">Shareable URL</h4>
+            <p className="text-sm text-muted-foreground">Copy this URL to share your current sheet data.</p>
+            <div className="flex items-center gap-2">
+              <Input
+                value={shareUrl}
+                readOnly
+                className="text-xs"
+                onClick={(e) => (e.target as HTMLInputElement).select()}
+              />
+              <Button
+                size="sm"
+                onClick={handleShareUrl}
+                className="whitespace-nowrap"
+              >
+                Copy
+              </Button>
+            </div>
+          </div>
+        </PopoverContent>
+      </Popover>
       <input 
         type="file" 
         ref={fileInputRef}
