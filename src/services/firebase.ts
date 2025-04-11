@@ -1,10 +1,8 @@
-
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, get, onValue } from "firebase/database";
 import { RoomData, FooterValues } from "@/types";
 
 // Your Firebase configuration
-// Replace these with your actual Firebase project values
 const firebaseConfig = {
   apiKey: "YOUR_API_KEY",
   authDomain: "motel-daily-sheet.firebaseapp.com",
@@ -13,8 +11,6 @@ const firebaseConfig = {
   storageBucket: "motel-daily-sheet.appspot.com",
   messagingSenderId: "608019576618",
   appId: "YOUR_APP_ID"
-};
-
 };
 
 // Initialize Firebase
