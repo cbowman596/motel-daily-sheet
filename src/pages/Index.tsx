@@ -100,13 +100,13 @@ const Index = () => {
         printWindow.document.write(`
           @page { 
             size: landscape; 
-            margin: 10mm 5mm; 
-            scale: 0.9;
+            margin: 5mm 3mm;
+            scale: 0.85;
           }
           body { 
             font-family: Arial, sans-serif;
-            font-size: 10px;
-            color: #000000; 
+            font-size: 9px;
+            color: #000000 !important; 
             width: 100%;
             margin: 0;
             padding: 0;
@@ -118,31 +118,31 @@ const Index = () => {
           }
           th { 
             border: 1px solid black; 
-            padding: 4px;
+            padding: 3px;
             background-color: #f3f4f6; 
-            font-size: 10px;
+            font-size: 9px;
             text-align: center;
             font-weight: bold;
-            color: #000000;
+            color: #000000 !important;
           }
           td { 
             border: 1px solid black; 
-            padding: 4px; 
-            height: 20px;
-            font-size: 10px;
+            padding: 3px; 
+            height: 18px;
+            font-size: 9px;
             font-weight: 600;
-            color: #000000;
+            color: #000000 !important;
           }
           .header {
             background-color: #4c9eeb;
             color: white;
-            padding: 6px;
+            padding: 4px;
             border-radius: 4px 4px 0 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 4px;
-            font-size: 12px;
+            margin-bottom: 2px;
+            font-size: 10px;
             font-weight: bold;
           }
           .date-display {
@@ -151,23 +151,23 @@ const Index = () => {
             margin-right: 8px;
           }
           .footer {
-            margin-top: 4px;
-            padding: 4px;
+            margin-top: 2px;
+            padding: 3px;
             border-top: 1px solid #e5e7eb;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 600;
-            color: #000000;
+            color: #000000 !important;
           }
           .footer-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 0.5rem;
+            gap: 0.25rem;
           }
           .footer-flex {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 0.5rem;
-            margin-top: 0.5rem;
+            gap: 0.25rem;
+            margin-top: 0.25rem;
           }
           .color-legend {
             display: flex;
@@ -179,9 +179,9 @@ const Index = () => {
             margin-bottom: 2px;
           }
           .color-swatch {
-            width: 12px;
-            height: 12px;
-            margin-right: 6px;
+            width: 10px;
+            height: 10px;
+            margin-right: 4px;
           }
           .purple {
             background-color: #6c5fc7 !important;
@@ -211,11 +211,14 @@ const Index = () => {
             width: 100%;
             background: transparent;
             border: none;
-            color: #000000;
-            font-weight: 600;
+            color: #000000 !important;
+            font-weight: 600 !important;
+            font-size: 9px !important;
           }
-          input[type="text"] {
-            font-size: 10px;
+          span {
+            color: #000000 !important;
+            font-weight: 600 !important;
+            font-size: 9px !important;
           }
           .text-center, input.text-center {
             text-align: center;
@@ -238,9 +241,10 @@ const Index = () => {
           .bg-motel-blue { background-color: #3b82f6 !important; }
           .bg-motel-yellow { background-color: #fcd34d !important; }
           .bg-motel-header { background-color: #4c9eeb !important; }
-          span {
+          p, div, label {
             color: #000000 !important;
             font-weight: 600 !important;
+            font-size: 9px !important;
           }
         `);
         printWindow.document.write('</style></head><body>');
@@ -255,22 +259,27 @@ const Index = () => {
           span.style.display = 'inline-block';
           span.style.color = '#000000';
           span.style.fontWeight = '600';
+          span.style.fontSize = '9px';
           
           if (input.classList.contains('text-center')) {
             span.style.textAlign = 'center';
           }
           
-          input.parentNode?.replaceChild(span, input);
+          if (input.parentNode) {
+            input.parentNode.replaceChild(span, input);
+          }
         });
         
         const checkboxes = clonedContent.querySelectorAll('[data-state]');
         checkboxes.forEach(checkbox => {
-          checkbox.parentNode?.removeChild(checkbox);
+          if (checkbox.parentNode) {
+            checkbox.parentNode.removeChild(checkbox);
+          }
         });
         
         const selectColumnHeaders = clonedContent.querySelectorAll('th');
         if (selectColumnHeaders.length > 0) {
-          selectColumnHeaders[0].style.display = 'none';
+          (selectColumnHeaders[0] as HTMLElement).style.display = 'none';
         }
         
         const selectColumnCells = clonedContent.querySelectorAll('td:first-child');
@@ -315,6 +324,7 @@ const Index = () => {
           cells.forEach(cell => {
             (cell as HTMLElement).style.color = '#000000';
             (cell as HTMLElement).style.fontWeight = '600';
+            (cell as HTMLElement).style.fontSize = '9px';
             
             if ((row as HTMLElement).style.backgroundColor) {
               (cell as HTMLElement).style.backgroundColor = (row as HTMLElement).style.backgroundColor;
@@ -324,14 +334,21 @@ const Index = () => {
         });
         
         const actionButtonsContainer = clonedContent.querySelector('[class*="flex justify-between"]');
-        if (actionButtonsContainer) {
-          actionButtonsContainer.parentNode?.removeChild(actionButtonsContainer);
+        if (actionButtonsContainer && actionButtonsContainer.parentNode) {
+          actionButtonsContainer.parentNode.removeChild(actionButtonsContainer);
         }
         
         const colorPickerContainer = clonedContent.querySelector('.px-4.py-2.border-b');
-        if (colorPickerContainer) {
-          colorPickerContainer.parentNode?.removeChild(colorPickerContainer);
+        if (colorPickerContainer && colorPickerContainer.parentNode) {
+          colorPickerContainer.parentNode.removeChild(colorPickerContainer);
         }
+        
+        const footerElements = clonedContent.querySelectorAll('.p-4.border-t *');
+        footerElements.forEach(element => {
+          (element as HTMLElement).style.color = '#000000';
+          (element as HTMLElement).style.fontWeight = '600';
+          (element as HTMLElement).style.fontSize = '9px';
+        });
         
         printWindow.document.write(clonedContent.innerHTML);
         printWindow.document.write('</body></html>');
