@@ -30,6 +30,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
     return '';
   };
 
+  // These functions are now only used if location or roomType are missing
   const getLocation = () => {
     const roomNum = Number(room.roomNumber);
     if (roomNum >= 1 && roomNum <= 6) return 'FB';
@@ -55,6 +56,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
     return '';
   };
   
+  // Check and update location/roomType if missing
   useEffect(() => {
     if (!room.location) {
       const location = getLocation();
@@ -67,6 +69,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
     }
   }, [room.id, room.roomNumber, room.location, room.roomType, updateRoom]);
 
+  // Calculate total based on rate for N type rooms
   useEffect(() => {
     if (room.type === 'N' && room.rate) {
       const baseRate = parseFloat(room.rate) || 0;
