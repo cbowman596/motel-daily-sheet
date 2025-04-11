@@ -3,28 +3,28 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import RoomManager from '@/components/RoomManager';
-import UserManager from '@/components/Auth/UserManager';
 import { RoomData } from '@/types';
 import { loadRooms, saveRooms } from '@/lib/supabase';
+import { initialRooms } from '@/data/initialData';
 
 const Index = () => {
-  const { signOut, nameUser } = useAuth();
-  const [rooms, setRooms] = useState<RoomData[]>([]);
+  const { signOut, user } = useAuth();
+  const [rooms, setRooms] = useState<RoomData[]>(initialRooms);
   const [selectedRoomIds, setSelectedRoomIds] = useState<number[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (nameUser) {
+    if (user) {
       fetchRooms();
     }
-  }, [nameUser]);
+  }, [user]);
 
   const fetchRooms = async () => {
-    if (!nameUser) return;
+    if (!user) return;
     
     setLoading(true);
-    const { data, success } = await loadRooms(nameUser.id);
-    if (success && data) {
+    const { data, success } = await loadRooms(user.id);
+    if (success && data && data.length > 0) {
       setRooms(data);
     }
     setLoading(false);
@@ -58,21 +58,35 @@ const Index = () => {
     );
   };
 
+  const handleSaveRooms = async () => {
+    if (!user) return;
+    
+    setLoading(true);
+    await saveRooms(rooms, user.id);
+    setLoading(false);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <header className="bg-white shadow">
         <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-gray-900">Motel Manager</h1>
           <div className="flex items-center gap-4">
-            {nameUser && <span>Welcome, {nameUser.name}</span>}
+            {user && <span>Welcome, {user.email}</span>}
             <Button variant="outline" onClick={() => signOut()}>Sign Out</Button>
           </div>
         </div>
       </header>
       
       <main className="flex-1 max-w-7xl w-full mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <UserManager />
+        <div className="mb-4 flex justify-end">
+          <Button 
+            onClick={handleSaveRooms}
+            disabled={loading}
+            className="bg-green-600 hover:bg-green-700"
+          >
+            {loading ? 'Saving...' : 'Save Changes'}
+          </Button>
         </div>
         
         <div>
