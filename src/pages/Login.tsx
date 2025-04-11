@@ -21,7 +21,7 @@ const Login = () => {
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold">Motel Manager</h1>
-            <p className="text-gray-600">Sign in to access your motel data</p>
+            <p className="text-gray-600">Sign in with your pre-created username</p>
           </div>
           <LoginForm />
         </div>

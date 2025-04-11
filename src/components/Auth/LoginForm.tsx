@@ -35,11 +35,8 @@ const LoginForm = () => {
             />
           </div>
         </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button variant="outline" type="button" onClick={() => window.location.href = '/signup'}>
-            Create Account
-          </Button>
-          <Button type="submit" disabled={loading}>
+        <CardFooter>
+          <Button type="submit" className="w-full" disabled={loading}>
             {loading ? 'Signing in...' : 'Sign In'}
           </Button>
         </CardFooter>

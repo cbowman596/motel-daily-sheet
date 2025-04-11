@@ -54,6 +54,24 @@ export type Database = {
         }
         Relationships: []
       }
+      name_users: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       rooms: {
         Row: {
           backgroundColor: string | null
