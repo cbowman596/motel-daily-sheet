@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import MotelHeader from '@/components/MotelHeader';
 import MotelRow from '@/components/MotelRow';
@@ -30,7 +29,6 @@ const Index = () => {
     };
     
     rooms.forEach(room => {
-      // Only count rooms marked specifically as type N for nightly
       if (room.type === 'N') {
         totals.nightly++;
       } else if (room.type === 'W') {
@@ -56,7 +54,7 @@ const Index = () => {
   const applyColorToRooms = (roomIds: number[], bgColor: string, textColor: string) => {
     setRooms(rooms.map(room => 
       roomIds.includes(room.id) 
-        ? { ...room, backgroundColor: bgColor, textColor: textColor } 
+        ? { ...room, backgroundColor: bgColor, textColor: '#000000' } 
         : room
     ));
     setSelectedRoomIds([]);
@@ -101,7 +99,7 @@ const Index = () => {
         printWindow.document.write('<style>');
         printWindow.document.write(`
           @page { size: portrait; margin: 5mm; }
-          body { font-family: Arial, sans-serif; font-size: 10px; }
+          body { font-family: Arial, sans-serif; font-size: 10px; color: #000000; }
           table { border-collapse: collapse; width: 100%; }
           th { 
             border: 1px solid black; 
@@ -110,12 +108,15 @@ const Index = () => {
             font-size: 9px;
             text-align: center;
             font-weight: bold;
+            color: #000000;
           }
           td { 
             border: 1px solid black; 
             padding: 2px; 
             height: 16px;
             font-size: 9px;
+            font-weight: 500;
+            color: #000000;
           }
           .header {
             background-color: #4c9eeb;
@@ -139,6 +140,8 @@ const Index = () => {
             padding: 4px;
             border-top: 1px solid #e5e7eb;
             font-size: 9px;
+            font-weight: 500;
+            color: #000000;
           }
           .footer-grid {
             display: grid;
@@ -167,13 +170,18 @@ const Index = () => {
           }
           .purple {
             background-color: #6c5fc7 !important;
-            color: white !important;
+            color: #000000 !important;
+            font-weight: 500 !important;
           }
           .yellow {
             background-color: #fcd34d !important;
+            color: #000000 !important;
+            font-weight: 500 !important;
           }
           .blue {
             background-color: #3b82f6 !important;
+            color: #000000 !important;
+            font-weight: 500 !important;
           }
           .footer-section {
             display: grid;
@@ -189,6 +197,11 @@ const Index = () => {
           * {
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
+            color-adjust: exact !important;
+          }
+          span {
+            color: #000000 !important;
+            font-weight: 500 !important;
           }
         `);
         printWindow.document.write('</style></head><body>');
@@ -201,42 +214,13 @@ const Index = () => {
           span.textContent = input.value;
           span.style.width = '100%';
           span.style.display = 'inline-block';
+          span.style.color = '#000000';
+          span.style.fontWeight = '500';
           if (input.classList.contains('text-center')) {
             span.style.textAlign = 'center';
           }
           input.parentNode?.replaceChild(span, input);
         });
-        
-        const actionButtonsDiv = clonedContent.querySelector('.max-w-6xl.mx-auto.mt-4');
-        if (actionButtonsDiv) {
-          actionButtonsDiv.remove();
-        }
-        
-        const headerElement = clonedContent.querySelector('.bg-motel-header');
-        if (headerElement) {
-          const dateSelectors = headerElement.querySelector('.flex.items-center.mt-2.md\\:mt-0')?.firstElementChild;
-          if (dateSelectors) {
-            const dateDisplay = document.createElement('div');
-            dateDisplay.className = 'date-display';
-            dateDisplay.textContent = `${month} ${day}`;
-            dateSelectors.parentNode?.replaceChild(dateDisplay, dateSelectors);
-          }
-        }
-        
-        const colorPickerDiv = clonedContent.querySelector('.px-4.py-2.border-b');
-        if (colorPickerDiv) {
-          colorPickerDiv.remove();
-        }
-        
-        const selectCheckboxes = clonedContent.querySelectorAll('td:first-child');
-        selectCheckboxes.forEach(selectCell => {
-          selectCell.classList.add('select-column');
-        });
-        
-        const selectHeader = clonedContent.querySelectorAll('th')[0];
-        if (selectHeader) {
-          selectHeader.classList.add('select-column');
-        }
         
         const tableRows = clonedContent.querySelectorAll('tr');
         tableRows.forEach(row => {
@@ -248,33 +232,43 @@ const Index = () => {
           if (style && style.includes('background-color')) {
             const computedStyle = window.getComputedStyle(row);
             row.style.backgroundColor = computedStyle.backgroundColor;
-            row.style.color = computedStyle.color;
-            row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact;`);
+            row.style.color = '#000000';
+            row.style.fontWeight = '500';
+            row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
           } 
           else if (row.classList.contains('bg-motel-purple')) {
             row.style.backgroundColor = '#6c5fc7';
-            row.style.color = 'white';
-            row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact;`);
+            row.style.color = '#000000';
+            row.style.fontWeight = '500';
+            row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
           } 
           else if (row.classList.contains('bg-motel-yellow')) {
             row.style.backgroundColor = '#fcd34d';
-            row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact;`);
+            row.style.color = '#000000';
+            row.style.fontWeight = '500';
+            row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
           }
           else if (row.classList.contains('bg-motel-blue')) {
             row.style.backgroundColor = '#3b82f6';
-            row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact;`);
+            row.style.color = '#000000';
+            row.style.fontWeight = '500';
+            row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
           }
           else if (row.classList.contains('bg-blue-100')) {
             row.style.backgroundColor = '#3b82f6';
-            row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact;`);
+            row.style.color = '#000000';
+            row.style.fontWeight = '500';
+            row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
           }
           
           const cells = row.querySelectorAll('td');
           cells.forEach(cell => {
+            cell.style.color = '#000000';
+            cell.style.fontWeight = '500';
+            
             if (row.style.backgroundColor) {
               cell.style.backgroundColor = row.style.backgroundColor;
-              cell.style.color = row.style.color || '';
-              cell.setAttribute('style', `${cell.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact;`);
+              cell.setAttribute('style', `${cell.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
             }
           });
         });

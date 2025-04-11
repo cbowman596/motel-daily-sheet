@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { RoomData } from '@/types';
@@ -17,16 +16,17 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
     if (room.backgroundColor) {
       return {
         backgroundColor: room.backgroundColor,
-        color: room.textColor || 'inherit'
+        // Always keep text black regardless of background color
+        color: '#000000'
       };
     }
-    return {};
+    return { color: '#000000' }; // Ensure text is black even when no background color
   };
   
   const getRowClass = () => {
     if (room.backgroundColor) return '';
     if (room.type === 'W') return 'bg-motel-blue';
-    if (room.type === 'M') return 'bg-motel-purple text-white';
+    if (room.type === 'M') return 'bg-motel-purple';
     if (Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) return 'bg-motel-yellow';
     return '';
   };
@@ -49,7 +49,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
   return (
     <tr 
       className={cn(
-        "border border-gray-300", 
+        "border border-gray-300 font-medium", // Added font-medium for slightly bolder text
         getRowClass(),
         isSelected ? 'ring-2 ring-blue-500' : ''
       )}
@@ -69,7 +69,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
           type="text" 
           value={room.type} 
           onChange={(e) => handleChange('type', e.target.value)}
-          className="w-full bg-transparent text-center focus:outline-none"
+          className="w-full bg-transparent text-center focus:outline-none font-medium text-black" // Added font-medium and text-black
           maxLength={2}
         />
       </td>
@@ -78,7 +78,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
           type="text" 
           value={room.roomNumber} 
           onChange={(e) => handleChange('roomNumber', e.target.value)}
-          className="w-full bg-transparent text-center focus:outline-none"
+          className="w-full bg-transparent text-center focus:outline-none font-medium text-black" // Added font-medium and text-black
           readOnly
         />
       </td>
@@ -87,7 +87,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
           type="text" 
           value={room.name} 
           onChange={(e) => handleChange('name', e.target.value)}
-          className="w-full bg-transparent focus:outline-none"
+          className="w-full bg-transparent focus:outline-none font-medium text-black" // Added font-medium and text-black
         />
       </td>
       <td className="border border-gray-300 p-1 text-center w-8">
@@ -95,7 +95,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
           type="text" 
           value={room.pmt} 
           onChange={(e) => handleChange('pmt', e.target.value)}
-          className="w-full bg-transparent text-center focus:outline-none"
+          className="w-full bg-transparent text-center focus:outline-none font-medium text-black" // Added font-medium and text-black
           maxLength={2}
         />
       </td>
@@ -104,7 +104,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
           type="text" 
           value={room.rate} 
           onChange={(e) => handleChange('rate', e.target.value)}
-          className="w-full bg-transparent text-center focus:outline-none"
+          className="w-full bg-transparent text-center focus:outline-none font-medium text-black" // Added font-medium and text-black
         />
       </td>
       <td className="border border-gray-300 p-1 text-center w-16">
@@ -112,7 +112,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
           type="text" 
           value={room.total} 
           onChange={(e) => handleChange('total', e.target.value)}
-          className="w-full bg-transparent text-center focus:outline-none"
+          className="w-full bg-transparent text-center focus:outline-none font-medium text-black" // Added font-medium and text-black
           readOnly={room.type === 'N'} // Make total readonly for nightly rooms
         />
       </td>
@@ -121,7 +121,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
           type="text" 
           value={room.checkIn} 
           onChange={(e) => handleChange('checkIn', e.target.value)}
-          className="w-full bg-transparent text-center focus:outline-none"
+          className="w-full bg-transparent text-center focus:outline-none font-medium text-black" // Added font-medium and text-black
         />
       </td>
       <td className="border border-gray-300 p-1 text-center w-16">
@@ -129,7 +129,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
           type="text" 
           value={room.checkOut} 
           onChange={(e) => handleChange('checkOut', e.target.value)}
-          className="w-full bg-transparent text-center focus:outline-none"
+          className="w-full bg-transparent text-center focus:outline-none font-medium text-black" // Added font-medium and text-black
         />
       </td>
       <td className="border border-gray-300 p-1 w-1/4">
@@ -137,7 +137,7 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
           type="text" 
           value={room.vehicleDesc} 
           onChange={(e) => handleChange('vehicleDesc', e.target.value)}
-          className="w-full bg-transparent focus:outline-none"
+          className="w-full bg-transparent focus:outline-none font-medium text-black" // Added font-medium and text-black
         />
       </td>
     </tr>
