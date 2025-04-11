@@ -104,7 +104,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setLoading(true);
       console.log('Attempting to sign in with name:', name);
 
-      // Use maybeSingle instead of single to prevent errors when no rows are found
+      // Check for user in name_users table
       const { data, error } = await supabase
         .from('name_users')
         .select('*')
@@ -113,28 +113,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       console.log('Name user lookup result:', { data, error });
 
-      if (error) {
-        console.error('Database lookup error:', error);
-        toast.error('Error looking up user. Please try again.');
-        setLoading(false);
-        return;
-      }
-
-      // Create an email format for authentication
+      // Format email for authentication consistency
       const email = `${name.toLowerCase().replace(/\s+/g, '-')}@example.com`;
       console.log('Using email for auth:', email);
-
+      
+      // Handle case when user is not in name_users table
       if (!data) {
         console.log('User not found in name_users table, attempting to create it');
         
-        // Instead of showing error, try to create the user automatically
+        // Create new user in name_users table
         const { data: newNameUser, error: createError } = await supabase
           .from('name_users')
           .insert([{ name: name }])
           .select()
           .single();
-          
-        if (createError || !newNameUser) {
+        
+        if (createError) {
           console.error('Error creating name user:', createError);
           toast.error('Error creating account. Please try again or contact admin.');
           setLoading(false);
@@ -142,8 +136,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
         
         console.log('Successfully created name user:', newNameUser);
-        localStorage.setItem('nameUser', JSON.stringify(newNameUser));
-        setNameUser(newNameUser as NameUser);
+        if (newNameUser) {
+          localStorage.setItem('nameUser', JSON.stringify(newNameUser));
+          setNameUser(newNameUser as NameUser);
+        }
       } else {
         // User found in name_users table
         console.log('User found in name_users table:', data);
@@ -151,16 +147,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setNameUser(data as NameUser);
       }
       
-      // Try to sign in with auth
-      const { error: signInError } = await supabase.auth.signInWithPassword({
+      // First try to sign in with existing auth account
+      console.log('Attempting to sign in with auth account:', email);
+      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
         email: email,
         password: 'password123'
       });
       
       if (signInError) {
-        console.log('Auth sign in failed, attempting sign up:', signInError);
-        // If sign in fails, try to create the auth user
-        const { error: signUpError } = await supabase.auth.signUp({
+        console.log('Auth sign in failed, user might not exist:', signInError);
+        
+        // If sign in fails, try to create auth user
+        console.log('Attempting to create auth account for:', email);
+        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
           email,
           password: 'password123'
         });
@@ -171,6 +170,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setLoading(false);
           return;
         }
+        
+        console.log('Auth account created or already exists:', signUpData);
+      } else {
+        console.log('Successfully signed in with auth account:', signInData);
       }
 
       toast.success(`Welcome, ${name}!`);
