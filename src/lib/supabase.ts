@@ -1,15 +1,16 @@
-
 import { createClient } from '@supabase/supabase-js';
 import { RoomData, FooterValues } from '@/types';
 
+// Get Supabase environment variables
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 // Check if environment variables are defined
 if (!supabaseUrl || !supabaseKey) {
-  console.error('Missing Supabase environment variables. Make sure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are defined in your .env.local file.');
+  console.error('Missing Supabase environment variables. Please connect your Supabase project in the Lovable interface.');
 }
 
+// Create Supabase client with fallback empty strings to prevent runtime errors
 export const supabase = createClient(supabaseUrl || '', supabaseKey || '');
 
 // Room data functions
