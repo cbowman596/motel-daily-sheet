@@ -6,13 +6,15 @@ import { RoomData, FooterValues } from "@/types";
 // Your Firebase configuration
 // Replace these with your actual Firebase project values
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY", // Replace with your Firebase API key
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com", 
-  databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  apiKey: "YOUR_API_KEY",
+  authDomain: "motel-daily-sheet.firebaseapp.com",
+  databaseURL: "https://motel-daily-sheet-default-rtdb.firebaseio.com",
+  projectId: "motel-daily-sheet",
+  storageBucket: "motel-daily-sheet.appspot.com",
+  messagingSenderId: "608019576618",
   appId: "YOUR_APP_ID"
+};
+
 };
 
 // Initialize Firebase
