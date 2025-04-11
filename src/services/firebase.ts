@@ -1,21 +1,33 @@
+
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref, set, get, onValue } from "firebase/database";
+import { getAnalytics } from "firebase/analytics";
 import { RoomData, FooterValues } from "@/types";
 
 // Your Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCkfAcmoXpiOlbNx20d__HfAOnJ-ct7TcY",
+  apiKey: "AIzaSyDLoUeSnQLzFfQYrf3kCPKyc9hrzDaf8vk",
   authDomain: "motel-daily-sheet.firebaseapp.com",
   databaseURL: "https://motel-daily-sheet-default-rtdb.firebaseio.com",
   projectId: "motel-daily-sheet",
-  storageBucket: "motel-daily-sheet.appspot.com",
+  storageBucket: "motel-daily-sheet.firebasestorage.app",
   messagingSenderId: "608019576618",
-  appId: "1:608019576618:web:de089347c767c74d525053"
+  appId: "1:608019576618:web:de089347c767c74d525053",
+  measurementId: "G-3JCS7K1NVG"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
+
+// Initialize Analytics
+try {
+  const analytics = getAnalytics(app);
+  console.log("Firebase Analytics initialized successfully");
+} catch (error) {
+  console.log("Analytics initialization failed:", error);
+  // Analytics might fail in environments without browser support
+}
 
 // Save data to Firebase
 export const saveDataToFirebase = async (

@@ -1,9 +1,10 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { RoomData, FooterValues } from '@/types';
 import DataTransfer from './DataTransfer';
-import { Cloud, CloudOff } from 'lucide-react';
+import { Cloud, CloudOff, Save, RefreshCcw } from 'lucide-react';
 
 interface ActionButtonsProps {
   handleSave: () => void;
@@ -22,6 +23,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
   handleDataImport
 }) => {
   const [isConnected, setIsConnected] = React.useState(true);
+  const [isSaving, setIsSaving] = React.useState(false);
 
   React.useEffect(() => {
     const checkConnection = () => {
@@ -37,6 +39,24 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       window.removeEventListener('offline', checkConnection);
     };
   }, []);
+
+  const handleSaveWithFeedback = async () => {
+    if (!isConnected) {
+      toast.error('You are offline. Changes will not be saved to Firebase.');
+      return;
+    }
+    
+    setIsSaving(true);
+    try {
+      await handleSave();
+      toast.success('Data saved to Firebase successfully');
+    } catch (error) {
+      toast.error('Failed to save data to Firebase');
+      console.error('Save error:', error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <div className="flex flex-col md:flex-row md:items-center gap-4">
@@ -57,10 +77,21 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
       />
       <div className="flex flex-wrap gap-2 md:ml-auto">
         <Button 
-          onClick={handleSave}
+          onClick={handleSaveWithFeedback}
           className="bg-green-600 hover:bg-green-700"
+          disabled={isSaving}
         >
-          Save Changes
+          {isSaving ? (
+            <>
+              <RefreshCcw className="mr-2 h-4 w-4 animate-spin" />
+              Saving...
+            </>
+          ) : (
+            <>
+              <Save className="mr-2 h-4 w-4" />
+              Save Changes
+            </>
+          )}
         </Button>
         <Button 
           onClick={() => {
@@ -70,6 +101,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
             }
           }}
           className="bg-red-600 hover:bg-red-700"
+          disabled={isSaving}
         >
           Reset Sheet
         </Button>
