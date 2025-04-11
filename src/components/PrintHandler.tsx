@@ -30,13 +30,13 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
     printWindow.document.write('<style>');
     printWindow.document.write(`
       @page { 
-        size: landscape; 
+        size: portrait; 
         margin: 2mm;
-        scale: 0.75;
+        scale: 0.9;
       }
       body { 
         font-family: Arial, sans-serif;
-        font-size: 7px;
+        font-size: 6px;
         color: #000000 !important; 
         width: 100%;
         margin: 0;
@@ -52,7 +52,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         border: 1px solid black; 
         padding: 1px;
         background-color: #f3f4f6; 
-        font-size: 7px;
+        font-size: 6px;
         text-align: center;
         font-weight: bold;
         color: #000000 !important;
@@ -60,8 +60,8 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       td { 
         border: 1px solid black; 
         padding: 1px; 
-        height: 15px;
-        font-size: 7px;
+        height: 13px;
+        font-size: 6px;
         font-weight: 600;
         color: #000000 !important;
       }
@@ -74,7 +74,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         justify-content: space-between;
         align-items: center;
         margin-bottom: 1px;
-        font-size: 8px;
+        font-size: 7px;
         font-weight: bold;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
@@ -88,7 +88,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         margin-top: 1px;
         padding: 1px;
         border-top: 1px solid #e5e7eb;
-        font-size: 7px;
+        font-size: 6px;
         font-weight: 600;
         color: #000000 !important;
       }
@@ -113,8 +113,8 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         margin-bottom: 1px;
       }
       .color-swatch {
-        width: 7px;
-        height: 7px;
+        width: 6px;
+        height: 6px;
         margin-right: 2px;
       }
       .purple, .bg-motel-purple {
@@ -158,12 +158,12 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         border: none;
         color: #000000 !important;
         font-weight: 600 !important;
-        font-size: 7px !important;
+        font-size: 6px !important;
       }
       span {
         color: #000000 !important;
         font-weight: 600 !important;
-        font-size: 7px !important;
+        font-size: 6px !important;
       }
       .text-center, input.text-center {
         text-align: center;
@@ -185,7 +185,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       p, div, label {
         color: #000000 !important;
         font-weight: 600 !important;
-        font-size: 7px !important;
+        font-size: 6px !important;
       }
       .footer-values {
         display: grid;
@@ -227,7 +227,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
     // Create header section with current date
     const headerHtml = `
       <div class="header">
-        <div><h1 style="font-size: 10px; margin: 0; padding: 0;">Coyote Motel West</h1></div>
+        <div><h1 style="font-size: 9px; margin: 0; padding: 0;">Coyote Motel West</h1></div>
         <div style="display: flex; align-items: center;">
           <div style="margin-right: 10px;">
             <span>N/${roomTotals.nightly}</span>
