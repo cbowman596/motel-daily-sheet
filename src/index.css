@@ -81,6 +81,27 @@
   }
 }
 
+/* Define colors for the motel sheet cells */
+.bg-motel-purple {
+  background-color: #6c5fc7;
+  color: #FFFFFF;
+}
+
+.bg-motel-yellow {
+  background-color: #fcd34d;
+  color: #000000;
+}
+
+.bg-motel-blue {
+  background-color: #3b82f6;
+  color: #FFFFFF;
+}
+
+.bg-motel-header {
+  background-color: #4c9eeb;
+  color: #FFFFFF;
+}
+
 /* Make specific columns always have black text on print and no background color */
 @media print {
   td.name-column,
@@ -90,6 +111,17 @@
   td.checkin-column,
   td.checkout-column,
   td.vehicle-column {
+    background-color: white !important;
+    color: black !important;
+  }
+
+  td.name-column *,
+  td.pmt-column *, 
+  td.rate-column *,
+  td.total-column *,
+  td.checkin-column *,
+  td.checkout-column *,
+  td.vehicle-column * {
     background-color: white !important;
     color: black !important;
   }

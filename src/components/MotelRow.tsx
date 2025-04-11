@@ -12,50 +12,67 @@ interface MotelRowProps {
 }
 
 const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onToggleSelect }) => {
-  // Apply custom styles based on room.backgroundColor and room.textColor
-  const customStyle = {
-    backgroundColor: room.backgroundColor || '',
-    color: room.textColor || ''
+  // Get background color and text color based on room type or custom colors
+  const getBgColor = () => {
+    if (room.backgroundColor) return room.backgroundColor;
+    if (room.type === 'W') return '#3b82f6';  // Blue for weekly
+    if (room.type === 'M') return '#6c5fc7';  // Purple for monthly
+    if (Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) return '#fcd34d';  // Yellow for employee rooms
+    return '';
+  };
+  
+  const getTextColor = () => {
+    if (room.textColor) return room.textColor;
+    if (room.type === 'W' || room.type === 'M') return '#FFFFFF';  // White text for blue and purple backgrounds
+    return '';
   };
 
+  const rowStyle = {
+    backgroundColor: getBgColor(),
+    color: getTextColor()
+  };
+
+  // Only apply custom styling to the first 5 columns (Selection, Loc, Type, Dur, Room#)
+  const colorColumnStyle = rowStyle;
+  
   return (
-    <tr key={room.id} style={customStyle}>
-      <td className="border border-gray-300 p-1 text-center" style={customStyle}>
+    <tr key={room.id}>
+      <td className="border border-gray-300 p-1 text-center" style={colorColumnStyle}>
         <Checkbox
           checked={isSelected}
           onCheckedChange={() => onToggleSelect(room.id)}
         />
       </td>
-      <td className="border border-gray-300 p-1 text-center" style={customStyle}>
+      <td className="border border-gray-300 p-1 text-center" style={colorColumnStyle}>
         <Input 
           value={room.location || ''} 
           onChange={(e) => updateRoom(room.id, 'location', e.target.value)}
           className="h-8 min-h-8 bg-transparent border-0 p-1 text-center"
-          style={customStyle}
+          style={{ color: getTextColor() }}
         />
       </td>
-      <td className="border border-gray-300 p-1 text-center" style={customStyle}>
+      <td className="border border-gray-300 p-1 text-center" style={colorColumnStyle}>
         <Input 
           value={room.roomType || ''} 
           onChange={(e) => updateRoom(room.id, 'roomType', e.target.value)}
           className="h-8 min-h-8 bg-transparent border-0 p-1 text-center"
-          style={customStyle}
+          style={{ color: getTextColor() }}
         />
       </td>
-      <td className="border border-gray-300 p-1 text-center" style={customStyle}>
+      <td className="border border-gray-300 p-1 text-center" style={colorColumnStyle}>
         <Input 
           value={room.type || ''} 
           onChange={(e) => updateRoom(room.id, 'type', e.target.value)}
           className="h-8 min-h-8 bg-transparent border-0 p-1 text-center"
-          style={customStyle}
+          style={{ color: getTextColor() }}
         />
       </td>
-      <td className="border border-gray-300 p-1 text-center" style={customStyle}>
+      <td className="border border-gray-300 p-1 text-center" style={colorColumnStyle}>
         <Input 
           value={room.roomNumber || ''} 
           onChange={(e) => updateRoom(room.id, 'roomNumber', e.target.value)}
           className="h-8 min-h-8 bg-transparent border-0 p-1"
-          style={customStyle}
+          style={{ color: getTextColor() }}
         />
       </td>
       <td className="name-column border border-gray-300 p-1">
