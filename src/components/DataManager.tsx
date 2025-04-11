@@ -5,7 +5,6 @@ import { RoomData, FooterValues } from '@/types';
 import { initialRooms, initialFooterValues } from '@/data/initialData';
 import ActionButtons from '@/components/ActionButtons';
 import PrintHandler from '@/components/PrintHandler';
-import { Button } from '@/components/ui/button';
 
 interface DataManagerProps {
   rooms: RoomData[];
@@ -40,7 +39,7 @@ const DataManager: React.FC<DataManagerProps> = ({
   const applyColorToRooms = (roomIds: number[], bgColor: string, textColor: string) => {
     setRooms(rooms.map(room => 
       roomIds.includes(room.id) 
-        ? { ...room, backgroundColor: bgColor, textColor: textColor } 
+        ? { ...room, backgroundColor: bgColor, textColor: '#000000' } 
         : room
     ));
     setSelectedRoomIds([]);
@@ -72,27 +71,28 @@ const DataManager: React.FC<DataManagerProps> = ({
   };
 
   return (
-    <div className="max-w-6xl mx-auto">
-      <div className="flex flex-wrap gap-2 justify-center mt-4">
-        <PrintHandler 
-          rooms={rooms}
-          footerValues={footerValues}
-          month={month}
-          day={day}
-          roomTotals={roomTotals}
-        />
-        
-        <ActionButtons 
-          handleSave={handleSave} 
-          handlePrint={() => {}} // PrintHandler handles this
-          handleReset={handleReset}
-          roomsData={rooms}
-          footerValues={footerValues}
-          handleDataImport={handleDataImport} 
-        />
-      </div>
-      <div className={`text-green-600 font-medium text-center mt-2 ${saveStatus ? 'animate-save-flash' : 'opacity-0'}`}>
-        {saveStatus}
+    <div className="max-w-6xl mx-auto mt-4">
+      <div className="flex justify-between items-center">
+        <div className={`text-green-600 font-medium ${saveStatus ? 'animate-save-flash' : 'opacity-0'}`}>
+          {saveStatus}
+        </div>
+        <div className="flex flex-col md:flex-row gap-2">
+          <PrintHandler 
+            rooms={rooms}
+            footerValues={footerValues}
+            month={month}
+            day={day}
+            roomTotals={roomTotals}
+          />
+          <ActionButtons 
+            handleSave={handleSave} 
+            handlePrint={() => {}} // PrintHandler now handles this
+            handleReset={handleReset}
+            roomsData={rooms}
+            footerValues={footerValues}
+            handleDataImport={handleDataImport} 
+          />
+        </div>
       </div>
     </div>
   );
