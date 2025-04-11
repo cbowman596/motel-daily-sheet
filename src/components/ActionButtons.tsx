@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
@@ -6,7 +7,7 @@ import DataTransfer from './DataTransfer';
 
 interface ActionButtonsProps {
   handleSave: () => void;
-  handlePrint: () => void;
+  handlePrint: () => void; // Keep prop for compatibility but we won't use it
   handleReset: () => void;
   roomsData: RoomData[];
   footerValues: FooterValues;
@@ -15,7 +16,6 @@ interface ActionButtonsProps {
 
 const ActionButtons: React.FC<ActionButtonsProps> = ({ 
   handleSave, 
-  handlePrint, 
   handleReset,
   roomsData,
   footerValues,
@@ -34,12 +34,6 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
           className="bg-green-600 hover:bg-green-700"
         >
           Save Changes
-        </Button>
-        <Button 
-          onClick={handlePrint}
-          className="bg-blue-600 hover:bg-blue-700"
-        >
-          Print Sheet
         </Button>
         <Button 
           onClick={() => {
