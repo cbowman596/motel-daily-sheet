@@ -101,6 +101,36 @@
   }
 }
 
+/* Ensure white text on colored backgrounds for both display and print */
+.bg-motel-purple, .purple {
+  background-color: #6c5fc7 !important;
+  color: #FFFFFF !important;
+}
+
+.bg-motel-purple *, .purple * {
+  color: #FFFFFF !important;
+}
+
+.bg-motel-blue, .blue {
+  background-color: #3b82f6 !important;
+  color: #FFFFFF !important;
+}
+
+.bg-motel-blue *, .blue * {
+  color: #FFFFFF !important;
+}
+
+.bg-motel-yellow, .yellow {
+  background-color: #fcd34d !important;
+  color: #000000 !important;
+}
+
+/* Remove inheritance that might override text color */
+tr[class*="bg-motel"] input, 
+tr[style*="background-color"] input {
+  color: inherit !important;
+}
+
 @media print {
   @page {
     size: portrait;
@@ -158,4 +188,12 @@
   tr[style*="background-color"] * {
     color: #FFFFFF !important;
   }
+  
+  /* Make sure inputs inside colored rows inherit the text color */
+  tr.bg-motel-purple input, 
+  tr.bg-motel-blue input,
+  tr[style*="background-color"] input {
+    color: inherit !important;
+  }
 }
+

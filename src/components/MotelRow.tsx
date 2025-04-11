@@ -14,13 +14,12 @@ interface MotelRowProps {
 const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onToggleSelect }) => {
   const getRowStyle = () => {
     if (room.backgroundColor) {
-      // Force white text for any custom background color
       return {
         backgroundColor: room.backgroundColor,
         color: '#FFFFFF'
       };
     }
-    return { color: '#000000' };
+    return {};
   };
   
   const getRowClass = () => {
@@ -83,8 +82,10 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
   };
   
   const rowStyle = getRowStyle();
+  
+  // Always use white text for special background colors
   const inputStyle = {
-    color: rowStyle.color
+    color: (room.backgroundColor || room.type === 'W' || room.type === 'M') ? '#FFFFFF' : 'inherit'
   };
   
   return (

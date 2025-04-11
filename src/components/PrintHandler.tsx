@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { RoomData, FooterValues } from '@/types';
 
@@ -122,7 +121,6 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       .purple, .bg-motel-purple {
         background-color: #6c5fc7 !important;
         color: #FFFFFF !important;
-        font-weight: 600 !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
@@ -132,14 +130,12 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       .yellow, .bg-motel-yellow {
         background-color: #fcd34d !important;
         color: #000000 !important;
-        font-weight: 600 !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
       .blue, .bg-motel-blue {
         background-color: #3b82f6 !important;
         color: #FFFFFF !important;
-        font-weight: 600 !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
@@ -229,6 +225,12 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       .gap-2 {
         gap: 2px;
       }
+      tr[style*="background-color"] {
+        color: #FFFFFF !important;
+      }
+      tr[style*="background-color"] * {
+        color: #FFFFFF !important;
+      }
     `);
     printWindow.document.write('</style></head><body>');
     
@@ -236,15 +238,15 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
     const headerHtml = `
       <div class="print-container">
         <div class="header">
-          <div><h1 style="font-size: 12px; margin: 0; padding: 0;">Coyote Motel West</h1></div>
-          <div style="display: flex; align-items: center;">
-            <div style="margin-right: 10px;">
-              <span>N/${roomTotals.nightly}</span>
-              <span>W/${roomTotals.weekly}</span>
-              <span>M/${roomTotals.monthly}</span>
-              <span>A/${roomTotals.airbnb}</span>
+          <div><h1 style="font-size: 12px; margin: 0; padding: 0; color: #FFFFFF !important;">Coyote Motel West</h1></div>
+          <div style="display: flex; align-items: center; color: #FFFFFF !important;">
+            <div style="margin-right: 10px; color: #FFFFFF !important;">
+              <span style="color: #FFFFFF !important;">N/${roomTotals.nightly}</span>
+              <span style="color: #FFFFFF !important;">W/${roomTotals.weekly}</span>
+              <span style="color: #FFFFFF !important;">M/${roomTotals.monthly}</span>
+              <span style="color: #FFFFFF !important;">A/${roomTotals.airbnb}</span>
             </div>
-            <div>${month} ${day}</div>
+            <div style="color: #FFFFFF !important;">${month} ${day}</div>
           </div>
         </div>
     `;
@@ -276,19 +278,18 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       let textColor = '#000000';
       
       if (room.backgroundColor) {
-        // For custom background colors, always use white text
+        // For custom background colors
         rowStyle = `background-color: ${room.backgroundColor};`;
-        textColor = '#FFFFFF';
+        textColor = '#FFFFFF'; // Always white text on custom backgrounds
       } else if (room.type === 'W') {
         rowClass = 'blue';
-        textColor = '#FFFFFF';
+        textColor = '#FFFFFF'; // White text for weekly rooms
       } else if (room.type === 'M') {
         rowClass = 'purple';
-        textColor = '#FFFFFF';
+        textColor = '#FFFFFF'; // White text for monthly rooms
       } else if (Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) {
         rowClass = 'yellow';
-        // Yellow background keeps black text for better contrast
-        textColor = '#000000';
+        textColor = '#000000'; // Black text for yellow background
       }
       
       // Determine the location based on room number
@@ -318,19 +319,24 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         return '';
       };
       
+      // Force white text with !important for colored rows
+      const textStyleAttr = textColor === '#FFFFFF' 
+        ? ` style="color: #FFFFFF !important;"` 
+        : ` style="color: ${textColor};"`;
+
       tableHtml += `
-        <tr class="${rowClass}" style="${rowStyle} color: ${textColor};">
-          <td style="text-align: center; color: ${textColor};">${room.location || getLocation()}</td>
-          <td style="text-align: center; color: ${textColor};">${room.roomType || getRoomType()}</td>
-          <td style="text-align: center; color: ${textColor};">${room.type}</td>
-          <td style="text-align: center; color: ${textColor};">${room.roomNumber}</td>
-          <td style="color: ${textColor};">${room.name}</td>
-          <td style="text-align: center; color: ${textColor};">${room.pmt}</td>
-          <td style="text-align: center; color: ${textColor};">${room.rate}</td>
-          <td style="text-align: center; color: ${textColor};">${room.total}</td>
-          <td style="text-align: center; color: ${textColor};">${room.checkIn}</td>
-          <td style="text-align: center; color: ${textColor};">${room.checkOut}</td>
-          <td style="color: ${textColor};">${room.vehicleDesc}</td>
+        <tr class="${rowClass}" style="${rowStyle}">
+          <td style="text-align: center;${textColor === '#FFFFFF' ? ' color: #FFFFFF !important;' : ''}">${room.location || getLocation()}</td>
+          <td style="text-align: center;${textColor === '#FFFFFF' ? ' color: #FFFFFF !important;' : ''}">${room.roomType || getRoomType()}</td>
+          <td style="text-align: center;${textColor === '#FFFFFF' ? ' color: #FFFFFF !important;' : ''}">${room.type}</td>
+          <td style="text-align: center;${textColor === '#FFFFFF' ? ' color: #FFFFFF !important;' : ''}">${room.roomNumber}</td>
+          <td${textStyleAttr}>${room.name}</td>
+          <td style="text-align: center;${textColor === '#FFFFFF' ? ' color: #FFFFFF !important;' : ''}">${room.pmt}</td>
+          <td style="text-align: center;${textColor === '#FFFFFF' ? ' color: #FFFFFF !important;' : ''}">${room.rate}</td>
+          <td style="text-align: center;${textColor === '#FFFFFF' ? ' color: #FFFFFF !important;' : ''}">${room.total}</td>
+          <td style="text-align: center;${textColor === '#FFFFFF' ? ' color: #FFFFFF !important;' : ''}">${room.checkIn}</td>
+          <td style="text-align: center;${textColor === '#FFFFFF' ? ' color: #FFFFFF !important;' : ''}">${room.checkOut}</td>
+          <td${textStyleAttr}>${room.vehicleDesc}</td>
         </tr>
       `;
     });
