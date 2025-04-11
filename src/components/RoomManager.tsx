@@ -44,10 +44,10 @@ const RoomManager: React.FC<RoomManagerProps> = ({
           <thead>
             <tr className="bg-gray-100">
               <th className="border border-gray-300 p-2 text-sm w-8">Select</th>
+              <th className="border border-gray-300 p-2 text-sm w-8">Room #</th>
               <th className="border border-gray-300 p-2 text-sm w-10">Loc</th>
               <th className="border border-gray-300 p-2 text-sm w-24">Type</th>
               <th className="border border-gray-300 p-2 text-sm w-8">Dur</th>
-              <th className="border border-gray-300 p-2 text-sm w-8">Room #</th>
               <th className="border border-gray-300 p-2 text-sm w-1/4">Name</th>
               <th className="border border-gray-300 p-2 text-sm w-8">PMT</th>
               <th className="border border-gray-300 p-2 text-sm w-20">Rate</th>

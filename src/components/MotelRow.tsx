@@ -109,6 +109,16 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
           />
         </div>
       </td>
+      <td className="border border-gray-300 p-1 text-center w-8">
+        <input 
+          type="text" 
+          value={room.roomNumber} 
+          onChange={(e) => handleChange('roomNumber', e.target.value)}
+          className="w-full bg-transparent text-center focus:outline-none font-medium"
+          style={inputStyle}
+          readOnly
+        />
+      </td>
       <td className="border border-gray-300 p-1 text-center w-10">
         <input 
           type="text" 
@@ -137,16 +147,6 @@ const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onTog
           className="w-full bg-transparent text-center focus:outline-none font-medium"
           style={inputStyle}
           maxLength={2}
-        />
-      </td>
-      <td className="border border-gray-300 p-1 text-center w-8">
-        <input 
-          type="text" 
-          value={room.roomNumber} 
-          onChange={(e) => handleChange('roomNumber', e.target.value)}
-          className="w-full bg-transparent text-center focus:outline-none font-medium"
-          style={inputStyle}
-          readOnly
         />
       </td>
       <td className="border border-gray-300 p-1 w-1/4">

@@ -250,15 +250,15 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         </div>
     `;
     
-    // Create table with rooms data
+    // Create table with rooms data in new column order
     let tableHtml = `
       <table>
         <thead>
           <tr>
+            <th>Room #</th>
             <th>Loc</th>
             <th>Type</th>
             <th>Dur</th>
-            <th>Room #</th>
             <th>Name</th>
             <th>PMT</th>
             <th style="width: 60px;">Rate</th>
@@ -319,22 +319,25 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       };
       
       // Create individual cell classes for the colored columns
+      const roomNumberCellClass = rowClass ? `${rowClass} ${coloredCellClass}` : '';
       const locationCellClass = rowClass ? `${rowClass} ${coloredCellClass}` : '';
       const roomTypeCellClass = rowClass ? `${rowClass} ${coloredCellClass}` : '';
       const typeCellClass = rowClass ? `${rowClass} ${coloredCellClass}` : '';
-      const roomNumberCellClass = rowClass ? `${rowClass} ${coloredCellClass}` : '';
 
       // Apply cell-specific background styles for custom colors
+      const roomNumberCellStyle = room.backgroundColor ? `background-color: ${room.backgroundColor};` : '';
       const locationCellStyle = room.backgroundColor ? `background-color: ${room.backgroundColor};` : '';
       const roomTypeCellStyle = room.backgroundColor ? `background-color: ${room.backgroundColor};` : '';
       const typeCellStyle = room.backgroundColor ? `background-color: ${room.backgroundColor};` : '';
-      const roomNumberCellStyle = room.backgroundColor ? `background-color: ${room.backgroundColor};` : '';
 
       // Apply text color for custom colored cells
       const coloredTextStyle = room.backgroundColor ? 'color: #FFFFFF !important;' : '';
 
       tableHtml += `
         <tr>
+          <td class="${roomNumberCellClass}" style="text-align: center; ${roomNumberCellStyle} ${roomNumberCellClass ? coloredTextStyle : ''}">
+            ${room.roomNumber}
+          </td>
           <td class="${locationCellClass}" style="text-align: center; ${locationCellStyle} ${locationCellClass ? coloredTextStyle : ''}">
             ${room.location || getLocation()}
           </td>
@@ -343,9 +346,6 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
           </td>
           <td class="${typeCellClass}" style="text-align: center; ${typeCellStyle} ${typeCellClass ? coloredTextStyle : ''}">
             ${room.type}
-          </td>
-          <td class="${roomNumberCellClass}" style="text-align: center; ${roomNumberCellStyle} ${roomNumberCellClass ? coloredTextStyle : ''}">
-            ${room.roomNumber}
           </td>
           <td style="color: #000000 !important;">${room.name}</td>
           <td style="text-align: center; color: #000000 !important;">${room.pmt}</td>
