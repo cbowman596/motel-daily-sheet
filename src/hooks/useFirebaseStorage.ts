@@ -1,9 +1,7 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import { saveDataToFirebase, loadDataFromFirebase } from '@/services/firebase';
 import { toast } from 'sonner';
 
-// Custom hook for using Firebase as storage
 export function useFirebaseStorage<T>(key: string, initialValue: T, sheetId: string = "default"): [T, (value: T) => void, boolean] {
   const [storedValue, setStoredValue] = useState<T>(initialValue);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -61,8 +59,6 @@ export function useFirebaseStorage<T>(key: string, initialValue: T, sheetId: str
           sheetId
         );
       }
-      
-      toast.success('Data saved to cloud successfully');
     } catch (error) {
       console.error(`Error saving ${key} to Firebase:`, error);
       toast.error('Failed to save data to cloud');
