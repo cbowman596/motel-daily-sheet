@@ -275,50 +275,50 @@ const Index = () => {
         
         const selectColumnCells = clonedContent.querySelectorAll('td:first-child');
         selectColumnCells.forEach(cell => {
-          cell.style.display = 'none';
+          (cell as HTMLElement).style.display = 'none';
         });
         
         const tableRows = clonedContent.querySelectorAll('tr');
         tableRows.forEach(row => {
-          if (row.classList.contains('ring-2')) {
-            row.classList.remove('ring-2', 'ring-blue-500');
+          if ((row as HTMLElement).classList.contains('ring-2')) {
+            (row as HTMLElement).classList.remove('ring-2', 'ring-blue-500');
           }
           
-          const style = row.getAttribute('style');
+          const style = (row as HTMLElement).getAttribute('style');
           if (style && style.includes('background-color')) {
             const bgColor = style.match(/background-color:\s*([^;]+)/)?.[1];
-            row.style.backgroundColor = bgColor || '';
-            row.style.color = '#000000';
-            row.style.fontWeight = '600';
-            row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
+            (row as HTMLElement).style.backgroundColor = bgColor || '';
+            (row as HTMLElement).style.color = '#000000';
+            (row as HTMLElement).style.fontWeight = '600';
+            (row as HTMLElement).setAttribute('style', `${(row as HTMLElement).getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
           } 
-          else if (row.classList.contains('bg-motel-purple')) {
-            row.style.backgroundColor = '#6c5fc7';
-            row.style.color = '#000000';
-            row.style.fontWeight = '600';
-            row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
+          else if ((row as HTMLElement).classList.contains('bg-motel-purple')) {
+            (row as HTMLElement).style.backgroundColor = '#6c5fc7';
+            (row as HTMLElement).style.color = '#000000';
+            (row as HTMLElement).style.fontWeight = '600';
+            (row as HTMLElement).setAttribute('style', `${(row as HTMLElement).getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
           } 
-          else if (row.classList.contains('bg-motel-yellow')) {
-            row.style.backgroundColor = '#fcd34d';
-            row.style.color = '#000000';
-            row.style.fontWeight = '600';
-            row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
+          else if ((row as HTMLElement).classList.contains('bg-motel-yellow')) {
+            (row as HTMLElement).style.backgroundColor = '#fcd34d';
+            (row as HTMLElement).style.color = '#000000';
+            (row as HTMLElement).style.fontWeight = '600';
+            (row as HTMLElement).setAttribute('style', `${(row as HTMLElement).getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
           }
-          else if (row.classList.contains('bg-motel-blue')) {
-            row.style.backgroundColor = '#3b82f6';
-            row.style.color = '#000000';
-            row.style.fontWeight = '600';
-            row.setAttribute('style', `${row.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
+          else if ((row as HTMLElement).classList.contains('bg-motel-blue')) {
+            (row as HTMLElement).style.backgroundColor = '#3b82f6';
+            (row as HTMLElement).style.color = '#000000';
+            (row as HTMLElement).style.fontWeight = '600';
+            (row as HTMLElement).setAttribute('style', `${(row as HTMLElement).getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
           }
           
           const cells = row.querySelectorAll('td');
           cells.forEach(cell => {
-            cell.style.color = '#000000';
-            cell.style.fontWeight = '600';
+            (cell as HTMLElement).style.color = '#000000';
+            (cell as HTMLElement).style.fontWeight = '600';
             
-            if (row.style.backgroundColor) {
-              cell.style.backgroundColor = row.style.backgroundColor;
-              cell.setAttribute('style', `${cell.getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
+            if ((row as HTMLElement).style.backgroundColor) {
+              (cell as HTMLElement).style.backgroundColor = (row as HTMLElement).style.backgroundColor;
+              (cell as HTMLElement).setAttribute('style', `${(cell as HTMLElement).getAttribute('style') || ''}; -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;`);
             }
           });
         });
