@@ -11,7 +11,7 @@ interface PrivateRouteProps {
 }
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
-  const { user, loading } = useAuth();
+  const { user, nameUser, loading } = useAuth();
   const [checkingConnection, setCheckingConnection] = useState(true);
   const [connectionError, setConnectionError] = useState(false);
   
@@ -38,12 +38,12 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
       }
     };
     
-    if (user) {
+    if (user || nameUser) {
       checkSupabaseConnection();
     } else {
       setCheckingConnection(false);
     }
-  }, [user]);
+  }, [user, nameUser]);
   
   // Display loading spinner while checking authentication or connection
   if (loading || (checkingConnection && !connectionError)) {
@@ -82,7 +82,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
     );
   }
   
-  return user ? <>{children}</> : <Navigate to="/login" replace />;
+  return (user || nameUser) ? <>{children}</> : <Navigate to="/login" replace />;
 };
 
 export default PrivateRoute;
