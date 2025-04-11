@@ -104,13 +104,13 @@
 @media print {
   @page {
     size: portrait;
-    margin: 3mm 2mm;
-    scale: 0.9;
+    margin: 1mm;
+    scale: 1;
   }
   
   body {
     font-family: Arial, sans-serif;
-    font-size: 6px;
+    font-size: 9px;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     color-adjust: exact !important;

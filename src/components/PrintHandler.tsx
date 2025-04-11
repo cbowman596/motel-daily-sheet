@@ -31,12 +31,12 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
     printWindow.document.write(`
       @page { 
         size: portrait; 
-        margin: 2mm;
-        scale: 0.9;
+        margin: 1mm;
+        scale: 1;
       }
       body { 
         font-family: Arial, sans-serif;
-        font-size: 6px;
+        font-size: 9px;
         color: #000000 !important; 
         width: 100%;
         margin: 0;
@@ -50,31 +50,31 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       }
       th { 
         border: 1px solid black; 
-        padding: 1px;
+        padding: 2px;
         background-color: #f3f4f6; 
-        font-size: 6px;
+        font-size: 9px;
         text-align: center;
         font-weight: bold;
         color: #000000 !important;
       }
       td { 
         border: 1px solid black; 
-        padding: 1px; 
-        height: 13px;
-        font-size: 6px;
+        padding: 2px; 
+        height: 18px;
+        font-size: 9px;
         font-weight: 600;
         color: #000000 !important;
       }
       .header {
         background-color: #4c9eeb;
         color: white;
-        padding: 2px;
+        padding: 3px;
         border-radius: 4px 4px 0 0;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 1px;
-        font-size: 7px;
+        margin-bottom: 2px;
+        font-size: 10px;
         font-weight: bold;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
@@ -85,23 +85,23 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         margin-right: 8px;
       }
       .footer {
-        margin-top: 1px;
-        padding: 1px;
+        margin-top: 2px;
+        padding: 2px;
         border-top: 1px solid #e5e7eb;
-        font-size: 6px;
+        font-size: 9px;
         font-weight: 600;
         color: #000000 !important;
       }
       .footer-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 1px;
+        gap: 2px;
       }
       .footer-flex {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 1px;
-        margin-top: 1px;
+        gap: 2px;
+        margin-top: 2px;
       }
       .color-legend {
         display: flex;
@@ -110,12 +110,12 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       .color-item {
         display: flex;
         align-items: center;
-        margin-bottom: 1px;
+        margin-bottom: 2px;
       }
       .color-swatch {
-        width: 6px;
-        height: 6px;
-        margin-right: 2px;
+        width: 9px;
+        height: 9px;
+        margin-right: 3px;
       }
       .purple, .bg-motel-purple {
         background-color: #6c5fc7 !important;
@@ -146,7 +146,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       .footer-section {
         display: grid;
         grid-template-columns: auto 1fr;
-        gap: 1px;
+        gap: 2px;
       }
       .text-right {
         text-align: right;
@@ -158,12 +158,12 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         border: none;
         color: #000000 !important;
         font-weight: 600 !important;
-        font-size: 6px !important;
+        font-size: 9px !important;
       }
       span {
         color: #000000 !important;
         font-weight: 600 !important;
-        font-size: 6px !important;
+        font-size: 9px !important;
       }
       .text-center, input.text-center {
         text-align: center;
@@ -185,7 +185,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       p, div, label {
         color: #000000 !important;
         font-weight: 600 !important;
-        font-size: 6px !important;
+        font-size: 9px !important;
       }
       .footer-values {
         display: grid;
@@ -204,19 +204,19 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         font-weight: bold;
       }
       .p-4 {
-        padding: 1px;
+        padding: 2px;
       }
       .border-t {
         border-top: 1px solid #e5e7eb;
       }
       .mt-2 {
-        margin-top: 1px;
+        margin-top: 2px;
       }
       .mb-4 {
-        margin-bottom: 1px;
+        margin-bottom: 2px;
       }
       .gap-4 {
-        gap: 1px;
+        gap: 2px;
       }
       .gap-2 {
         gap: 1px;
@@ -227,7 +227,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
     // Create header section with current date
     const headerHtml = `
       <div class="header">
-        <div><h1 style="font-size: 9px; margin: 0; padding: 0;">Coyote Motel West</h1></div>
+        <div><h1 style="font-size: 12px; margin: 0; padding: 0;">Coyote Motel West</h1></div>
         <div style="display: flex; align-items: center;">
           <div style="margin-right: 10px;">
             <span>N/${roomTotals.nightly}</span>
