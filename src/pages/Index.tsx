@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import MotelHeader from '@/components/MotelHeader';
 import MotelRow from '@/components/MotelRow';
@@ -100,12 +101,12 @@ const Index = () => {
         printWindow.document.write(`
           @page { 
             size: landscape; 
-            margin: 5mm 3mm;
-            scale: 0.85;
+            margin: 3mm 2mm;
+            scale: 0.8;
           }
           body { 
             font-family: Arial, sans-serif;
-            font-size: 9px;
+            font-size: 8px;
             color: #000000 !important; 
             width: 100%;
             margin: 0;
@@ -118,31 +119,31 @@ const Index = () => {
           }
           th { 
             border: 1px solid black; 
-            padding: 3px;
+            padding: 2px;
             background-color: #f3f4f6; 
-            font-size: 9px;
+            font-size: 8px;
             text-align: center;
             font-weight: bold;
             color: #000000 !important;
           }
           td { 
             border: 1px solid black; 
-            padding: 3px; 
-            height: 18px;
-            font-size: 9px;
+            padding: 2px; 
+            height: 16px;
+            font-size: 8px;
             font-weight: 600;
             color: #000000 !important;
           }
           .header {
             background-color: #4c9eeb;
             color: white;
-            padding: 4px;
+            padding: 3px;
             border-radius: 4px 4px 0 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2px;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: bold;
           }
           .date-display {
@@ -151,10 +152,10 @@ const Index = () => {
             margin-right: 8px;
           }
           .footer {
-            margin-top: 2px;
-            padding: 3px;
+            margin-top: 1px;
+            padding: 2px;
             border-top: 1px solid #e5e7eb;
-            font-size: 9px;
+            font-size: 8px;
             font-weight: 600;
             color: #000000 !important;
           }
@@ -179,9 +180,9 @@ const Index = () => {
             margin-bottom: 2px;
           }
           .color-swatch {
-            width: 10px;
-            height: 10px;
-            margin-right: 4px;
+            width: 8px;
+            height: 8px;
+            margin-right: 3px;
           }
           .purple {
             background-color: #6c5fc7 !important;
@@ -213,12 +214,12 @@ const Index = () => {
             border: none;
             color: #000000 !important;
             font-weight: 600 !important;
-            font-size: 9px !important;
+            font-size: 8px !important;
           }
           span {
             color: #000000 !important;
             font-weight: 600 !important;
-            font-size: 9px !important;
+            font-size: 8px !important;
           }
           .text-center, input.text-center {
             text-align: center;
@@ -244,7 +245,29 @@ const Index = () => {
           p, div, label {
             color: #000000 !important;
             font-weight: 600 !important;
-            font-size: 9px !important;
+            font-size: 8px !important;
+          }
+          .footer-values {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 4px;
+          }
+          .footer-item {
+            display: flex;
+            align-items: center;
+          }
+          .footer-label {
+            font-weight: bold;
+            margin-right: 4px;
+          }
+          .footer-value {
+            font-weight: bold;
+          }
+          .p-4 {
+            padding: 2px;
+          }
+          .border-t {
+            border-top: 1px solid #e5e7eb;
           }
         `);
         printWindow.document.write('</style></head><body>');
@@ -259,7 +282,7 @@ const Index = () => {
           span.style.display = 'inline-block';
           span.style.color = '#000000';
           span.style.fontWeight = '600';
-          span.style.fontSize = '9px';
+          span.style.fontSize = '8px';
           
           if (input.classList.contains('text-center')) {
             span.style.textAlign = 'center';
@@ -324,7 +347,7 @@ const Index = () => {
           cells.forEach(cell => {
             (cell as HTMLElement).style.color = '#000000';
             (cell as HTMLElement).style.fontWeight = '600';
-            (cell as HTMLElement).style.fontSize = '9px';
+            (cell as HTMLElement).style.fontSize = '8px';
             
             if ((row as HTMLElement).style.backgroundColor) {
               (cell as HTMLElement).style.backgroundColor = (row as HTMLElement).style.backgroundColor;
@@ -343,12 +366,35 @@ const Index = () => {
           colorPickerContainer.parentNode.removeChild(colorPickerContainer);
         }
         
-        const footerElements = clonedContent.querySelectorAll('.p-4.border-t *');
-        footerElements.forEach(element => {
-          (element as HTMLElement).style.color = '#000000';
-          (element as HTMLElement).style.fontWeight = '600';
-          (element as HTMLElement).style.fontSize = '9px';
-        });
+        // Improve footer styling
+        const footerContainer = clonedContent.querySelector('.p-4.border-t');
+        if (footerContainer) {
+          (footerContainer as HTMLElement).style.padding = '2px';
+          (footerContainer as HTMLElement).style.marginTop = '1px';
+          
+          const footerElements = footerContainer.querySelectorAll('*');
+          footerElements.forEach(element => {
+            (element as HTMLElement).style.color = '#000000';
+            (element as HTMLElement).style.fontWeight = '600';
+            (element as HTMLElement).style.fontSize = '8px';
+            
+            // Make sure all input values are properly formatted
+            if ((element as HTMLElement).tagName.toLowerCase() === 'input') {
+              const input = element as HTMLInputElement;
+              const span = document.createElement('span');
+              span.textContent = input.value;
+              span.style.width = '100%';
+              span.style.display = 'inline-block';
+              span.style.color = '#000000';
+              span.style.fontWeight = '600';
+              span.style.fontSize = '8px';
+              
+              if (input.parentNode) {
+                input.parentNode.replaceChild(span, input);
+              }
+            }
+          });
+        }
         
         printWindow.document.write(clonedContent.innerHTML);
         printWindow.document.write('</body></html>');
