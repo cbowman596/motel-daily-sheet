@@ -1,12 +1,44 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import RoomManager from '@/components/RoomManager';
 import UserManager from '@/components/Auth/UserManager';
+import { RoomData } from '@/types';
 
 const Index = () => {
   const { signOut, nameUser } = useAuth();
+  const [rooms, setRooms] = useState<RoomData[]>([]);
+  const [selectedRoomIds, setSelectedRoomIds] = useState<number[]>([]);
+
+  // Add functions required for RoomManager props
+  const updateRoom = (id: number, field: string, value: string) => {
+    setRooms(prevRooms => 
+      prevRooms.map(room => 
+        room.id === id ? { ...room, [field]: value } : room
+      )
+    );
+  };
+
+  const applyColorToRooms = (roomIds: number[], bgColor: string, textColor: string) => {
+    setRooms(prevRooms => 
+      prevRooms.map(room => 
+        roomIds.includes(room.id) 
+          ? { ...room, bgColor, textColor } 
+          : room
+      )
+    );
+  };
+
+  const clearRoomColors = (roomIds: number[]) => {
+    setRooms(prevRooms => 
+      prevRooms.map(room => 
+        roomIds.includes(room.id) 
+          ? { ...room, bgColor: '', textColor: '' } 
+          : room
+      )
+    );
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -26,7 +58,14 @@ const Index = () => {
         </div>
         
         <div>
-          <RoomManager />
+          <RoomManager
+            rooms={rooms}
+            updateRoom={updateRoom}
+            selectedRoomIds={selectedRoomIds}
+            setSelectedRoomIds={setSelectedRoomIds}
+            applyColorToRooms={applyColorToRooms}
+            clearRoomColors={clearRoomColors}
+          />
         </div>
       </main>
     </div>
