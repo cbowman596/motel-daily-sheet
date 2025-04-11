@@ -3,15 +3,21 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import RoomManager from '@/components/RoomManager';
-import { RoomData } from '@/types';
+import DataManager from '@/components/DataManager';
+import { RoomData, FooterValues } from '@/types';
 import { loadRooms, saveRooms } from '@/lib/supabase';
-import { initialRooms } from '@/data/initialData';
+import { initialRooms, initialFooterValues } from '@/data/initialData';
+import MotelHeader from '@/components/MotelHeader';
+import MotelFooter from '@/components/MotelFooter';
 
 const Index = () => {
   const { signOut, user } = useAuth();
   const [rooms, setRooms] = useState<RoomData[]>(initialRooms);
   const [selectedRoomIds, setSelectedRoomIds] = useState<number[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [month, setMonth] = useState<string>(new Date().toLocaleString('default', { month: 'long' }));
+  const [day, setDay] = useState<number>(new Date().getDate());
+  const [footerValues, setFooterValues] = useState<FooterValues>(initialFooterValues);
 
   useEffect(() => {
     if (user) {
@@ -36,6 +42,13 @@ const Index = () => {
         room.id === id ? { ...room, [field]: value } : room
       )
     );
+  };
+
+  const updateFooterValue = (field: string, value: string) => {
+    setFooterValues(prev => ({
+      ...prev,
+      [field]: value
+    }));
   };
 
   const applyColorToRooms = (roomIds: number[], bgColor: string, textColor: string) => {
@@ -66,6 +79,18 @@ const Index = () => {
     setLoading(false);
   };
 
+  // Calculate totals for different room types
+  const roomTotals = rooms.reduce(
+    (acc, room) => {
+      if (room.type === 'W') acc.weekly++;
+      else if (room.type === 'M') acc.monthly++;
+      else if (room.name?.toLowerCase().includes('airbnb')) acc.airbnb++;
+      else acc.nightly++;
+      return acc;
+    },
+    { nightly: 0, weekly: 0, monthly: 0, airbnb: 0 }
+  );
+
   return (
     <div className="min-h-screen flex flex-col">
       <header className="bg-white shadow">
@@ -79,17 +104,17 @@ const Index = () => {
       </header>
       
       <main className="flex-1 max-w-7xl w-full mx-auto py-6 px-4 sm:px-6 lg:px-8">
-        <div className="mb-4 flex justify-end">
-          <Button 
-            onClick={handleSaveRooms}
-            disabled={loading}
-            className="bg-green-600 hover:bg-green-700"
-          >
-            {loading ? 'Saving...' : 'Save Changes'}
-          </Button>
+        <div className="mb-4 flex justify-between">
+          <MotelHeader 
+            month={month} 
+            setMonth={setMonth} 
+            day={day} 
+            setDay={setDay}
+            totals={roomTotals}
+          />
         </div>
         
-        <div>
+        <div className="mb-4">
           <RoomManager 
             rooms={rooms}
             updateRoom={updateRoom}
@@ -99,6 +124,25 @@ const Index = () => {
             clearRoomColors={clearRoomColors}
           />
         </div>
+        
+        <div className="mb-4">
+          <MotelFooter 
+            values={footerValues}
+            updateFooterValue={updateFooterValue}
+          />
+        </div>
+        
+        <DataManager 
+          rooms={rooms}
+          setRooms={setRooms}
+          footerValues={footerValues}
+          setFooterValues={setFooterValues}
+          roomTotals={roomTotals}
+          month={month}
+          day={day}
+          selectedRoomIds={selectedRoomIds}
+          setSelectedRoomIds={setSelectedRoomIds}
+        />
       </main>
     </div>
   );

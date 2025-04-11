@@ -44,7 +44,7 @@ const MotelHeader: React.FC<MotelHeaderProps> = ({ month, setMonth, day, setDay,
   const selectedDate = new Date(currentYear, months.indexOf(month), day);
   
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between mb-4 bg-motel-header p-3 rounded-t-md">
+    <div className="flex flex-col md:flex-row items-center justify-between w-full bg-motel-header p-3 rounded-t-md">
       <div className="flex items-center">
         <h1 className="text-2xl font-bold text-white">Coyote Motel West</h1>
       </div>
