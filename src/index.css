@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -12,7 +11,7 @@
     --card-foreground: 222.2 84% 4.9%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 222.2 47.4% 11.2%;
 
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
@@ -104,7 +103,7 @@
 @media print {
   @page {
     size: portrait;
-    margin: 1mm;
+    margin: 5mm 3mm;
     scale: 1;
   }
   
@@ -114,6 +113,10 @@
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     color-adjust: exact !important;
+  }
+  
+  .print-container {
+    padding: 3mm 4mm;
   }
   
   .print\:border-t {

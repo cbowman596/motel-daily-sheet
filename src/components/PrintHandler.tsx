@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { RoomData, FooterValues } from '@/types';
 
@@ -31,7 +30,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
     printWindow.document.write(`
       @page { 
         size: portrait; 
-        margin: 1mm;
+        margin: 5mm 3mm;
         scale: 1;
       }
       body { 
@@ -41,6 +40,9 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         width: 100%;
         margin: 0;
         padding: 0;
+      }
+      .print-container {
+        padding: 3mm 4mm 3mm 4mm;
       }
       table { 
         border-collapse: collapse; 
@@ -226,18 +228,19 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
     
     // Create header section with current date
     const headerHtml = `
-      <div class="header">
-        <div><h1 style="font-size: 12px; margin: 0; padding: 0;">Coyote Motel West</h1></div>
-        <div style="display: flex; align-items: center;">
-          <div style="margin-right: 10px;">
-            <span>N/${roomTotals.nightly}</span>
-            <span>W/${roomTotals.weekly}</span>
-            <span>M/${roomTotals.monthly}</span>
-            <span>A/${roomTotals.airbnb}</span>
+      <div class="print-container">
+        <div class="header">
+          <div><h1 style="font-size: 12px; margin: 0; padding: 0;">Coyote Motel West</h1></div>
+          <div style="display: flex; align-items: center;">
+            <div style="margin-right: 10px;">
+              <span>N/${roomTotals.nightly}</span>
+              <span>W/${roomTotals.weekly}</span>
+              <span>M/${roomTotals.monthly}</span>
+              <span>A/${roomTotals.airbnb}</span>
+            </div>
+            <div>${month} ${day}</div>
           </div>
-          <div>${month} ${day}</div>
         </div>
-      </div>
     `;
     
     // Create table with rooms data
@@ -382,7 +385,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
     printWindow.document.write(headerHtml);
     printWindow.document.write(tableHtml);
     printWindow.document.write(footerHtml);
-    printWindow.document.write('</body></html>');
+    printWindow.document.write('</div></body></html>');
     printWindow.document.close();
     
     setTimeout(() => {
