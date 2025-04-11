@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Session, User } from '@supabase/supabase-js';
@@ -103,16 +104,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setLoading(true);
       console.log('Attempting to sign in with name:', name);
 
+      // Use maybeSingle instead of single to prevent errors when no rows are found
       const { data, error } = await supabase
         .from('name_users')
         .select('*')
         .eq('name', name)
-        .single();
+        .maybeSingle();
 
       console.log('Name user lookup result:', { data, error });
 
-      if (error || !data) {
-        console.error('User not found error:', error);
+      if (error) {
+        console.error('Database lookup error:', error);
+        toast.error('Error looking up user. Please try again.');
+        setLoading(false);
+        return;
+      }
+
+      if (!data) {
+        console.log('User not found');
         toast.error('User not found. Please ask an admin to create your account.');
         setLoading(false);
         return;
@@ -121,8 +130,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       localStorage.setItem('nameUser', JSON.stringify(data));
       setNameUser(data as NameUser);
       
+      // Construct email from name for authentication
+      const email = `${name.toLowerCase().replace(/\s+/g, '-')}@example.com`;
+      
       const { error: authError } = await supabase.auth.signInWithPassword({
-        email: `${name.toLowerCase().replace(/\s+/g, '-')}@example.com`,
+        email: email,
         password: 'password123'
       });
       
@@ -159,15 +171,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       toast.success(`Welcome, ${name}! Your account has been created.`);
       
+      // After signup, check if the name user exists
       const { data, error } = await supabase
         .from('name_users')
         .select('*')
         .eq('name', name)
-        .single();
+        .maybeSingle();
         
       if (data) {
         localStorage.setItem('nameUser', JSON.stringify(data));
         setNameUser(data as NameUser);
+      } else if (!error) {
+        // If user doesn't exist in name_users but auth signup succeeded,
+        // create the name_user record
+        const { data: newUser, error: createError } = await supabase
+          .from('name_users')
+          .insert([{ name: name }])
+          .select()
+          .single();
+          
+        if (newUser && !createError) {
+          localStorage.setItem('nameUser', JSON.stringify(newUser));
+          setNameUser(newUser as NameUser);
+        }
       }
     } catch (error: any) {
       console.error('Error signing up with name:', error);
