@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { RoomData, FooterValues } from '@/types';
 
@@ -35,14 +36,14 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       }
       body { 
         font-family: Arial, sans-serif;
-        font-size: 9px;
+        font-size: 11px;
         color: #000000 !important; 
         width: 100%;
         margin: 0;
         padding: 0;
       }
       .print-container {
-        padding: 3mm 4mm;
+        padding: 5mm 3mm;
       }
       table { 
         border-collapse: collapse; 
@@ -52,58 +53,57 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       }
       th { 
         border: 1px solid black; 
-        padding: 2px;
+        padding: 3px;
         background-color: #f3f4f6; 
-        font-size: 9px;
+        font-size: 11px;
         text-align: center;
         font-weight: bold;
         color: #000000 !important;
       }
       td { 
         border: 1px solid black; 
-        padding: 2px; 
-        height: 18px;
-        font-size: 9px;
+        padding: 3px; 
+        height: 20px;
+        font-size: 11px;
         font-weight: 600;
-        color: #000000 !important;
       }
       .header {
         background-color: #4c9eeb;
-        color: white;
-        padding: 3px;
+        color: white !important;
+        padding: 4px;
         border-radius: 4px 4px 0 0;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 2px;
-        font-size: 10px;
+        margin-bottom: 3px;
+        font-size: 12px;
         font-weight: bold;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
       .date-display {
-        color: white;
+        color: white !important;
         font-weight: bold;
-        margin-right: 8px;
+        margin-right: 10px;
       }
       .footer {
-        margin-top: 2px;
-        padding: 2px;
+        margin-top: 3px;
+        padding: 3px;
         border-top: 1px solid #e5e7eb;
-        font-size: 9px;
+        font-size: 11px;
         font-weight: 600;
         color: #000000 !important;
       }
       .footer-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 2px;
+        gap: 3px;
       }
       .footer-flex {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 2px;
-        margin-top: 2px;
+        gap: 3px;
+        margin-top: 3px;
       }
       .color-legend {
         display: flex;
@@ -112,12 +112,12 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       .color-item {
         display: flex;
         align-items: center;
-        margin-bottom: 2px;
+        margin-bottom: 3px;
       }
       .color-swatch {
-        width: 9px;
-        height: 9px;
-        margin-right: 3px;
+        width: 11px;
+        height: 11px;
+        margin-right: 4px;
       }
       .purple, .bg-motel-purple {
         background-color: #6c5fc7 !important;
@@ -125,6 +125,9 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         font-weight: 600 !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
+      }
+      .purple *, .bg-motel-purple * {
+        color: #FFFFFF !important;
       }
       .yellow, .bg-motel-yellow {
         background-color: #fcd34d !important;
@@ -140,6 +143,9 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
+      .blue *, .bg-motel-blue * {
+        color: #FFFFFF !important;
+      }
       .bg-motel-header {
         background-color: #4c9eeb !important;
         -webkit-print-color-adjust: exact !important;
@@ -148,7 +154,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       .footer-section {
         display: grid;
         grid-template-columns: auto 1fr;
-        gap: 2px;
+        gap: 3px;
       }
       .text-right {
         text-align: right;
@@ -160,12 +166,12 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         border: none;
         color: inherit !important;
         font-weight: 600 !important;
-        font-size: 9px !important;
+        font-size: 11px !important;
       }
       span {
         color: inherit !important;
         font-weight: 600 !important;
-        font-size: 9px !important;
+        font-size: 11px !important;
       }
       .text-center, input.text-center {
         text-align: center;
@@ -187,12 +193,12 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       p, div, label {
         color: #000000 !important;
         font-weight: 600 !important;
-        font-size: 9px !important;
+        font-size: 11px !important;
       }
       .footer-values {
         display: grid;
         grid-template-columns: 1fr 1fr 1fr;
-        gap: 2px;
+        gap: 3px;
       }
       .footer-item {
         display: flex;
@@ -200,34 +206,28 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       }
       .footer-label {
         font-weight: bold;
-        margin-right: 2px;
+        margin-right: 3px;
       }
       .footer-value {
         font-weight: bold;
       }
       .p-4 {
-        padding: 2px;
+        padding: 3px;
       }
       .border-t {
         border-top: 1px solid #e5e7eb;
       }
       .mt-2 {
-        margin-top: 2px;
+        margin-top: 3px;
       }
       .mb-4 {
-        margin-bottom: 2px;
+        margin-bottom: 3px;
       }
       .gap-4 {
-        gap: 2px;
+        gap: 3px;
       }
       .gap-2 {
-        gap: 1px;
-      }
-      .colored-row {
-        color: #FFFFFF !important;
-      }
-      .colored-row * {
-        color: #FFFFFF !important;
+        gap: 2px;
       }
     `);
     printWindow.document.write('</style></head><body>');
@@ -276,7 +276,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       let textColor = '#000000';
       
       if (room.backgroundColor) {
-        // For custom background colors, use white text
+        // For custom background colors, always use white text
         rowStyle = `background-color: ${room.backgroundColor};`;
         textColor = '#FFFFFF';
       } else if (room.type === 'W') {

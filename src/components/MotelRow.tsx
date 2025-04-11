@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { RoomData } from '@/types';
@@ -13,9 +14,10 @@ interface MotelRowProps {
 const MotelRow: React.FC<MotelRowProps> = ({ room, updateRoom, isSelected, onToggleSelect }) => {
   const getRowStyle = () => {
     if (room.backgroundColor) {
+      // Force white text for any custom background color
       return {
         backgroundColor: room.backgroundColor,
-        color: room.textColor || '#FFFFFF'
+        color: '#FFFFFF'
       };
     }
     return { color: '#000000' };

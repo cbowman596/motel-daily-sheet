@@ -110,14 +110,14 @@
   
   body {
     font-family: Arial, sans-serif;
-    font-size: 9px;
+    font-size: 11px;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     color-adjust: exact !important;
   }
   
   .print-container {
-    padding: 3mm 4mm;
+    padding: 5mm 3mm;
   }
   
   .print\:border-t {
@@ -148,5 +148,14 @@
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     color-adjust: exact !important;
+  }
+
+  /* Ensure custom background colored rows have white text */
+  tr[style*="background-color"] {
+    color: #FFFFFF !important;
+  }
+
+  tr[style*="background-color"] * {
+    color: #FFFFFF !important;
   }
 }
