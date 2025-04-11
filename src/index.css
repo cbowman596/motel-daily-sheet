@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -106,21 +107,23 @@
   color: #FFFFFF !important;
 }
 
-.bg-motel-purple *, .purple * {
-  color: #FFFFFF !important;
-}
-
 .bg-motel-blue, .blue {
   background-color: #3b82f6 !important;
   color: #FFFFFF !important;
 }
 
-.bg-motel-blue *, .blue * {
-  color: #FFFFFF !important;
-}
-
 .bg-motel-yellow, .yellow {
   background-color: #fcd34d !important;
+  color: #000000 !important;
+}
+
+/* Make name, pmt, rate, total, checkin, checkout, and vehicle desc always black text */
+.black-text-column {
+  color: #000000 !important;
+  background-color: white !important;
+}
+
+.black-text-column * {
   color: #000000 !important;
 }
 
@@ -188,10 +191,18 @@ tr[style*="background-color"] input {
     color: #FFFFFF !important;
   }
   
+  /* Override for specific columns to always be black text */
+  .black-text-column {
+    color: #000000 !important;
+    background-color: white !important;
+  }
+
+  .black-text-column * {
+    color: #000000 !important;
+  }
+  
   /* Make sure inputs inside colored rows inherit the text color */
-  tr.bg-motel-purple input, 
-  tr.bg-motel-blue input,
-  tr[style*="background-color"] input {
-    color: inherit !important;
+  .black-text-column input {
+    color: #000000 !important;
   }
 }
