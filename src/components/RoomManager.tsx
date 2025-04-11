@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { RoomData } from '@/types';
 import MotelRow from '@/components/MotelRow';
 import ColorPicker from '@/components/ColorPicker';
@@ -13,7 +13,7 @@ interface RoomManagerProps {
   clearRoomColors: (roomIds: number[]) => void;
 }
 
-const RoomManager: React.FC<RoomManagerProps> = ({
+const RoomManager: React.FC<RoomManagerProps> = React.memo(({
   rooms,
   updateRoom,
   selectedRoomIds,
@@ -21,13 +21,27 @@ const RoomManager: React.FC<RoomManagerProps> = ({
   applyColorToRooms,
   clearRoomColors
 }) => {
-  const toggleRoomSelection = (id: number) => {
+  // Memoize the toggle function to prevent recreation on each render
+  const toggleRoomSelection = React.useCallback((id: number) => {
     setSelectedRoomIds(prev => 
       prev.includes(id) 
         ? prev.filter(roomId => roomId !== id) 
         : [...prev, id]
     );
-  };
+  }, [setSelectedRoomIds]);
+
+  // Memoize the room rows to prevent unnecessary re-renders
+  const roomRows = useMemo(() => {
+    return rooms.map((room) => (
+      <MotelRow 
+        key={room.id} 
+        room={room} 
+        updateRoom={updateRoom}
+        isSelected={selectedRoomIds.includes(room.id)}
+        onToggleSelect={toggleRoomSelection}
+      />
+    ));
+  }, [rooms, updateRoom, selectedRoomIds, toggleRoomSelection]);
 
   return (
     <>
@@ -58,20 +72,14 @@ const RoomManager: React.FC<RoomManagerProps> = ({
             </tr>
           </thead>
           <tbody>
-            {rooms.map((room) => (
-              <MotelRow 
-                key={room.id} 
-                room={room} 
-                updateRoom={updateRoom}
-                isSelected={selectedRoomIds.includes(room.id)}
-                onToggleSelect={toggleRoomSelection}
-              />
-            ))}
+            {roomRows}
           </tbody>
         </table>
       </div>
     </>
   );
-};
+});
+
+RoomManager.displayName = 'RoomManager';
 
 export default RoomManager;
