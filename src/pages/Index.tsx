@@ -4,10 +4,11 @@ import MotelHeader from '@/components/MotelHeader';
 import MotelFooter from '@/components/MotelFooter';
 import RoomManager from '@/components/RoomManager';
 import DataManager from '@/components/DataManager';
-import { useFirebaseStorage } from '@/hooks/useFirebaseStorage'; // Updated import
+import { useFirebaseStorage } from '@/hooks/useFirebaseStorage';
 import { initialRooms, initialFooterValues } from '@/data/initialData';
 import { RoomData, FooterValues } from '@/types';
 import { decodeDataFromUrl } from '@/utils/urlUtils';
+import { populateInitialData } from '@/utils/populateInitialData';
 import { toast } from 'sonner';
 
 const Index = () => {
@@ -24,6 +25,18 @@ const Index = () => {
   
   // Print reference
   const printRef = useRef<HTMLDivElement>(null);
+
+  // Make sure initial data is populated in Firebase
+  useEffect(() => {
+    const initializeData = async () => {
+      const wasPopulated = await populateInitialData();
+      if (wasPopulated) {
+        console.log("Firebase populated with initial data");
+      }
+    };
+    
+    initializeData();
+  }, []);
 
   // Check for URL parameters on mount
   useEffect(() => {

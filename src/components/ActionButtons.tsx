@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { RoomData, FooterValues } from '@/types';
@@ -25,6 +25,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
   const [isConnected, setIsConnected] = React.useState(true);
   const [isSaving, setIsSaving] = React.useState(false);
 
+  // Check connection status
   React.useEffect(() => {
     const checkConnection = () => {
       setIsConnected(navigator.onLine);
@@ -40,6 +41,22 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
     };
   }, []);
 
+  // Effect to save data to Firebase when component mounts
+  useEffect(() => {
+    if (isConnected && roomsData && roomsData.length > 0) {
+      const initialSave = async () => {
+        try {
+          await handleSave();
+          console.log('Initial data saved to Firebase');
+        } catch (error) {
+          console.error('Error during initial save:', error);
+        }
+      };
+      
+      initialSave();
+    }
+  }, []); // Empty dependency array to run only once on mount
+
   const handleSaveWithFeedback = async () => {
     if (!isConnected) {
       toast.error('You are offline. Changes will not be saved to Firebase.');
@@ -49,7 +66,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
     setIsSaving(true);
     try {
       await handleSave();
-      // Toast will be triggered by the Firebase service only
+      toast.success('Data saved manually');
     } catch (error) {
       toast.error('Failed to save data to Firebase');
       console.error('Save error:', error);
