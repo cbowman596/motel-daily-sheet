@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -100,22 +101,21 @@
   }
 }
 
-/* Ensure white text on colored backgrounds for both display and print */
+/* Ensure appropriate text on colored backgrounds for display */
 .bg-motel-purple, .purple {
   background-color: #6c5fc7 !important;
-  color: #FFFFFF !important;
 }
 
-.bg-motel-purple *, .purple * {
+/* Only apply white text to specifically classed elements */
+td.bg-motel-purple, td.purple, th.bg-motel-purple, th.purple {
   color: #FFFFFF !important;
 }
 
 .bg-motel-blue, .blue {
   background-color: #3b82f6 !important;
-  color: #FFFFFF !important;
 }
 
-.bg-motel-blue *, .blue * {
+td.bg-motel-blue, td.blue, th.bg-motel-blue, th.blue {
   color: #FFFFFF !important;
 }
 
@@ -124,9 +124,13 @@
   color: #000000 !important;
 }
 
-/* Remove inheritance that might override text color */
-tr[class*="bg-motel"] input, 
-tr[style*="background-color"] input {
+/* Reset color inheritance for non-colored cells */
+tr td:not([class*="bg-motel"]):not([class*="blue"]):not([class*="purple"]):not([class*="yellow"]) {
+  color: #000000 !important;
+}
+
+/* Make inputs match their cell text color */
+tr td input {
   color: inherit !important;
 }
 
@@ -157,41 +161,36 @@ tr[style*="background-color"] input {
     page-break-inside: avoid;
   }
   
-  input, span, div {
-    color: inherit !important;
+  /* Default text color is black */
+  input, span, div, td {
+    color: #000000 !important;
     font-weight: 600 !important;
   }
   
-  .bg-motel-purple, .bg-motel-blue {
+  /* Only specific columns have colored backgrounds with white text */
+  td.bg-motel-purple, td.purple, td.bg-motel-blue, td.blue {
     color: #FFFFFF !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
-    color-adjust: exact !important;
   }
   
-  .bg-motel-purple *, .bg-motel-blue * {
-    color: #FFFFFF !important;
-  }
-  
-  .bg-motel-yellow, .bg-motel-header {
+  td.bg-motel-yellow, td.yellow, td.bg-motel-header {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
-    color-adjust: exact !important;
   }
-
-  /* Ensure custom background colored rows have white text */
-  tr[style*="background-color"] {
-    color: #FFFFFF !important;
+  
+  /* Ensure white text is only applied to specific colored cells */
+  tr td:not([class*="bg-motel"]):not([class*="blue"]):not([class*="purple"]):not([class*="yellow"]) {
+    color: #000000 !important;
   }
-
-  tr[style*="background-color"] * {
+  
+  /* Make inputs match their cell text color */
+  tr td.bg-motel-purple input, tr td.purple input,
+  tr td.bg-motel-blue input, tr td.blue input {
     color: #FFFFFF !important;
   }
   
-  /* Make sure inputs inside colored rows inherit the text color */
-  tr.bg-motel-purple input, 
-  tr.bg-motel-blue input,
-  tr[style*="background-color"] input {
-    color: inherit !important;
+  tr td:not([class*="bg-motel"]):not([class*="blue"]):not([class*="purple"]):not([class*="yellow"]) input {
+    color: #000000 !important;
   }
 }

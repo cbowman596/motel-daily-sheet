@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { RoomData, FooterValues } from '@/types';
 
@@ -65,6 +66,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         height: 20px;
         font-size: 11px;
         font-weight: 600;
+        color: #000000 !important;
       }
       .header {
         background-color: #4c9eeb;
@@ -120,26 +122,23 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       }
       .purple, .bg-motel-purple {
         background-color: #6c5fc7 !important;
-        color: #FFFFFF !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
-      .purple *, .bg-motel-purple * {
+      .purple-text {
         color: #FFFFFF !important;
       }
       .yellow, .bg-motel-yellow {
         background-color: #fcd34d !important;
-        color: #000000 !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
       .blue, .bg-motel-blue {
         background-color: #3b82f6 !important;
-        color: #FFFFFF !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
-      .blue *, .bg-motel-blue * {
+      .blue-text {
         color: #FFFFFF !important;
       }
       .bg-motel-header {
@@ -225,10 +224,10 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       .gap-2 {
         gap: 2px;
       }
-      tr[style*="background-color"] {
+      .colored-cell {
         color: #FFFFFF !important;
       }
-      tr[style*="background-color"] * {
+      .header-cell {
         color: #FFFFFF !important;
       }
     `);
@@ -275,26 +274,27 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
     rooms.forEach(room => {
       let rowClass = '';
       let rowStyle = '';
-      let textColor = '#000000';
+      let coloredCellClass = '';
+      const roomNum = Number(room.roomNumber);
       
+      // Apply row styles based on room type
       if (room.backgroundColor) {
-        // For custom background colors
-        rowStyle = `background-color: ${room.backgroundColor};`;
-        textColor = '#FFFFFF'; // Always white text on custom backgrounds
+        // Custom background color - only apply to specific columns
+        rowStyle = ''; // No full row background
+        coloredCellClass = 'colored-cell'; // Text color for colored cells
       } else if (room.type === 'W') {
         rowClass = 'blue';
-        textColor = '#FFFFFF'; // White text for weekly rooms
+        coloredCellClass = 'blue-text';
       } else if (room.type === 'M') {
         rowClass = 'purple';
-        textColor = '#FFFFFF'; // White text for monthly rooms
+        coloredCellClass = 'purple-text';
       } else if (Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) {
         rowClass = 'yellow';
-        textColor = '#000000'; // Black text for yellow background
+        coloredCellClass = ''; // Yellow has black text
       }
       
       // Determine the location based on room number
       const getLocation = () => {
-        const roomNum = Number(room.roomNumber);
         if (roomNum >= 1 && roomNum <= 6) return 'FB';
         if (roomNum >= 7 && roomNum <= 12) return 'BR';
         if (roomNum >= 13 && roomNum <= 19) return 'FT';
@@ -307,7 +307,6 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       
       // Get room type based on room number
       const getRoomType = () => {
-        const roomNum = Number(room.roomNumber);
         if (roomNum === 1) return '1K Kit';
         if ([6, 13, 19].includes(roomNum)) return '2Q Kit';
         if ([2, 3, 4, 5, 7, 8, 14, 15, 17, 18, 20, 21, 22].includes(roomNum)) return '1Q Kit';
@@ -319,24 +318,42 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         return '';
       };
       
-      // Force white text with !important for colored rows
-      const textStyleAttr = textColor === '#FFFFFF' 
-        ? ` style="color: #FFFFFF !important;"` 
-        : ` style="color: ${textColor};"`;
+      // Create individual cell classes for the colored columns
+      const locationCellClass = rowClass ? `${rowClass} ${coloredCellClass}` : '';
+      const roomTypeCellClass = rowClass ? `${rowClass} ${coloredCellClass}` : '';
+      const typeCellClass = rowClass ? `${rowClass} ${coloredCellClass}` : '';
+      const roomNumberCellClass = rowClass ? `${rowClass} ${coloredCellClass}` : '';
+
+      // Apply cell-specific background styles for custom colors
+      const locationCellStyle = room.backgroundColor ? `background-color: ${room.backgroundColor};` : '';
+      const roomTypeCellStyle = room.backgroundColor ? `background-color: ${room.backgroundColor};` : '';
+      const typeCellStyle = room.backgroundColor ? `background-color: ${room.backgroundColor};` : '';
+      const roomNumberCellStyle = room.backgroundColor ? `background-color: ${room.backgroundColor};` : '';
+
+      // Apply text color for custom colored cells
+      const coloredTextStyle = room.backgroundColor ? 'color: #FFFFFF !important;' : '';
 
       tableHtml += `
-        <tr class="${rowClass}" style="${rowStyle}">
-          <td style="text-align: center;${textColor === '#FFFFFF' ? ' color: #FFFFFF !important;' : ''}">${room.location || getLocation()}</td>
-          <td style="text-align: center;${textColor === '#FFFFFF' ? ' color: #FFFFFF !important;' : ''}">${room.roomType || getRoomType()}</td>
-          <td style="text-align: center;${textColor === '#FFFFFF' ? ' color: #FFFFFF !important;' : ''}">${room.type}</td>
-          <td style="text-align: center;${textColor === '#FFFFFF' ? ' color: #FFFFFF !important;' : ''}">${room.roomNumber}</td>
-          <td${textStyleAttr}>${room.name}</td>
-          <td style="text-align: center;${textColor === '#FFFFFF' ? ' color: #FFFFFF !important;' : ''}">${room.pmt}</td>
-          <td style="text-align: center;${textColor === '#FFFFFF' ? ' color: #FFFFFF !important;' : ''}">${room.rate}</td>
-          <td style="text-align: center;${textColor === '#FFFFFF' ? ' color: #FFFFFF !important;' : ''}">${room.total}</td>
-          <td style="text-align: center;${textColor === '#FFFFFF' ? ' color: #FFFFFF !important;' : ''}">${room.checkIn}</td>
-          <td style="text-align: center;${textColor === '#FFFFFF' ? ' color: #FFFFFF !important;' : ''}">${room.checkOut}</td>
-          <td${textStyleAttr}>${room.vehicleDesc}</td>
+        <tr>
+          <td class="${locationCellClass}" style="text-align: center; ${locationCellStyle} ${locationCellClass ? coloredTextStyle : ''}">
+            ${room.location || getLocation()}
+          </td>
+          <td class="${roomTypeCellClass}" style="text-align: center; ${roomTypeCellStyle} ${roomTypeCellClass ? coloredTextStyle : ''}">
+            ${room.roomType || getRoomType()}
+          </td>
+          <td class="${typeCellClass}" style="text-align: center; ${typeCellStyle} ${typeCellClass ? coloredTextStyle : ''}">
+            ${room.type}
+          </td>
+          <td class="${roomNumberCellClass}" style="text-align: center; ${roomNumberCellStyle} ${roomNumberCellClass ? coloredTextStyle : ''}">
+            ${room.roomNumber}
+          </td>
+          <td style="color: #000000 !important;">${room.name}</td>
+          <td style="text-align: center; color: #000000 !important;">${room.pmt}</td>
+          <td style="text-align: center; color: #000000 !important;">${room.rate}</td>
+          <td style="text-align: center; color: #000000 !important;">${room.total}</td>
+          <td style="text-align: center; color: #000000 !important;">${room.checkIn}</td>
+          <td style="text-align: center; color: #000000 !important;">${room.checkOut}</td>
+          <td style="color: #000000 !important;">${room.vehicleDesc}</td>
         </tr>
       `;
     });
