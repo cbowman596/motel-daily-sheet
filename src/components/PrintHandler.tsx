@@ -247,6 +247,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
           <tr>
             <th>Loc</th>
             <th>Type</th>
+            <th>Dur</th>
             <th>Room #</th>
             <th>Name</th>
             <th>PMT</th>
@@ -287,9 +288,24 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         return '';
       };
       
+      // Get room type based on room number
+      const getRoomType = () => {
+        const roomNum = Number(room.roomNumber);
+        if (roomNum === 1) return '1K Kit';
+        if ([13, 19].includes(roomNum)) return '2Q Kit';
+        if ([2, 3, 4, 5, 7, 8, 14, 15, 17, 18, 20, 21, 22].includes(roomNum)) return '1Q Kit';
+        if ([24, 25, 26, 28, 29, 30].includes(roomNum)) return '1Q';
+        if ([9, 10, 11].includes(roomNum)) return '1F Kit';
+        if ([12, 16].includes(roomNum)) return '1F';
+        if (room.roomNumber === 'Cabin') return '1Q Kit';
+        if (room.roomNumber === 'Loft') return '1Q';
+        return '';
+      };
+      
       tableHtml += `
         <tr class="${rowClass}" style="${rowStyle}">
           <td style="text-align: center;">${room.location || getLocation()}</td>
+          <td style="text-align: center;">${room.roomType || getRoomType()}</td>
           <td style="text-align: center;">${room.type}</td>
           <td style="text-align: center;">${room.roomNumber}</td>
           <td>${room.name}</td>
