@@ -55,14 +55,15 @@ const DataManager: React.FC<DataManagerProps> = ({
   };
 
   const handleSave = () => {
+    // Local storage saving is handled automatically by the useLocalStorage hook
     setSaveStatus('Saved!');
-    toast.success('Sheet data saved successfully!');
     setTimeout(() => setSaveStatus(''), 2000);
   };
   
   const handleDataImport = (importedRooms: RoomData[], importedFooterValues: FooterValues) => {
     setRooms(importedRooms);
     setFooterValues(importedFooterValues);
+    toast.success('Data imported successfully');
   };
 
   const handleReset = () => {
@@ -86,7 +87,7 @@ const DataManager: React.FC<DataManagerProps> = ({
           />
           <ActionButtons 
             handleSave={handleSave} 
-            handlePrint={() => {}} // PrintHandler now handles this
+            handlePrint={() => {}} // PrintHandler handles this
             handleReset={handleReset}
             roomsData={rooms}
             footerValues={footerValues}
