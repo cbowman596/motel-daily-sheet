@@ -34,14 +34,25 @@ const Index = () => {
     }, 500);
   }, []);
 
-  // Check for URL parameters on mount
+  // Check for URL parameters on mount and force refresh if needed
   useEffect(() => {
     const checkForUrlData = () => {
       try {
         const urlParams = new URLSearchParams(window.location.search);
         const encodedData = urlParams.get('data');
         
-        if (encodedData) {
+        // Check if this is a first load with shared data
+        const needsRefresh = sessionStorage.getItem('dataRefreshed') !== 'true' && encodedData;
+        
+        if (needsRefresh) {
+          // Set flag in session storage to prevent infinite refresh
+          sessionStorage.setItem('dataRefreshed', 'true');
+          // Force a refresh to ensure clean state
+          window.location.reload();
+          return;
+        }
+        
+        if (encodedData && sessionStorage.getItem('dataRefreshed') === 'true') {
           const decodedData = decodeDataFromUrl(encodedData);
           
           if (decodedData) {
@@ -53,10 +64,14 @@ const Index = () => {
             const newUrl = window.location.pathname;
             window.history.replaceState({}, document.title, newUrl);
           }
+          
+          // Reset the refresh flag for future shared links
+          sessionStorage.removeItem('dataRefreshed');
         }
       } catch (error) {
         console.error('Error loading data from URL:', error);
         toast.error('Failed to load data from URL');
+        sessionStorage.removeItem('dataRefreshed');
       }
     };
     
