@@ -100,37 +100,55 @@
   }
 }
 
-/* Ensure appropriate text on colored backgrounds for display */
+/* Color settings for different room types */
 .bg-motel-purple, .purple {
   background-color: #6c5fc7 !important;
-}
-
-/* Only apply white text to specifically classed elements */
-td.bg-motel-purple, td.purple, th.bg-motel-purple, th.purple {
-  color: #FFFFFF !important;
 }
 
 .bg-motel-blue, .blue {
   background-color: #3b82f6 !important;
 }
 
+.bg-motel-yellow, .yellow {
+  background-color: #fcd34d !important;
+}
+
+/* Text color settings for table cells */
+td.bg-motel-purple, td.purple, th.bg-motel-purple, th.purple {
+  color: #FFFFFF !important;
+}
+
 td.bg-motel-blue, td.blue, th.bg-motel-blue, th.blue {
   color: #FFFFFF !important;
 }
 
-.bg-motel-yellow, .yellow {
-  background-color: #fcd34d !important;
+td.bg-motel-yellow, td.yellow, th.bg-motel-yellow, th.yellow {
   color: #000000 !important;
 }
 
-/* Reset color inheritance for non-colored cells */
-tr td:not([class*="bg-motel"]):not([class*="blue"]):not([class*="purple"]):not([class*="yellow"]) {
+/* Default text color for regular cells */
+tr td:not(.bg-motel-purple):not(.purple):not(.bg-motel-blue):not(.blue):not(.bg-motel-yellow):not(.yellow) {
   color: #000000 !important;
 }
 
-/* Make inputs match their cell text color */
-tr td input {
-  color: inherit !important;
+/* Input text color should always be visible */
+input {
+  color: #000000 !important;
+}
+
+/* Ensure colored backgrounds have appropriate text colors */
+.bg-motel-purple input, .purple input, 
+.bg-motel-blue input, .blue input {
+  color: #FFFFFF !important;
+}
+
+.bg-motel-yellow input, .yellow input {
+  color: #000000 !important;
+}
+
+/* Total column input text should always be visible */
+.total-column input {
+  color: #000000 !important;
 }
 
 @media print {
@@ -192,19 +210,38 @@ tr td input {
   tr td:not([class*="bg-motel"]):not([class*="blue"]):not([class*="purple"]):not([class*="yellow"]) input {
     color: #000000 !important;
   }
+  
+  /* Ensure all input text is visible during printing */
+  input {
+    color: #000000 !important;
+  }
+  
+  /* Override for colored cells in print mode */
+  td.bg-motel-purple input, td.purple input,
+  td.bg-motel-blue input, td.blue input {
+    color: #FFFFFF !important;
+  }
+  
+  td.bg-motel-yellow input, td.yellow input {
+    color: #000000 !important;
+  }
+  
+  /* Default to black text for standard rows */
+  tr td:not(.bg-motel-purple):not(.purple):not(.bg-motel-blue):not(.blue):not(.bg-motel-yellow):not(.yellow) input {
+    color: #000000 !important;
+  }
 }
 
-/* Ensure white text on colored backgrounds */
+/* Additional styles to ensure text visibility */
 .bg-motel-purple, .bg-motel-blue {
   color: #FFFFFF !important;
 }
 
-/* Ensure input text matches cell text color */
-.bg-motel-purple input, .bg-motel-blue input {
-  color: #FFFFFF !important;
+.bg-motel-yellow {
+  color: #000000 !important;
 }
 
-/* Special handling for yellow rows (keep black text) */
-.bg-motel-yellow, .bg-motel-yellow input {
-  color: #000000 !important;
+/* Force visibility on total column */
+td:nth-child(9) input {
+  color: black !important;
 }

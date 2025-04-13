@@ -1,4 +1,3 @@
-
 import React, { memo, useState, useCallback } from 'react';
 import { cn } from '@/lib/utils';
 import { RoomData } from '@/types';
@@ -45,10 +44,23 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     return '';
   }, [room.backgroundColor, room.type, room.roomNumber]);
   
-  const inputStyle = React.useMemo(() => ({
-    color: (room.backgroundColor || room.type === 'W' || room.type === 'M') ? '#FFFFFF' : 
-           (Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) ? '#000000' : 'inherit'
-  }), [room.backgroundColor, room.type, room.roomNumber]);
+  // Simplified input style logic to ensure text is visible
+  const inputStyle = React.useMemo(() => {
+    // Default to black text for standard rows
+    let textColor = '#000000';
+    
+    // If the row has a background color or is a specific type, use white text
+    if (room.backgroundColor || room.type === 'W' || room.type === 'M') {
+      textColor = '#FFFFFF';
+    }
+    
+    // Special case for yellow rows
+    if (Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) {
+      textColor = '#000000';
+    }
+    
+    return { color: textColor };
+  }, [room.backgroundColor, room.type, room.roomNumber]);
   
   // Pre-calculate these values to avoid recalculating them in multiple places
   const defaultLocation = React.useMemo(() => {
@@ -224,8 +236,11 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
           value={localInputs.total} 
           onChange={(e) => handleInputChange('total', e.target.value)}
           onBlur={(e) => handleInputBlur('total', e.target.value)}
-          className="w-full bg-transparent text-center focus:outline-none font-medium"
-          style={inputStyle}
+          className="w-full bg-transparent text-center focus:outline-none font-medium !text-black"
+          style={{
+            ...inputStyle,
+            color: room.type === 'N' || room.type === 'W' ? inputStyle.color : '#000000'
+          }}
           readOnly={room.type === 'N' || room.type === 'W'}
         />
       </td>
