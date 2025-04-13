@@ -1,3 +1,4 @@
+
 import React, { memo, useState, useCallback } from 'react';
 import { cn } from '@/lib/utils';
 import { RoomData } from '@/types';
@@ -139,6 +140,9 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     updateRoom(room.id, field, value);
   }, [room.id, updateRoom]);
   
+  // Force total column text to always be black and visible
+  const totalInputStyle = { color: '#000000' };
+  
   return (
     <tr 
       className={cn(
@@ -230,17 +234,14 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
           style={inputStyle}
         />
       </td>
-      <td className="border border-gray-300 p-1 text-center w-16">
+      <td className="border border-gray-300 p-1 text-center w-16 total-column">
         <input 
           type="text" 
           value={localInputs.total} 
           onChange={(e) => handleInputChange('total', e.target.value)}
           onBlur={(e) => handleInputBlur('total', e.target.value)}
-          className="w-full bg-transparent text-center focus:outline-none font-medium !text-black"
-          style={{
-            ...inputStyle,
-            color: room.type === 'N' || room.type === 'W' ? inputStyle.color : '#000000'
-          }}
+          className="w-full bg-transparent text-center focus:outline-none font-medium"
+          style={totalInputStyle}
           readOnly={room.type === 'N' || room.type === 'W'}
         />
       </td>

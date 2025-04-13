@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -151,6 +152,16 @@ input {
   color: #000000 !important;
 }
 
+/* Special case for row 2 (if needed) */
+tr:nth-child(2) .total-column input {
+  color: #000000 !important;
+}
+
+/* Any row's total column should show black text */
+td:nth-child(9) input {
+  color: #000000 !important; 
+}
+
 @media print {
   @page {
     size: portrait;
@@ -245,3 +256,9 @@ input {
 td:nth-child(9) input {
   color: black !important;
 }
+
+/* Additional rule for total column to ensure visibility */
+.total-column input, td.total-column input {
+  color: black !important;
+}
+
