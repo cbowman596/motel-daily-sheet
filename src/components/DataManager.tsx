@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { toast } from 'sonner';
 import { RoomData, FooterValues } from '@/types';
@@ -75,7 +76,7 @@ const DataManager: React.FC<DataManagerProps> = ({
         location: currentRoom.location,
         roomType: currentRoom.roomType,
         
-        // Clear all other data
+        // Clear all other data and remove any highlighting
         backgroundColor: undefined,
         textColor: undefined,
         name: '',
