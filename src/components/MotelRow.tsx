@@ -56,8 +56,8 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
   // Recalculate row class when type changes
   const rowClass = React.useMemo(() => {
     if (room.backgroundColor) return 'text-white';
-    if (localInputs.type === 'W') return 'bg-motel-purple text-white';
-    if (localInputs.type === 'M') return 'bg-motel-blue text-white';
+    if (localInputs.type === 'M') return 'bg-motel-purple text-white';
+    if (localInputs.type === 'W') return 'bg-motel-blue text-white';
     if (Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) return 'bg-motel-yellow text-black';
     return '';
   }, [room.backgroundColor, localInputs.type, room.roomNumber]);
@@ -72,10 +72,10 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     }
     
     // Apply background colors based on type
-    if (localInputs.type === 'W') {
+    if (localInputs.type === 'M') {
       return { backgroundColor: '#6c5fc7', color: '#FFFFFF' };
     }
-    if (localInputs.type === 'M') {
+    if (localInputs.type === 'W') {
       return { backgroundColor: '#3b82f6', color: '#FFFFFF' };
     }
     if (Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) {
@@ -91,7 +91,7 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     let textColor = '#000000';
     
     // For colored backgrounds or specific types, use white text
-    if (room.backgroundColor || localInputs.type === 'W' || localInputs.type === 'M') {
+    if (room.backgroundColor || localInputs.type === 'M' || localInputs.type === 'W') {
       textColor = '#FFFFFF';
     }
     
