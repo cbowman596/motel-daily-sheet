@@ -76,6 +76,7 @@ const Index = () => {
     };
     
     rooms.forEach(room => {
+      // Count rooms based on their type field
       if (room.type === 'N') {
         totals.nightly++;
       } else if (room.type === 'W') {

@@ -43,6 +43,9 @@ const MotelHeader: React.FC<MotelHeaderProps> = ({ month, setMonth, day, setDay,
   const currentYear = new Date().getFullYear();
   const selectedDate = new Date(currentYear, months.indexOf(month), day);
   
+  // Calculate total occupied rooms
+  const totalOccupied = totals.nightly + totals.weekly + totals.monthly + totals.airbnb;
+  
   return (
     <div className="flex flex-col md:flex-row items-center justify-between mb-4 bg-motel-header p-3 rounded-t-md">
       <div className="flex items-center">
@@ -54,6 +57,7 @@ const MotelHeader: React.FC<MotelHeaderProps> = ({ month, setMonth, day, setDay,
           <span title="Weekly">W/{totals.weekly}</span>
           <span title="Monthly">M/{totals.monthly}</span>
           <span title="Airbnb">A/{totals.airbnb}</span>
+          <span title="Total Occupied">T/{totalOccupied}</span>
         </div>
         <div className="flex items-center">
           <select 
