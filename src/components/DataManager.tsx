@@ -67,10 +67,13 @@ const DataManager: React.FC<DataManagerProps> = ({
   };
 
   const handleReset = () => {
-    // Preserve yellow highlighted rows and specific fields
+    // Get a fresh copy of initial rooms data
+    const freshInitialRooms = JSON.parse(JSON.stringify(initialRooms));
+    
+    // Reset all rooms but preserve specific data
     setRooms(prevRooms => prevRooms.map((currentRoom, index) => {
       // Get the initial room data for this position
-      const initialRoom = initialRooms[index];
+      const initialRoom = freshInitialRooms[index];
       
       // Special case for rooms 28-30 and Cabin/Loft (rooms 31-32)
       if (currentRoom.roomNumber === '28' || 
@@ -82,7 +85,7 @@ const DataManager: React.FC<DataManagerProps> = ({
         return currentRoom;
       }
       
-      // For yellow highlighted rows (only rooms specifically marked as yellow, not textColor black)
+      // For explicitly yellow highlighted rows only
       if (currentRoom.backgroundColor === '#fcd34d' || 
           currentRoom.backgroundColor === 'yellow') {
         // Preserve the row but reset non-preserved fields
@@ -98,22 +101,32 @@ const DataManager: React.FC<DataManagerProps> = ({
         };
       }
       
-      // For all other rooms, completely reset to initial state but preserve only room number, location, and roomType
+      // For all other rooms, completely reset to initial state
       return {
         ...initialRoom,
+        // Only preserve room number, location, and roomType
         roomNumber: currentRoom.roomNumber,
         location: currentRoom.location,
         roomType: currentRoom.roomType,
-        // Explicitly clear any background colors and set to undefined
+        // Explicitly reset these fields to undefined
         backgroundColor: undefined,
-        textColor: undefined
+        textColor: undefined,
+        // Explicitly reset these fields to empty strings
+        name: '',
+        pmt: '',
+        rate: '',
+        total: '',
+        checkIn: '',
+        checkOut: '',
+        vehicleDesc: '',
+        type: ''
       };
     }));
     
-    // Reset footer values
-    setFooterValues(initialFooterValues);
+    // Reset footer values to initial state
+    setFooterValues({...initialFooterValues});
     
-    toast.success('Sheet reset with preserved data');
+    toast.success('Sheet has been reset');
   };
 
   return (
