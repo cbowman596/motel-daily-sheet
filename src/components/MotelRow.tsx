@@ -62,6 +62,26 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     
     return { color: textColor };
   }, [room.backgroundColor, room.type, room.roomNumber]);
+
+  // Properly determine total column text color based on background
+  const totalInputStyle = React.useMemo(() => {
+    // For colored backgrounds (purple, blue), use white text
+    if ((room.type === 'W') || 
+        (room.type === 'M') || 
+        (room.backgroundColor && ['#6c5fc7', '#3b82f6'].includes(room.backgroundColor))) {
+      return { color: '#FFFFFF' };
+    }
+    
+    // For yellow background or room numbers 16 and 27, use black text
+    if (Number(room.roomNumber) === 16 || 
+        Number(room.roomNumber) === 27 || 
+        (room.backgroundColor && room.backgroundColor === '#fcd34d')) {
+      return { color: '#000000' };
+    }
+    
+    // Default to black text
+    return { color: '#000000' };
+  }, [room.backgroundColor, room.type, room.roomNumber]);
   
   // Pre-calculate these values to avoid recalculating them in multiple places
   const defaultLocation = React.useMemo(() => {
@@ -140,9 +160,6 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     updateRoom(room.id, field, value);
   }, [room.id, updateRoom]);
   
-  // Force total column text to always be black and visible
-  const totalInputStyle = { color: '#000000' };
-  
   return (
     <tr 
       className={cn(
@@ -151,6 +168,8 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
         isSelected ? 'ring-2 ring-blue-500' : ''
       )}
       style={rowStyle}
+      data-room-id={room.id}
+      data-room-number={room.roomNumber}
     >
       <td className="border border-gray-300 p-1 text-center w-8">
         <div className="flex items-center justify-center">
@@ -243,6 +262,8 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
           className="w-full bg-transparent text-center focus:outline-none font-medium"
           style={totalInputStyle}
           readOnly={room.type === 'N' || room.type === 'W'}
+          data-room-id={room.id}
+          data-room-number={room.roomNumber}
         />
       </td>
       <td className="border border-gray-300 p-1 text-center w-16">

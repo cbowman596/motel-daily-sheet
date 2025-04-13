@@ -147,19 +147,31 @@ input {
   color: #000000 !important;
 }
 
-/* Total column input text should always be visible */
-.total-column input {
+/* Make sure total column inputs match their row's color */
+tr.bg-motel-purple .total-column input,
+tr.bg-motel-blue .total-column input,
+tr.purple .total-column input,
+tr.blue .total-column input {
+  color: #FFFFFF !important;
+}
+
+tr.bg-motel-yellow .total-column input,
+tr.yellow .total-column input {
   color: #000000 !important;
 }
 
-/* Special case for row 2 (if needed) */
+/* Fix for row 2 specifically - force it to have visible text */
 tr:nth-child(2) .total-column input {
   color: #000000 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
-/* Any row's total column should show black text */
-td:nth-child(9) input {
-  color: #000000 !important; 
+/* Row 2 troubleshooting - try forcing !important on input itself */
+tr[data-room-number="2"] .total-column input,
+tr:nth-child(2) td:nth-child(9) input {
+  color: #000000 !important;
+  opacity: 1 !important;
 }
 
 @media print {
@@ -252,13 +264,20 @@ td:nth-child(9) input {
   color: #000000 !important;
 }
 
-/* Force visibility on total column */
-td:nth-child(9) input {
-  color: black !important;
+/* Colored rows should have appropriate text color in total column */
+tr.bg-motel-purple td.total-column input,
+tr.bg-motel-blue td.total-column input,
+tr.purple td.total-column input, 
+tr.blue td.total-column input {
+  color: #FFFFFF !important;
 }
 
-/* Additional rule for total column to ensure visibility */
-.total-column input, td.total-column input {
-  color: black !important;
+tr.bg-motel-yellow td.total-column input,
+tr.yellow td.total-column input {
+  color: #000000 !important;
 }
 
+/* Non-colored rows always have black text in total column */
+tr:not(.bg-motel-purple):not(.purple):not(.bg-motel-blue):not(.blue):not(.bg-motel-yellow):not(.yellow) td.total-column input {
+  color: #000000 !important;
+}
