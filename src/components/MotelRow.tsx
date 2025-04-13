@@ -106,9 +106,9 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     }
   }, [room.id, defaultRoomType, room.roomType, updateRoom]);
 
-  // Calculate total from rate only when necessary
+  // Calculate total from rate for nightly and weekly rooms
   React.useEffect(() => {
-    if (room.type === 'N' && room.rate) {
+    if ((room.type === 'N' || room.type === 'W') && room.rate) {
       const baseRate = parseFloat(room.rate) || 0;
       const total = (baseRate * 1.049).toFixed(2);
       if (total !== room.total) {
@@ -226,7 +226,7 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
           onBlur={(e) => handleInputBlur('total', e.target.value)}
           className="w-full bg-transparent text-center focus:outline-none font-medium"
           style={inputStyle}
-          readOnly={room.type === 'N'}
+          readOnly={room.type === 'N' || room.type === 'W'}
         />
       </td>
       <td className="border border-gray-300 p-1 text-center w-16">
