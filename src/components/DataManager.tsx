@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { toast } from 'sonner';
 import { RoomData, FooterValues } from '@/types';
@@ -81,10 +82,9 @@ const DataManager: React.FC<DataManagerProps> = ({
         return currentRoom;
       }
       
-      // For yellow highlighted rooms
+      // For yellow highlighted rows (only rooms specifically marked as yellow, not textColor black)
       if (currentRoom.backgroundColor === '#fcd34d' || 
-          currentRoom.backgroundColor === 'yellow' || 
-          currentRoom.textColor === '#000000') {
+          currentRoom.backgroundColor === 'yellow') {
         // Preserve the row but reset non-preserved fields
         return {
           ...initialRoom,
@@ -98,13 +98,15 @@ const DataManager: React.FC<DataManagerProps> = ({
         };
       }
       
-      // For all other rooms, preserve only specified fields
+      // For all other rooms, completely reset to initial state but preserve only room number, location, and roomType
       return {
         ...initialRoom,
-        // Keep the roomNumber, location, and roomType from the current data
         roomNumber: currentRoom.roomNumber,
         location: currentRoom.location,
-        roomType: currentRoom.roomType
+        roomType: currentRoom.roomType,
+        // Explicitly clear any background colors and set to undefined
+        backgroundColor: undefined,
+        textColor: undefined
       };
     }));
     
