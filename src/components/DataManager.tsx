@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { toast } from 'sonner';
 import { RoomData, FooterValues } from '@/types';
@@ -67,8 +66,52 @@ const DataManager: React.FC<DataManagerProps> = ({
   };
 
   const handleReset = () => {
-    setRooms(initialRooms);
+    // Preserve yellow highlighted rows and specific fields
+    setRooms(prevRooms => prevRooms.map((currentRoom, index) => {
+      // Get the initial room data for this position
+      const initialRoom = initialRooms[index];
+      
+      // Special case for rooms 28-30 and Cabin/Loft (rooms 31-32)
+      if (currentRoom.roomNumber === '28' || 
+          currentRoom.roomNumber === '29' || 
+          currentRoom.roomNumber === '30' || 
+          currentRoom.roomNumber === 'Cabin' || 
+          currentRoom.roomNumber === 'Loft') {
+        // Preserve these rooms entirely
+        return currentRoom;
+      }
+      
+      // For yellow highlighted rooms
+      if (currentRoom.backgroundColor === '#fcd34d' || 
+          currentRoom.backgroundColor === 'yellow' || 
+          currentRoom.textColor === '#000000') {
+        // Preserve the row but reset non-preserved fields
+        return {
+          ...initialRoom,
+          // Keep the following fields
+          roomNumber: currentRoom.roomNumber,
+          location: currentRoom.location,
+          roomType: currentRoom.roomType,
+          // Keep the highlighting
+          backgroundColor: currentRoom.backgroundColor,
+          textColor: currentRoom.textColor
+        };
+      }
+      
+      // For all other rooms, preserve only specified fields
+      return {
+        ...initialRoom,
+        // Keep the roomNumber, location, and roomType from the current data
+        roomNumber: currentRoom.roomNumber,
+        location: currentRoom.location,
+        roomType: currentRoom.roomType
+      };
+    }));
+    
+    // Reset footer values
     setFooterValues(initialFooterValues);
+    
+    toast.success('Sheet reset with preserved data');
   };
 
   return (
