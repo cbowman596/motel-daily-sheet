@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { toast } from 'sonner';
 import { RoomData, FooterValues } from '@/types';
@@ -67,51 +66,18 @@ const DataManager: React.FC<DataManagerProps> = ({
   };
 
   const handleReset = () => {
-    // Get a fresh copy of initial rooms data
-    const freshInitialRooms = JSON.parse(JSON.stringify(initialRooms));
-    
-    // Reset all rooms but preserve specific data
-    setRooms(prevRooms => prevRooms.map((currentRoom, index) => {
-      // Get the initial room data for this position
-      const initialRoom = freshInitialRooms[index];
-      
-      // Special case for rooms 28-30 and Cabin/Loft (rooms 31-32)
-      if (currentRoom.roomNumber === '28' || 
-          currentRoom.roomNumber === '29' || 
-          currentRoom.roomNumber === '30' || 
-          currentRoom.roomNumber === 'Cabin' || 
-          currentRoom.roomNumber === 'Loft') {
-        // Preserve these rooms entirely
-        return currentRoom;
-      }
-      
-      // For explicitly yellow highlighted rows only
-      if (currentRoom.backgroundColor === '#fcd34d' || 
-          currentRoom.backgroundColor === 'yellow') {
-        // Preserve the row but reset non-preserved fields
-        return {
-          ...initialRoom,
-          // Keep the following fields
-          roomNumber: currentRoom.roomNumber,
-          location: currentRoom.location,
-          roomType: currentRoom.roomType,
-          // Keep the highlighting
-          backgroundColor: currentRoom.backgroundColor,
-          textColor: currentRoom.textColor
-        };
-      }
-      
-      // For all other rooms, completely reset to initial state
+    // Reset all rooms, preserving only room number, location, and roomType
+    setRooms(prevRooms => prevRooms.map(currentRoom => {
       return {
-        ...initialRoom,
-        // Only preserve room number, location, and roomType
+        // Keep id and basic room identifiers 
+        id: currentRoom.id,
         roomNumber: currentRoom.roomNumber,
         location: currentRoom.location,
         roomType: currentRoom.roomType,
-        // Explicitly reset these fields to undefined
+        
+        // Clear all other data
         backgroundColor: undefined,
         textColor: undefined,
-        // Explicitly reset these fields to empty strings
         name: '',
         pmt: '',
         rate: '',
@@ -123,7 +89,7 @@ const DataManager: React.FC<DataManagerProps> = ({
       };
     }));
     
-    // Reset footer values to initial state
+    // Reset footer values to initial state (empty)
     setFooterValues({...initialFooterValues});
     
     toast.success('Sheet has been reset');
