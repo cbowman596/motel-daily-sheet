@@ -1,4 +1,3 @@
-
 import React, { memo, useState, useCallback } from 'react';
 import { cn } from '@/lib/utils';
 import { RoomData } from '@/types';
@@ -63,8 +62,17 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     return { color: textColor };
   }, [room.backgroundColor, room.type, room.roomNumber]);
 
-  // Properly determine total column text color based on background
+  // Determine total column text color based on background
   const totalInputStyle = React.useMemo(() => {
+    // Special case for row 2 - always force black and editable
+    if (Number(room.roomNumber) === 2) {
+      return { 
+        color: '#000000', 
+        opacity: '1', 
+        background: 'transparent'
+      };
+    }
+    
     // For colored backgrounds (purple, blue), use white text
     if ((room.type === 'W') || 
         (room.type === 'M') || 
@@ -141,6 +149,11 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
 
   // Calculate total from rate for nightly and weekly rooms
   React.useEffect(() => {
+    // Skip the automatic calculation for row 2
+    if (Number(room.roomNumber) === 2) {
+      return;
+    }
+    
     if ((room.type === 'N' || room.type === 'W') && room.rate) {
       const baseRate = parseFloat(room.rate) || 0;
       const total = (baseRate * 1.049).toFixed(2);
@@ -148,7 +161,7 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
         updateRoom(room.id, 'total', total);
       }
     }
-  }, [room.type, room.rate, room.id, room.total, updateRoom]);
+  }, [room.type, room.rate, room.id, room.total, room.roomNumber, updateRoom]);
 
   // Debounced update function to reduce state updates
   const handleInputChange = useCallback((field: string, value: string) => {
@@ -253,7 +266,7 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
           style={inputStyle}
         />
       </td>
-      <td className="border border-gray-300 p-1 text-center w-16 total-column">
+      <td className={`border border-gray-300 p-1 text-center w-16 total-column ${Number(room.roomNumber) === 2 ? 'force-visible' : ''}`}>
         <input 
           type="text" 
           value={localInputs.total} 
@@ -261,7 +274,7 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
           onBlur={(e) => handleInputBlur('total', e.target.value)}
           className="w-full bg-transparent text-center focus:outline-none font-medium"
           style={totalInputStyle}
-          readOnly={room.type === 'N' || room.type === 'W'}
+          readOnly={room.type === 'N' || room.type === 'W' && Number(room.roomNumber) !== 2}
           data-room-id={room.id}
           data-room-number={room.roomNumber}
         />

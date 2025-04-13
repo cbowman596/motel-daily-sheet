@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -160,18 +159,28 @@ tr.yellow .total-column input {
   color: #000000 !important;
 }
 
-/* Fix for row 2 specifically - force it to have visible text */
-tr:nth-child(2) .total-column input {
+/* Special handling for row 2 */
+tr[data-room-number="2"] .total-column input,
+tr:nth-child(2) td.total-column input {
   color: #000000 !important;
   opacity: 1 !important;
   visibility: visible !important;
+  pointer-events: auto !important;
+  user-select: text !important;
+  -webkit-text-fill-color: #000000 !important;
+  background-color: transparent !important;
 }
 
-/* Row 2 troubleshooting - try forcing !important on input itself */
-tr[data-room-number="2"] .total-column input,
-tr:nth-child(2) td:nth-child(9) input {
-  color: #000000 !important;
+/* Force visibility class to override any other styles */
+.force-visible input {
   opacity: 1 !important;
+  visibility: visible !important;
+  color: #000000 !important;
+}
+
+/* Additional utility class for responsive rows */
+.total-column {
+  position: relative;
 }
 
 @media print {
@@ -280,4 +289,11 @@ tr.yellow td.total-column input {
 /* Non-colored rows always have black text in total column */
 tr:not(.bg-motel-purple):not(.purple):not(.bg-motel-blue):not(.blue):not(.bg-motel-yellow):not(.yellow) td.total-column input {
   color: #000000 !important;
+}
+
+/* Override for row 2 */
+tr[data-room-number="2"] td.total-column input {
+  -webkit-text-fill-color: #000000 !important;
+  color: #000000 !important;
+  caret-color: #000000 !important;
 }
