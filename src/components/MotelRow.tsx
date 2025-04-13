@@ -1,7 +1,8 @@
-import React, { memo, useState, useCallback } from 'react';
+import React, { memo, useState, useCallback, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { RoomData } from '@/types';
 import { Checkbox } from '@/components/ui/checkbox';
+import TotalColumnInput from './TotalColumnInput';
 
 interface MotelRowProps {
   room: RoomData;
@@ -25,7 +26,16 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     vehicleDesc: room.vehicleDesc || '',
   });
   
-  // Calculate styles once
+  // Recalculate row class when type changes
+  const rowClass = React.useMemo(() => {
+    if (room.backgroundColor) return 'text-white';
+    if (localInputs.type === 'W') return 'bg-motel-purple text-white';
+    if (localInputs.type === 'M') return 'bg-motel-blue text-white';
+    if (Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) return 'bg-motel-yellow text-black';
+    return '';
+  }, [room.backgroundColor, localInputs.type, room.roomNumber]);
+  
+  // Calculate styles based on row type or background
   const rowStyle = React.useMemo(() => {
     if (room.backgroundColor) {
       return {
@@ -33,24 +43,28 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
         color: room.textColor || '#FFFFFF'
       };
     }
+    
+    // Apply background colors based on type
+    if (localInputs.type === 'W') {
+      return { backgroundColor: '#6c5fc7', color: '#FFFFFF' };
+    }
+    if (localInputs.type === 'M') {
+      return { backgroundColor: '#3b82f6', color: '#FFFFFF' };
+    }
+    if (Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) {
+      return { backgroundColor: '#fcd34d', color: '#000000' };
+    }
+    
     return {};
-  }, [room.backgroundColor, room.textColor]);
-  
-  const rowClass = React.useMemo(() => {
-    if (room.backgroundColor) return 'text-white';
-    if (room.type === 'W') return 'bg-motel-purple text-white';
-    if (room.type === 'M') return 'bg-motel-blue text-white';
-    if (Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) return 'bg-motel-yellow text-black';
-    return '';
-  }, [room.backgroundColor, room.type, room.roomNumber]);
+  }, [room.backgroundColor, room.textColor, localInputs.type, room.roomNumber]);
   
   // Simplified input style logic to ensure text is visible
   const inputStyle = React.useMemo(() => {
-    // Default to black text for standard rows
+    // Default to black text
     let textColor = '#000000';
     
-    // If the row has a background color or is a specific type, use white text
-    if (room.backgroundColor || room.type === 'W' || room.type === 'M') {
+    // For colored backgrounds or specific types, use white text
+    if (room.backgroundColor || localInputs.type === 'W' || localInputs.type === 'M') {
       textColor = '#FFFFFF';
     }
     
@@ -60,63 +74,8 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     }
     
     return { color: textColor };
-  }, [room.backgroundColor, room.type, room.roomNumber]);
+  }, [room.backgroundColor, localInputs.type, room.roomNumber]);
 
-  // Determine total column text color based on background
-  const totalInputStyle = React.useMemo(() => {
-    // Special case for row 2 - always force black and editable
-    if (Number(room.roomNumber) === 2) {
-      return { 
-        color: '#000000', 
-        opacity: '1', 
-        background: 'transparent'
-      };
-    }
-    
-    // For colored backgrounds (purple, blue), use white text
-    if ((room.type === 'W') || 
-        (room.type === 'M') || 
-        (room.backgroundColor && ['#6c5fc7', '#3b82f6'].includes(room.backgroundColor))) {
-      return { color: '#FFFFFF' };
-    }
-    
-    // For yellow background or room numbers 16 and 27, use black text
-    if (Number(room.roomNumber) === 16 || 
-        Number(room.roomNumber) === 27 || 
-        (room.backgroundColor && room.backgroundColor === '#fcd34d')) {
-      return { color: '#000000' };
-    }
-    
-    // Default to black text
-    return { color: '#000000' };
-  }, [room.backgroundColor, room.type, room.roomNumber]);
-  
-  // Pre-calculate these values to avoid recalculating them in multiple places
-  const defaultLocation = React.useMemo(() => {
-    const roomNum = Number(room.roomNumber);
-    if (roomNum >= 1 && roomNum <= 6) return 'FB';
-    if (roomNum >= 7 && roomNum <= 12) return 'BR';
-    if (roomNum >= 13 && roomNum <= 19) return 'FT';
-    if (roomNum >= 20 && roomNum <= 26) return 'BT';
-    if (roomNum >= 28 && roomNum <= 30) return 'ST';
-    if (roomNum === 27) return 'LFT';
-    if (roomNum === 16) return 'CAB';
-    return '';
-  }, [room.roomNumber]);
-  
-  const defaultRoomType = React.useMemo(() => {
-    const roomNum = Number(room.roomNumber);
-    if (roomNum === 1) return '1K Kit';
-    if ([6, 13, 19].includes(roomNum)) return '2Q Kit';
-    if ([2, 3, 4, 5, 7, 8, 14, 15, 17, 18, 20, 21, 22].includes(roomNum)) return '1Q Kit';
-    if ([24, 25, 26, 28, 29, 30].includes(roomNum)) return '1Q';
-    if ([9, 10, 11].includes(roomNum)) return '1F Kit';
-    if ([12, 16].includes(roomNum)) return '1F';
-    if (room.roomNumber === 'Cabin') return '1Q Kit';
-    if (room.roomNumber === 'Loft') return '1Q';
-    return '';
-  }, [room.roomNumber]);
-  
   // Update local inputs when props change
   React.useEffect(() => {
     setLocalInputs(prev => ({
@@ -149,7 +108,6 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
 
   // Calculate total from rate for nightly and weekly rooms
   React.useEffect(() => {
-    // Skip the automatic calculation for row 2
     if (Number(room.roomNumber) === 2) {
       return;
     }
@@ -166,12 +124,43 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
   // Debounced update function to reduce state updates
   const handleInputChange = useCallback((field: string, value: string) => {
     setLocalInputs(prev => ({ ...prev, [field]: value }));
-  }, []);
+    
+    // Immediately update parent for type changes to see color effect
+    if (field === 'type') {
+      updateRoom(room.id, field, value);
+    }
+  }, [room.id, updateRoom]);
 
-  // Update parent state with debounce
+  // Update parent state on blur
   const handleInputBlur = useCallback((field: string, value: string) => {
     updateRoom(room.id, field, value);
   }, [room.id, updateRoom]);
+  
+  // Pre-calculate these values to avoid recalculating them in multiple places
+  const defaultLocation = React.useMemo(() => {
+    const roomNum = Number(room.roomNumber);
+    if (roomNum >= 1 && roomNum <= 6) return 'FB';
+    if (roomNum >= 7 && roomNum <= 12) return 'BR';
+    if (roomNum >= 13 && roomNum <= 19) return 'FT';
+    if (roomNum >= 20 && roomNum <= 26) return 'BT';
+    if (roomNum >= 28 && roomNum <= 30) return 'ST';
+    if (roomNum === 27) return 'LFT';
+    if (roomNum === 16) return 'CAB';
+    return '';
+  }, [room.roomNumber]);
+  
+  const defaultRoomType = React.useMemo(() => {
+    const roomNum = Number(room.roomNumber);
+    if (roomNum === 1) return '1K Kit';
+    if ([6, 13, 19].includes(roomNum)) return '2Q Kit';
+    if ([2, 3, 4, 5, 7, 8, 14, 15, 17, 18, 20, 21, 22].includes(roomNum)) return '1Q Kit';
+    if ([24, 25, 26, 28, 29, 30].includes(roomNum)) return '1Q';
+    if ([9, 10, 11].includes(roomNum)) return '1F Kit';
+    if ([12, 16].includes(roomNum)) return '1F';
+    if (room.roomNumber === 'Cabin') return '1Q Kit';
+    if (room.roomNumber === 'Loft') return '1Q';
+    return '';
+  }, [room.roomNumber]);
   
   return (
     <tr 
@@ -267,16 +256,14 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
         />
       </td>
       <td className={`border border-gray-300 p-1 text-center w-16 total-column ${Number(room.roomNumber) === 2 ? 'force-visible' : ''}`}>
-        <input 
-          type="text" 
-          value={localInputs.total} 
-          onChange={(e) => handleInputChange('total', e.target.value)}
-          onBlur={(e) => handleInputBlur('total', e.target.value)}
-          className="w-full bg-transparent text-center focus:outline-none font-medium"
-          style={totalInputStyle}
-          readOnly={room.type === 'N' || room.type === 'W' && Number(room.roomNumber) !== 2}
-          data-room-id={room.id}
-          data-room-number={room.roomNumber}
+        <TotalColumnInput
+          roomId={room.id}
+          roomNumber={room.roomNumber}
+          initialValue={localInputs.total}
+          readOnly={localInputs.type === 'N' || localInputs.type === 'W' && Number(room.roomNumber) !== 2}
+          backgroundColor={rowStyle.backgroundColor}
+          rowType={localInputs.type}
+          onUpdate={updateRoom}
         />
       </td>
       <td className="border border-gray-300 p-1 text-center w-16">

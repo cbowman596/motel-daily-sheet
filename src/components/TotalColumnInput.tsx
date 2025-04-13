@@ -34,7 +34,7 @@ const TotalColumnInput: React.FC<TotalColumnInputProps> = ({
       return '#000000';
     }
     
-    // For purple or blue backgrounds
+    // For purple or blue backgrounds (type W or M)
     if (rowType === 'W' || rowType === 'M' || 
         (backgroundColor && ['#6c5fc7', '#3b82f6'].includes(backgroundColor))) {
       return '#FFFFFF';
