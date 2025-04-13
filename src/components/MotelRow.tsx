@@ -53,16 +53,15 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     vehicleDesc: room.vehicleDesc || '',
   });
   
-  // Recalculate row class when type changes
+  // Recalculate row class when type changes - REMOVED special case for rooms 16 and 27
   const rowClass = React.useMemo(() => {
     if (room.backgroundColor) return 'text-white';
     if (localInputs.type === 'M') return 'bg-motel-purple text-white';
     if (localInputs.type === 'W') return 'bg-motel-blue text-white';
-    if (Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) return 'bg-motel-yellow text-black';
     return '';
-  }, [room.backgroundColor, localInputs.type, room.roomNumber]);
+  }, [room.backgroundColor, localInputs.type]);
   
-  // Calculate styles based on row type or background
+  // Calculate styles based on row type or background - REMOVED special case for rooms 16 and 27
   const rowStyle = React.useMemo(() => {
     if (room.backgroundColor) {
       return {
@@ -78,14 +77,11 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     if (localInputs.type === 'W') {
       return { backgroundColor: '#3b82f6', color: '#FFFFFF' };
     }
-    if (Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) {
-      return { backgroundColor: '#fcd34d', color: '#000000' };
-    }
     
     return {};
-  }, [room.backgroundColor, room.textColor, localInputs.type, room.roomNumber]);
+  }, [room.backgroundColor, room.textColor, localInputs.type]);
   
-  // Simplified input style logic to ensure text is visible
+  // Simplified input style logic to ensure text is visible - REMOVED special case for rooms 16 and 27
   const inputStyle = React.useMemo(() => {
     // Default to black text
     let textColor = '#000000';
@@ -95,13 +91,8 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
       textColor = '#FFFFFF';
     }
     
-    // Special case for yellow rows
-    if (Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) {
-      textColor = '#000000';
-    }
-    
     return { color: textColor };
-  }, [room.backgroundColor, localInputs.type, room.roomNumber]);
+  }, [room.backgroundColor, localInputs.type]);
 
   // Update local inputs when props change
   React.useEffect(() => {
