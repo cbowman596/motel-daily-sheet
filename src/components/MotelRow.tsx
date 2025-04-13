@@ -1,5 +1,5 @@
 
-import React, { useEffect, memo } from 'react';
+import React, { memo, useState, useCallback } from 'react';
 import { cn } from '@/lib/utils';
 import { RoomData } from '@/types';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -12,28 +12,46 @@ interface MotelRowProps {
 }
 
 const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, onToggleSelect }) => {
-  const getRowStyle = () => {
+  // Store the local input values to prevent lag
+  const [localInputs, setLocalInputs] = useState({
+    name: room.name || '',
+    location: room.location || '',
+    roomType: room.roomType || '',
+    type: room.type || '',
+    pmt: room.pmt || '',
+    rate: room.rate || '',
+    total: room.total || '',
+    checkIn: room.checkIn || '',
+    checkOut: room.checkOut || '',
+    vehicleDesc: room.vehicleDesc || '',
+  });
+  
+  // Calculate styles once
+  const rowStyle = React.useMemo(() => {
     if (room.backgroundColor) {
       return {
         backgroundColor: room.backgroundColor,
-        color: '#FFFFFF'
+        color: room.textColor || '#FFFFFF'
       };
     }
     return {};
-  };
+  }, [room.backgroundColor, room.textColor]);
   
-  const getRowClass = () => {
+  const rowClass = React.useMemo(() => {
     if (room.backgroundColor) return 'text-white';
     if (room.type === 'W') return 'bg-motel-purple text-white';
     if (room.type === 'M') return 'bg-motel-blue text-white';
     if (Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) return 'bg-motel-yellow text-black';
     return '';
-  };
-
+  }, [room.backgroundColor, room.type, room.roomNumber]);
+  
+  const inputStyle = React.useMemo(() => ({
+    color: (room.backgroundColor || room.type === 'W' || room.type === 'M') ? '#FFFFFF' : 
+           (Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) ? '#000000' : 'inherit'
+  }), [room.backgroundColor, room.type, room.roomNumber]);
+  
   // Pre-calculate these values to avoid recalculating them in multiple places
-  const location = React.useMemo(() => {
-    if (room.location) return room.location;
-    
+  const defaultLocation = React.useMemo(() => {
     const roomNum = Number(room.roomNumber);
     if (roomNum >= 1 && roomNum <= 6) return 'FB';
     if (roomNum >= 7 && roomNum <= 12) return 'BR';
@@ -43,11 +61,9 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     if (roomNum === 27) return 'LFT';
     if (roomNum === 16) return 'CAB';
     return '';
-  }, [room.location, room.roomNumber]);
+  }, [room.roomNumber]);
   
-  const roomType = React.useMemo(() => {
-    if (room.roomType) return room.roomType;
-    
+  const defaultRoomType = React.useMemo(() => {
     const roomNum = Number(room.roomNumber);
     if (roomNum === 1) return '1K Kit';
     if ([6, 13, 19].includes(roomNum)) return '2Q Kit';
@@ -58,23 +74,40 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     if (room.roomNumber === 'Cabin') return '1Q Kit';
     if (room.roomNumber === 'Loft') return '1Q';
     return '';
-  }, [room.roomType, room.roomNumber]);
+  }, [room.roomNumber]);
   
-  // Run effects only when needed values change
-  useEffect(() => {
+  // Update local inputs when props change
+  React.useEffect(() => {
+    setLocalInputs(prev => ({
+      ...prev,
+      name: room.name || prev.name,
+      location: room.location || prev.location,
+      roomType: room.roomType || prev.roomType,
+      type: room.type || prev.type,
+      pmt: room.pmt || prev.pmt,
+      rate: room.rate || prev.rate,
+      total: room.total || prev.total,
+      checkIn: room.checkIn || prev.checkIn,
+      checkOut: room.checkOut || prev.checkOut,
+      vehicleDesc: room.vehicleDesc || prev.vehicleDesc,
+    }));
+  }, [room]);
+  
+  // Apply defaults for location and room type
+  React.useEffect(() => {
     if (!room.location) {
-      updateRoom(room.id, 'location', location);
+      updateRoom(room.id, 'location', defaultLocation);
     }
-  }, [room.id, location, room.location, updateRoom]);
+  }, [room.id, defaultLocation, room.location, updateRoom]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!room.roomType) {
-      updateRoom(room.id, 'roomType', roomType);
+      updateRoom(room.id, 'roomType', defaultRoomType);
     }
-  }, [room.id, roomType, room.roomType, updateRoom]);
+  }, [room.id, defaultRoomType, room.roomType, updateRoom]);
 
-  // Separate effect for rate calculation
-  useEffect(() => {
+  // Calculate total from rate only when necessary
+  React.useEffect(() => {
     if (room.type === 'N' && room.rate) {
       const baseRate = parseFloat(room.rate) || 0;
       const total = (baseRate * 1.049).toFixed(2);
@@ -84,18 +117,15 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     }
   }, [room.type, room.rate, room.id, room.total, updateRoom]);
 
-  // Memoize handlers to prevent recreating them on each render
-  const handleChange = React.useCallback((field: string, value: string) => {
+  // Debounced update function to reduce state updates
+  const handleInputChange = useCallback((field: string, value: string) => {
+    setLocalInputs(prev => ({ ...prev, [field]: value }));
+  }, []);
+
+  // Update parent state with debounce
+  const handleInputBlur = useCallback((field: string, value: string) => {
     updateRoom(room.id, field, value);
   }, [room.id, updateRoom]);
-  
-  // Memoize styles to prevent recalculation on each render
-  const rowStyle = React.useMemo(() => getRowStyle(), [room.backgroundColor]);
-  const rowClass = React.useMemo(() => getRowClass(), [room.backgroundColor, room.type, room.roomNumber]);
-  
-  const inputStyle = React.useMemo(() => ({
-    color: (room.backgroundColor || room.type === 'W' || room.type === 'M') ? '#FFFFFF' : 'inherit'
-  }), [room.backgroundColor, room.type]);
   
   return (
     <tr 
@@ -119,7 +149,6 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
         <input 
           type="text" 
           value={room.roomNumber} 
-          onChange={(e) => handleChange('roomNumber', e.target.value)}
           className="w-full bg-transparent text-center focus:outline-none font-medium"
           style={inputStyle}
           readOnly
@@ -128,8 +157,9 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
       <td className="border border-gray-300 p-1 text-center w-10">
         <input 
           type="text" 
-          value={room.location || location} 
-          onChange={(e) => handleChange('location', e.target.value)}
+          value={localInputs.location || defaultLocation} 
+          onChange={(e) => handleInputChange('location', e.target.value)}
+          onBlur={(e) => handleInputBlur('location', e.target.value)}
           className="w-full bg-transparent text-center focus:outline-none font-medium"
           style={inputStyle}
           maxLength={3}
@@ -138,8 +168,9 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
       <td className="border border-gray-300 p-1 text-center w-24">
         <input 
           type="text" 
-          value={room.roomType || roomType} 
-          onChange={(e) => handleChange('roomType', e.target.value)}
+          value={localInputs.roomType || defaultRoomType} 
+          onChange={(e) => handleInputChange('roomType', e.target.value)}
+          onBlur={(e) => handleInputBlur('roomType', e.target.value)}
           className="w-full bg-transparent text-center focus:outline-none font-medium"
           style={inputStyle}
           maxLength={8}
@@ -148,8 +179,9 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
       <td className="border border-gray-300 p-1 text-center w-8">
         <input 
           type="text" 
-          value={room.type} 
-          onChange={(e) => handleChange('type', e.target.value)}
+          value={localInputs.type} 
+          onChange={(e) => handleInputChange('type', e.target.value)}
+          onBlur={(e) => handleInputBlur('type', e.target.value)}
           className="w-full bg-transparent text-center focus:outline-none font-medium"
           style={inputStyle}
           maxLength={2}
@@ -158,8 +190,9 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
       <td className="border border-gray-300 p-1 w-1/4">
         <input 
           type="text" 
-          value={room.name} 
-          onChange={(e) => handleChange('name', e.target.value)}
+          value={localInputs.name} 
+          onChange={(e) => handleInputChange('name', e.target.value)}
+          onBlur={(e) => handleInputBlur('name', e.target.value)}
           className="w-full bg-transparent focus:outline-none font-medium"
           style={inputStyle}
         />
@@ -167,8 +200,9 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
       <td className="border border-gray-300 p-1 text-center w-8">
         <input 
           type="text" 
-          value={room.pmt} 
-          onChange={(e) => handleChange('pmt', e.target.value)}
+          value={localInputs.pmt} 
+          onChange={(e) => handleInputChange('pmt', e.target.value)}
+          onBlur={(e) => handleInputBlur('pmt', e.target.value)}
           className="w-full bg-transparent text-center focus:outline-none font-medium"
           style={inputStyle}
           maxLength={2}
@@ -177,8 +211,9 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
       <td className="border border-gray-300 p-1 text-center w-20">
         <input 
           type="text" 
-          value={room.rate} 
-          onChange={(e) => handleChange('rate', e.target.value)}
+          value={localInputs.rate} 
+          onChange={(e) => handleInputChange('rate', e.target.value)}
+          onBlur={(e) => handleInputBlur('rate', e.target.value)}
           className="w-full bg-transparent text-center focus:outline-none font-medium"
           style={inputStyle}
         />
@@ -186,8 +221,9 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
       <td className="border border-gray-300 p-1 text-center w-16">
         <input 
           type="text" 
-          value={room.total} 
-          onChange={(e) => handleChange('total', e.target.value)}
+          value={localInputs.total} 
+          onChange={(e) => handleInputChange('total', e.target.value)}
+          onBlur={(e) => handleInputBlur('total', e.target.value)}
           className="w-full bg-transparent text-center focus:outline-none font-medium"
           style={inputStyle}
           readOnly={room.type === 'N'}
@@ -196,8 +232,9 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
       <td className="border border-gray-300 p-1 text-center w-16">
         <input 
           type="text" 
-          value={room.checkIn} 
-          onChange={(e) => handleChange('checkIn', e.target.value)}
+          value={localInputs.checkIn} 
+          onChange={(e) => handleInputChange('checkIn', e.target.value)}
+          onBlur={(e) => handleInputBlur('checkIn', e.target.value)}
           className="w-full bg-transparent text-center focus:outline-none font-medium"
           style={inputStyle}
         />
@@ -205,8 +242,9 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
       <td className="border border-gray-300 p-1 text-center w-16">
         <input 
           type="text" 
-          value={room.checkOut} 
-          onChange={(e) => handleChange('checkOut', e.target.value)}
+          value={localInputs.checkOut} 
+          onChange={(e) => handleInputChange('checkOut', e.target.value)}
+          onBlur={(e) => handleInputBlur('checkOut', e.target.value)}
           className="w-full bg-transparent text-center focus:outline-none font-medium"
           style={inputStyle}
         />
@@ -214,8 +252,9 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
       <td className="border border-gray-300 p-1 w-1/4">
         <input 
           type="text" 
-          value={room.vehicleDesc} 
-          onChange={(e) => handleChange('vehicleDesc', e.target.value)}
+          value={localInputs.vehicleDesc} 
+          onChange={(e) => handleInputChange('vehicleDesc', e.target.value)}
+          onBlur={(e) => handleInputBlur('vehicleDesc', e.target.value)}
           className="w-full bg-transparent focus:outline-none font-medium"
           style={inputStyle}
         />

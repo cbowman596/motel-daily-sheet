@@ -30,18 +30,26 @@ const RoomManager: React.FC<RoomManagerProps> = React.memo(({
     );
   }, [setSelectedRoomIds]);
 
+  // Create a memoized update function to prevent re-renders
+  const memoizedUpdateRoom = React.useCallback(
+    (id: number, field: string, value: string) => {
+      updateRoom(id, field, value);
+    },
+    [updateRoom]
+  );
+
   // Memoize the room rows to prevent unnecessary re-renders
   const roomRows = useMemo(() => {
     return rooms.map((room) => (
       <MotelRow 
         key={room.id} 
         room={room} 
-        updateRoom={updateRoom}
+        updateRoom={memoizedUpdateRoom}
         isSelected={selectedRoomIds.includes(room.id)}
         onToggleSelect={toggleRoomSelection}
       />
     ));
-  }, [rooms, updateRoom, selectedRoomIds, toggleRoomSelection]);
+  }, [rooms, memoizedUpdateRoom, selectedRoomIds, toggleRoomSelection]);
 
   return (
     <>
