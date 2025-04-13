@@ -65,7 +65,7 @@ const DataTransfer: React.FC<DataTransferProps> = ({ roomsData, footerValues, im
     if (url) {
       navigator.clipboard.writeText(url)
         .then(() => {
-          toast.success('Shareable URL copied to clipboard! The link will load fresh data when opened.');
+          toast.success('Shareable URL copied to clipboard!');
         })
         .catch(() => {
           toast.error('Failed to copy URL. Please copy it manually.');
@@ -158,7 +158,7 @@ const DataTransfer: React.FC<DataTransferProps> = ({ roomsData, footerValues, im
             <h4 className="font-medium">Shareable URL</h4>
             <p className="text-sm text-muted-foreground">
               Copy this URL to share your current sheet data. 
-              <span className="font-medium block mt-1">This link will automatically refresh to show the latest data when opened.</span>
+              <span className="font-medium block mt-1">The data will load automatically when the link is opened.</span>
             </p>
             <div className="flex items-center gap-2">
               <Input

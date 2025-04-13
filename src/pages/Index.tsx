@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import MotelHeader from '@/components/MotelHeader';
 import MotelFooter from '@/components/MotelFooter';
@@ -34,44 +33,40 @@ const Index = () => {
     }, 500);
   }, []);
 
-  // Check for URL parameters on mount and force refresh if needed
+  // Check for URL parameters on mount and handle shared data once
   useEffect(() => {
     const checkForUrlData = () => {
       try {
         const urlParams = new URLSearchParams(window.location.search);
         const encodedData = urlParams.get('data');
         
-        // Check if this is a first load with shared data
-        const needsRefresh = sessionStorage.getItem('dataRefreshed') !== 'true' && encodedData;
+        if (!encodedData) return;
         
-        if (needsRefresh) {
-          // Set flag in session storage to prevent infinite refresh
-          sessionStorage.setItem('dataRefreshed', 'true');
-          // Force a refresh to ensure clean state
-          window.location.reload();
+        // Check if we need to process the encoded data
+        const hasProcessedData = sessionStorage.getItem('dataProcessed') === 'true';
+        
+        if (hasProcessedData) {
+          // Data was already processed, don't do anything
           return;
         }
         
-        if (encodedData && sessionStorage.getItem('dataRefreshed') === 'true') {
-          const decodedData = decodeDataFromUrl(encodedData);
-          
-          if (decodedData) {
-            setRooms(decodedData.rooms);
-            setFooterValues(decodedData.footerValues);
-            toast.success('Data loaded from URL successfully');
-            
-            // Clear the URL parameter to avoid reloading on refresh
-            const newUrl = window.location.pathname;
-            window.history.replaceState({}, document.title, newUrl);
-          }
-          
-          // Reset the refresh flag for future shared links
-          sessionStorage.removeItem('dataRefreshed');
+        // Mark data as processed to prevent reprocessing
+        sessionStorage.setItem('dataProcessed', 'true');
+        
+        // Decode and apply the data
+        const decodedData = decodeDataFromUrl(encodedData);
+        if (decodedData) {
+          setRooms(decodedData.rooms);
+          setFooterValues(decodedData.footerValues);
+          toast.success('Data loaded from URL successfully');
         }
+        
+        // Clean up the URL by removing the query parameter
+        const newUrl = window.location.pathname;
+        window.history.replaceState({}, document.title, newUrl);
       } catch (error) {
         console.error('Error loading data from URL:', error);
         toast.error('Failed to load data from URL');
-        sessionStorage.removeItem('dataRefreshed');
       }
     };
     
