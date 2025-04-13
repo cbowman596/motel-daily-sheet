@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface TotalColumnInputProps {
   roomId: number;
@@ -28,7 +28,7 @@ const TotalColumnInput: React.FC<TotalColumnInputProps> = ({
   }, [initialValue]);
   
   // Determine the text color based on room properties
-  const getTextColor = useCallback(() => {
+  const getTextColor = () => {
     // Special case for room 2
     if (Number(roomNumber) === 2) {
       return '#000000';
@@ -48,7 +48,7 @@ const TotalColumnInput: React.FC<TotalColumnInputProps> = ({
     
     // Default
     return '#000000';
-  }, [roomNumber, rowType, backgroundColor]);
+  };
   
   // Handle change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
