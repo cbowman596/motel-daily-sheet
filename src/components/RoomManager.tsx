@@ -1,4 +1,3 @@
-
 import React, { useMemo } from 'react';
 import { RoomData } from '@/types';
 import MotelRow from '@/components/MotelRow';
@@ -21,7 +20,6 @@ const RoomManager: React.FC<RoomManagerProps> = React.memo(({
   applyColorToRooms,
   clearRoomColors
 }) => {
-  // Memoize the toggle function to prevent recreation on each render
   const toggleRoomSelection = React.useCallback((id: number) => {
     setSelectedRoomIds(prev => 
       prev.includes(id) 
@@ -30,7 +28,6 @@ const RoomManager: React.FC<RoomManagerProps> = React.memo(({
     );
   }, [setSelectedRoomIds]);
 
-  // Create a memoized update function to prevent re-renders
   const memoizedUpdateRoom = React.useCallback(
     (id: number, field: string, value: string) => {
       updateRoom(id, field, value);
@@ -38,7 +35,6 @@ const RoomManager: React.FC<RoomManagerProps> = React.memo(({
     [updateRoom]
   );
 
-  // Memoize the room rows to prevent unnecessary re-renders
   const roomRows = useMemo(() => {
     return rooms.map((room) => (
       <MotelRow 
@@ -77,7 +73,7 @@ const RoomManager: React.FC<RoomManagerProps> = React.memo(({
               <th className="border border-gray-300 p-2 text-sm w-16">Total</th>
               <th className="border border-gray-300 p-2 text-sm w-16">Check-In</th>
               <th className="border border-gray-300 p-2 text-sm w-16">Check-Out</th>
-              <th className="border border-gray-300 p-2 text-sm w-1/4">Notes</th>
+              <th className="border border-gray-300 p-2 text-sm w-1/5">Notes</th>
             </tr>
           </thead>
           <tbody>
