@@ -181,7 +181,7 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
           maxLength={3}
         />
       </td>
-      <td className="border border-gray-300 p-1 text-center w-16">
+      <td className="border border-gray-300 p-1 text-center w-24">
         <input 
           type="text" 
           value={localInputs.roomType || defaultRoomType} 
