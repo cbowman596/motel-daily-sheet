@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { toast } from 'sonner';
 import { RoomData, FooterValues } from '@/types';
@@ -55,7 +54,6 @@ const DataManager: React.FC<DataManagerProps> = ({
   };
 
   const handleSave = () => {
-    // Local storage saving is handled automatically by the useLocalStorage hook
     setSaveStatus('Saved!');
     setTimeout(() => setSaveStatus(''), 2000);
   };
@@ -67,20 +65,17 @@ const DataManager: React.FC<DataManagerProps> = ({
   };
 
   const handleReset = () => {
-    // Reset all rooms, preserving only room number, location, and roomType
     setRooms(prevRooms => prevRooms.map(currentRoom => {
       return {
-        // Keep id and basic room identifiers 
         id: currentRoom.id,
         roomNumber: currentRoom.roomNumber,
         location: currentRoom.location,
         roomType: currentRoom.roomType,
-        
-        // Clear all other data and remove any highlighting
         backgroundColor: undefined,
         textColor: undefined,
         name: '',
         pmt: '',
+        cacc: '',
         rate: '',
         total: '',
         checkIn: '',
@@ -90,7 +85,6 @@ const DataManager: React.FC<DataManagerProps> = ({
       };
     }));
     
-    // Reset footer values to initial state (empty)
     setFooterValues({...initialFooterValues});
     
     toast.success('Sheet has been reset');
