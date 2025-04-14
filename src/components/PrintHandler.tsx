@@ -260,7 +260,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
           <tr>
             <th style="width: 30px;">Room #</th>
             <th style="width: 30px;">Loc</th>
-            <th style="width: 30px;">Type</th>
+            <th style="width: 35px;">Type</th>
             <th style="width: 30px;">Dur</th>
             <th style="width: 200px;">Name</th>
             <th style="width: 30px;">PMT</th>
