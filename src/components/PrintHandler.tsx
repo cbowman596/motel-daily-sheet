@@ -258,17 +258,18 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       <table>
         <thead>
           <tr>
-            <th>Room #</th>
-            <th>Loc</th>
-            <th>Type</th>
-            <th>Dur</th>
-            <th>Name</th>
-            <th>PMT</th>
+            <th style="width: 30px;">Room #</th>
+            <th style="width: 30px;">Loc</th>
+            <th style="width: 30px;">Type</th>
+            <th style="width: 30px;">Dur</th>
+            <th style="width: 200px;">Name</th>
+            <th style="width: 30px;">PMT</th>
+            <th style="width: 40px;">CA/CC</th>
             <th style="width: 60px;">Rate</th>
-            <th>Total</th>
-            <th>Check-In</th>
-            <th>Check-Out</th>
-            <th>Vehicle Desc</th>
+            <th style="width: 60px;">Total</th>
+            <th style="width: 50px;">Check-In</th>
+            <th style="width: 50px;">Check-Out</th>
+            <th style="width: 200px;">Notes</th>
           </tr>
         </thead>
         <tbody>
@@ -344,6 +345,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
           </td>
           <td style="color: #000000 !important;">${room.name}</td>
           <td style="text-align: center; color: #000000 !important;">${room.pmt}</td>
+          <td style="text-align: center; color: #000000 !important;">${room.cacc}</td>
           <td style="text-align: center; color: #000000 !important;">${room.rate}</td>
           <td style="text-align: center; color: #000000 !important;">${room.total}</td>
           <td style="text-align: center; color: #000000 !important;">${room.checkIn}</td>

@@ -1,4 +1,3 @@
-
 // Define RoomData interface directly in types file rather than importing it
 export interface RoomData {
   id: number;
@@ -6,6 +5,7 @@ export interface RoomData {
   roomNumber: string;
   name: string;
   pmt: string;
+  cacc: string; // New field for Cash/Credit Card
   rate: string;
   total: string;
   checkIn: string;
@@ -14,7 +14,7 @@ export interface RoomData {
   backgroundColor?: string;
   textColor?: string;
   location?: string;
-  roomType?: string; // Added roomType property to store the room type information
+  roomType?: string;
 }
 
 export interface FooterValues {

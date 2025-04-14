@@ -1,4 +1,3 @@
-
 import React, { memo, useState, useCallback, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { RoomData } from '@/types';
@@ -13,7 +12,6 @@ interface MotelRowProps {
 }
 
 const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, onToggleSelect }) => {
-  // Pre-calculate these values to avoid recalculating them in multiple places
   const defaultLocation = React.useMemo(() => {
     const roomNum = Number(room.roomNumber);
     if (roomNum >= 1 && roomNum <= 6) return 'FB';
@@ -39,21 +37,20 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     return '';
   }, [room.roomNumber]);
 
-  // Store the local input values to prevent lag
   const [localInputs, setLocalInputs] = useState({
     name: room.name || '',
     location: room.location || '',
     roomType: room.roomType || '',
     type: room.type || '',
     pmt: room.pmt || '',
+    cacc: room.cacc || '',
     rate: room.rate || '',
     total: room.total || '',
     checkIn: room.checkIn || '',
     checkOut: room.checkOut || '',
     vehicleDesc: room.vehicleDesc || '',
   });
-  
-  // Recalculate row class when type changes - REMOVED special case for rooms 16 and 27
+
   const rowClass = React.useMemo(() => {
     if (room.backgroundColor) return 'text-white';
     if (localInputs.type === 'M') return 'bg-motel-purple text-white';
@@ -61,7 +58,6 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     return '';
   }, [room.backgroundColor, localInputs.type]);
   
-  // Calculate styles based on row type or background - REMOVED special case for rooms 16 and 27
   const rowStyle = React.useMemo(() => {
     if (room.backgroundColor) {
       return {
@@ -70,7 +66,6 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
       };
     }
     
-    // Apply background colors based on type
     if (localInputs.type === 'M') {
       return { backgroundColor: '#6c5fc7', color: '#FFFFFF' };
     }
@@ -81,12 +76,9 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     return {};
   }, [room.backgroundColor, room.textColor, localInputs.type]);
   
-  // Simplified input style logic to ensure text is visible - REMOVED special case for rooms 16 and 27
   const inputStyle = React.useMemo(() => {
-    // Default to black text
     let textColor = '#000000';
     
-    // For colored backgrounds or specific types, use white text
     if (room.backgroundColor || localInputs.type === 'M' || localInputs.type === 'W') {
       textColor = '#FFFFFF';
     }
@@ -94,7 +86,6 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     return { color: textColor };
   }, [room.backgroundColor, localInputs.type]);
 
-  // Update local inputs when props change
   React.useEffect(() => {
     setLocalInputs(prev => ({
       ...prev,
@@ -103,6 +94,7 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
       roomType: room.roomType || prev.roomType,
       type: room.type || prev.type,
       pmt: room.pmt || prev.pmt,
+      cacc: room.cacc || prev.cacc,
       rate: room.rate || prev.rate,
       total: room.total || prev.total,
       checkIn: room.checkIn || prev.checkIn,
@@ -111,7 +103,6 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     }));
   }, [room]);
   
-  // Apply defaults for location and room type
   React.useEffect(() => {
     if (!room.location) {
       updateRoom(room.id, 'location', defaultLocation);
@@ -124,7 +115,6 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     }
   }, [room.id, defaultRoomType, room.roomType, updateRoom]);
 
-  // Calculate total from rate for nightly and weekly rooms
   React.useEffect(() => {
     if (Number(room.roomNumber) === 2) {
       return;
@@ -139,17 +129,14 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     }
   }, [room.type, room.rate, room.id, room.total, room.roomNumber, updateRoom]);
 
-  // Debounced update function to reduce state updates
   const handleInputChange = useCallback((field: string, value: string) => {
     setLocalInputs(prev => ({ ...prev, [field]: value }));
     
-    // Immediately update parent for type changes to see color effect
     if (field === 'type') {
       updateRoom(room.id, field, value);
     }
   }, [room.id, updateRoom]);
 
-  // Update parent state on blur
   const handleInputBlur = useCallback((field: string, value: string) => {
     updateRoom(room.id, field, value);
   }, [room.id, updateRoom]);
@@ -194,7 +181,7 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
           maxLength={3}
         />
       </td>
-      <td className="border border-gray-300 p-1 text-center w-24">
+      <td className="border border-gray-300 p-1 text-center w-16">
         <input 
           type="text" 
           value={localInputs.roomType || defaultRoomType} 
@@ -232,6 +219,17 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
           value={localInputs.pmt} 
           onChange={(e) => handleInputChange('pmt', e.target.value)}
           onBlur={(e) => handleInputBlur('pmt', e.target.value)}
+          className="w-full bg-transparent text-center focus:outline-none font-medium"
+          style={inputStyle}
+          maxLength={2}
+        />
+      </td>
+      <td className="border border-gray-300 p-1 text-center w-12">
+        <input 
+          type="text" 
+          value={localInputs.cacc} 
+          onChange={(e) => handleInputChange('cacc', e.target.value)}
+          onBlur={(e) => handleInputBlur('cacc', e.target.value)}
           className="w-full bg-transparent text-center focus:outline-none font-medium"
           style={inputStyle}
           maxLength={2}
