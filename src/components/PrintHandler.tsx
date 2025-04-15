@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { RoomData, FooterValues } from '@/types';
 
@@ -394,7 +393,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
             </div>
             <div class="key-legend">
               <div class="key-item">
-                <span><strong>Key Legend:</strong> Y=Yes, N=No, O=Office, U=Unit</span>
+                <span><strong>Key:</strong> P=Physical D=Digital</span>
               </div>
             </div>
           </div>
