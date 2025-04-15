@@ -1,4 +1,3 @@
-
 import React, { useMemo } from 'react';
 import { RoomData } from '@/types';
 import MotelRow from '@/components/MotelRow';
@@ -65,7 +64,7 @@ const RoomManager: React.FC<RoomManagerProps> = React.memo(({
               <th className="border border-gray-300 p-2 text-sm w-8">Select</th>
               <th className="border border-gray-300 p-2 text-sm w-6">Room #</th>
               <th className="border border-gray-300 p-2 text-sm w-10">Loc</th>
-              <th className="border border-gray-300 p-2 text-sm w-16">Type</th>
+              <th className="border border-gray-300 p-2 text-sm w-12">Type</th>
               <th className="border border-gray-300 p-2 text-sm w-8">Dur</th>
               <th className="border border-gray-300 p-2 text-sm w-1/6">Name</th>
               <th className="border border-gray-300 p-2 text-sm w-8">PMT</th>
@@ -74,7 +73,7 @@ const RoomManager: React.FC<RoomManagerProps> = React.memo(({
               <th className="border border-gray-300 p-2 text-sm w-16">Total</th>
               <th className="border border-gray-300 p-2 text-sm w-16">Check-In</th>
               <th className="border border-gray-300 p-2 text-sm w-16">Check-Out</th>
-              <th className="border border-gray-300 p-2 text-sm w-1/12">Notes</th>
+              <th className="border border-gray-300 p-2 text-sm w-1/6">Notes</th>
             </tr>
           </thead>
           <tbody>
