@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 
 interface TotalColumnInputProps {
@@ -20,11 +19,13 @@ const TotalColumnInput: React.FC<TotalColumnInputProps> = ({
   rowType,
   onUpdate
 }) => {
-  const [value, setValue] = useState(initialValue || '');
+  const [value, setValue] = useState('');
   
-  // Update local value when prop changes
+  // Update local value when prop changes, but only if it's explicitly set
   useEffect(() => {
-    setValue(initialValue || '');
+    if (initialValue) {
+      setValue(initialValue);
+    }
   }, [initialValue]);
   
   // Determine the text color based on room properties
