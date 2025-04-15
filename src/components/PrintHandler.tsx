@@ -236,6 +236,17 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       td:not(.colored-cell) {
         color: #000000 !important;
       }
+      .key-legend {
+        display: flex;
+        flex-direction: column;
+        margin-top: 3px;
+      }
+      .key-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 3px;
+        font-size: 11px;
+      }
     `);
     printWindow.document.write('</style></head><body>');
     
@@ -270,7 +281,8 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
             <th style="width: 60px;">Total</th>
             <th style="width: 50px;">Check-In</th>
             <th style="width: 50px;">Check-Out</th>
-            <th style="width: 200px;">Notes</th>
+            <th style="width: 30px;">Key</th>
+            <th style="width: 170px;">Notes</th>
           </tr>
         </thead>
         <tbody>
@@ -351,6 +363,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
           <td style="text-align: center; color: #000000 !important;">${room.total}</td>
           <td style="text-align: center; color: #000000 !important;">${room.checkIn}</td>
           <td style="text-align: center; color: #000000 !important;">${room.checkOut}</td>
+          <td style="text-align: center; color: #000000 !important;">${room.key || ''}</td>
           <td style="color: #000000 !important;">${room.vehicleDesc}</td>
         </tr>
       `;
@@ -364,18 +377,25 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
     const footerHtml = `
       <div class="footer">
         <div class="footer-grid">
-          <div class="color-legend">
-            <div class="color-item">
-              <div class="color-swatch purple"></div>
-              <span>Purple - Monthly</span>
+          <div>
+            <div class="color-legend">
+              <div class="color-item">
+                <div class="color-swatch purple"></div>
+                <span>Purple - Monthly</span>
+              </div>
+              <div class="color-item">
+                <div class="color-swatch blue"></div>
+                <span>Blue - Weekly</span>
+              </div>
+              <div class="color-item">
+                <div class="color-swatch yellow"></div>
+                <span>Yellow - Employee</span>
+              </div>
             </div>
-            <div class="color-item">
-              <div class="color-swatch blue"></div>
-              <span>Blue - Weekly</span>
-            </div>
-            <div class="color-item">
-              <div class="color-swatch yellow"></div>
-              <span>Yellow - Employee</span>
+            <div class="key-legend">
+              <div class="key-item">
+                <span><strong>Key Legend:</strong> Y=Yes, N=No, O=Office, U=Unit</span>
+              </div>
             </div>
           </div>
           
