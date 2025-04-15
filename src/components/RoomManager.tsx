@@ -67,14 +67,14 @@ const RoomManager: React.FC<RoomManagerProps> = React.memo(({
               <th className="border border-gray-300 p-2 text-sm w-10">Loc</th>
               <th className="border border-gray-300 p-2 text-sm w-24">Type</th>
               <th className="border border-gray-300 p-2 text-sm w-8">Dur</th>
-              <th className="border border-gray-300 p-2 text-sm w-1/4">Name</th>
+              <th className="border border-gray-300 p-2 text-sm w-1/6">Name</th>
               <th className="border border-gray-300 p-2 text-sm w-8">PMT</th>
-              <th className="border border-gray-300 p-2 text-sm w-16">CA/CC</th>
-              <th className="border border-gray-300 p-2 text-sm w-16">Rate</th>
+              <th className="border border-gray-300 p-2 text-sm w-12">CA/CC</th>
+              <th className="border border-gray-300 p-2 text-sm w-24">Rate</th>
               <th className="border border-gray-300 p-2 text-sm w-16">Total</th>
               <th className="border border-gray-300 p-2 text-sm w-16">Check-In</th>
               <th className="border border-gray-300 p-2 text-sm w-16">Check-Out</th>
-              <th className="border border-gray-300 p-2 text-sm w-1/6">Notes</th>
+              <th className="border border-gray-300 p-2 text-sm w-1/12">Notes</th>
             </tr>
           </thead>
           <tbody>
