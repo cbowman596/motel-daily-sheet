@@ -49,6 +49,7 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     checkIn: room.checkIn || '',
     checkOut: room.checkOut || '',
     vehicleDesc: room.vehicleDesc || '',
+    key: room.key || '',
   });
 
   const rowClass = React.useMemo(() => {
@@ -100,6 +101,7 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
       checkIn: room.checkIn || prev.checkIn,
       checkOut: room.checkOut || prev.checkOut,
       vehicleDesc: room.vehicleDesc || prev.vehicleDesc,
+      key: room.key || prev.key,
     }));
   }, [room]);
   
@@ -260,6 +262,17 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
           onBlur={(e) => handleInputBlur('checkOut', e.target.value)}
           className="w-full bg-transparent text-center focus:outline-none font-medium"
           style={inputStyle}
+        />
+      </td>
+      <td className="border border-gray-300 p-1 text-center w-8">
+        <input 
+          type="text" 
+          value={localInputs.key} 
+          onChange={(e) => handleInputChange('key', e.target.value)}
+          onBlur={(e) => handleInputBlur('key', e.target.value)}
+          className="w-full bg-transparent text-center focus:outline-none font-medium"
+          style={inputStyle}
+          maxLength={1}
         />
       </td>
       <td className="border border-gray-300 p-1 w-1/5">

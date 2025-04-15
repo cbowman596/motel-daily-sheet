@@ -62,24 +62,37 @@ const RoomManager: React.FC<RoomManagerProps> = React.memo(({
           <thead>
             <tr className="bg-gray-100">
               <th className="border border-gray-300 p-2 text-sm w-8">Select</th>
-              <th className="border border-gray-300 p-2 text-sm w-6">Room #</th>
+              <th className="border border-gray-300 p-2 text-sm w-4">Room #</th>
               <th className="border border-gray-300 p-2 text-sm w-10">Loc</th>
-              <th className="border border-gray-300 p-2 text-sm w-12">Type</th>
+              <th className="border border-gray-300 p-2 text-sm w-8">Type</th>
               <th className="border border-gray-300 p-2 text-sm w-8">Dur</th>
               <th className="border border-gray-300 p-2 text-sm w-1/6">Name</th>
               <th className="border border-gray-300 p-2 text-sm w-8">PMT</th>
               <th className="border border-gray-300 p-2 text-sm w-12">CA/CC</th>
-              <th className="border border-gray-300 p-2 text-sm w-24">Rate</th>
+              <th className="border border-gray-300 p-2 text-sm w-16">Rate</th>
               <th className="border border-gray-300 p-2 text-sm w-16">Total</th>
               <th className="border border-gray-300 p-2 text-sm w-16">Check-In</th>
               <th className="border border-gray-300 p-2 text-sm w-16">Check-Out</th>
-              <th className="border border-gray-300 p-2 text-sm w-1/6">Notes</th>
+              <th className="border border-gray-300 p-2 text-sm w-8">Key</th>
+              <th className="border border-gray-300 p-2 text-sm w-1/5">Notes</th>
             </tr>
           </thead>
           <tbody>
             {roomRows}
           </tbody>
         </table>
+      </div>
+      
+      <div className="p-4 border-t">
+        <div className="color-legend">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center">
+              <span className="text-sm font-medium mr-2">Key:</span>
+              <span className="text-sm">P=Physical</span>
+              <span className="text-sm mx-2">D=Digital</span>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
