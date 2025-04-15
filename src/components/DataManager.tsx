@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { toast } from 'sonner';
 import { RoomData, FooterValues } from '@/types';
@@ -81,6 +82,7 @@ const DataManager: React.FC<DataManagerProps> = ({
         checkIn: '',
         checkOut: '',
         vehicleDesc: '',
+        key: '', // Added the key field here
         type: ''
       };
     }));

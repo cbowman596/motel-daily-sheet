@@ -17,6 +17,7 @@ export const encodeDataToUrl = (rooms: RoomData[], footerValues: FooterValues): 
         ci: room.checkIn || '',
         co: room.checkOut || '',
         v: room.vehicleDesc || '',
+        k: room.key || '', // Added key field
         bg: room.backgroundColor,
         tc: room.textColor,
         l: room.location,
@@ -55,6 +56,7 @@ export const decodeDataFromUrl = (encodedData: string): { rooms: RoomData[], foo
       checkIn: r.ci || '',
       checkOut: r.co || '',
       vehicleDesc: r.v || '',
+      key: r.k || '', // Added key field
       backgroundColor: r.bg,
       textColor: r.tc,
       location: r.l,
