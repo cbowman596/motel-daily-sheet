@@ -115,20 +115,6 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     }
   }, [room.id, defaultRoomType, room.roomType, updateRoom]);
 
-  React.useEffect(() => {
-    if (Number(room.roomNumber) === 2) {
-      return;
-    }
-    
-    if ((room.type === 'N' || room.type === 'W') && room.rate) {
-      const baseRate = parseFloat(room.rate) || 0;
-      const total = (baseRate * 1.049).toFixed(2);
-      if (total !== room.total) {
-        updateRoom(room.id, 'total', total);
-      }
-    }
-  }, [room.type, room.rate, room.id, room.total, room.roomNumber, updateRoom]);
-
   const handleInputChange = useCallback((field: string, value: string) => {
     setLocalInputs(prev => ({ ...prev, [field]: value }));
     
