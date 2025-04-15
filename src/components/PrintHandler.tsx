@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { RoomData, FooterValues } from '@/types';
 
@@ -345,7 +346,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
           </td>
           <td style="color: #000000 !important;">${room.name}</td>
           <td style="text-align: center; color: #000000 !important;">${room.pmt}</td>
-          <td style="text-align: center; color: #000000 !important;">${room.cacc}</td>
+          <td style="text-align: center; color: #000000 !important;">${room.cacc || ''}</td>
           <td style="text-align: center; color: #000000 !important;">${room.rate}</td>
           <td style="text-align: center; color: #000000 !important;">${room.total}</td>
           <td style="text-align: center; color: #000000 !important;">${room.checkIn}</td>
