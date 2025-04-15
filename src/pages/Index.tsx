@@ -42,16 +42,8 @@ const Index = () => {
         
         if (!encodedData) return;
         
-        // Check if we need to process the encoded data
-        const hasProcessedData = sessionStorage.getItem('dataProcessed') === 'true';
-        
-        if (hasProcessedData) {
-          // Data was already processed, don't do anything
-          return;
-        }
-        
-        // Mark data as processed to prevent reprocessing
-        sessionStorage.setItem('dataProcessed', 'true');
+        // Clear local storage when loading shared URL data
+        localStorage.clear();
         
         // Decode and apply the data
         const decodedData = decodeDataFromUrl(encodedData);
