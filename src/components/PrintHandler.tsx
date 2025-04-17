@@ -52,20 +52,22 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       }
       th { 
         border: 1px solid black; 
-        padding: 3px;
+        padding: 6px;
         background-color: #f3f4f6; 
         font-size: 11px;
         text-align: center;
         font-weight: bold;
         color: #000000 !important;
+        height: 24px;
       }
       td { 
         border: 1px solid black; 
-        padding: 3px; 
-        height: 20px;
+        padding: 8px 6px; 
+        height: 32px;
         font-size: 11px;
         font-weight: 600;
         color: #000000 !important;
+        vertical-align: middle;
       }
       .header {
         background-color: #4c9eeb;
