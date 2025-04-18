@@ -29,13 +29,13 @@ const TotalColumnInput: React.FC<TotalColumnInputProps> = ({
     }
   }, [initialValue]);
   
+  // Special styling for row 2
+  const isRoom2 = Number(roomNumber) === 2;
+  
   // Determine if input should actually be readonly
   // Room 2 is a special case - it should always be editable
   // Also, make sure rows with background colors can be edited if they aren't marked as readOnly
   const actuallyReadOnly = isRoom2 ? false : readOnly;
-  
-  // Special styling for row 2
-  const isRoom2 = Number(roomNumber) === 2;
   
   // Handle change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
