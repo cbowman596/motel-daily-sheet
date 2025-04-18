@@ -40,7 +40,7 @@ const DataManager: React.FC<DataManagerProps> = ({
   const applyColorToRooms = (roomIds: number[], bgColor: string, textColor: string) => {
     setRooms(rooms.map(room => 
       roomIds.includes(room.id) 
-        ? { ...room, backgroundColor: bgColor, textColor: '#000000' } 
+        ? { ...room, backgroundColor: bgColor, textColor: textColor } 
         : room
     ));
     setSelectedRoomIds([]);
@@ -58,10 +58,13 @@ const DataManager: React.FC<DataManagerProps> = ({
   const handleSave = async () => {
     setIsSaving(true);
     try {
+      // Create a deep copy of the rooms data to ensure all changes are captured
+      const roomsToSave = JSON.parse(JSON.stringify(rooms));
+      
       // Firebase storage hook will handle the saving
-      // Just trigger a state update to save
-      setRooms([...rooms]);
-      setFooterValues({...footerValues});
+      // Send the deep copy to ensure all fields are saved properly
+      await setRooms(roomsToSave);
+      await setFooterValues({...footerValues});
       
       setSaveStatus('Saved!');
       setTimeout(() => setSaveStatus(''), 2000);

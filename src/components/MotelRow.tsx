@@ -1,3 +1,4 @@
+
 import React, { memo, useState, useCallback, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { RoomData } from '@/types';
@@ -37,6 +38,7 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     key: room.key || '',
   });
 
+  // Update local state when props change
   useEffect(() => {
     setLocalInputs(prev => ({
       ...prev,
@@ -55,6 +57,7 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     }));
   }, [room]);
 
+  // Set default values for location and roomType if not present
   useEffect(() => {
     if (!room.location) {
       updateRoom(room.id, 'location', defaultLocation);
@@ -77,6 +80,12 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
   const handleInputBlur = useCallback((field: string, value: string) => {
     updateRoom(room.id, field, value);
   }, [room.id, updateRoom]);
+
+  // Determine if the Total column should be read-only based on type,
+  // but make sure to not make it read-only for colored cells
+  const isTotalReadOnly = 
+    (room.type === 'N' || (room.type === 'W' && Number(room.roomNumber) !== 2))
+    && !room.backgroundColor; // Allow editing if the row has a background color
 
   return (
     <tr 
@@ -173,7 +182,7 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
           roomId={room.id}
           roomNumber={room.roomNumber}
           initialValue={localInputs.total}
-          readOnly={localInputs.type === 'N' || localInputs.type === 'W' && Number(room.roomNumber) !== 2}
+          readOnly={isTotalReadOnly}
           backgroundColor={rowStyle.backgroundColor}
           rowType={localInputs.type}
           onUpdate={updateRoom}
