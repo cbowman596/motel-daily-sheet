@@ -40,18 +40,18 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
   useEffect(() => {
     setLocalInputs(prev => ({
       ...prev,
-      name: room.name || prev.name,
-      location: room.location || prev.location,
-      roomType: room.roomType || prev.roomType,
-      type: room.type || prev.type,
-      pmt: room.pmt || prev.pmt,
-      cacc: room.cacc || prev.cacc,
-      rate: room.rate || prev.rate,
-      total: room.total || prev.total,
-      checkIn: room.checkIn || prev.checkIn,
-      checkOut: room.checkOut || prev.checkOut,
-      vehicleDesc: room.vehicleDesc || prev.vehicleDesc,
-      key: room.key || prev.key,
+      name: room.name ?? '',
+      location: room.location ?? '',
+      roomType: room.roomType ?? '',
+      type: room.type ?? '',
+      pmt: room.pmt ?? '',
+      cacc: room.cacc ?? '',
+      rate: room.rate ?? '',
+      total: room.total ?? '',
+      checkIn: room.checkIn ?? '',
+      checkOut: room.checkOut ?? '',
+      vehicleDesc: room.vehicleDesc ?? '',
+      key: room.key ?? '',
     }));
   }, [room]);
 
@@ -78,10 +78,10 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     updateRoom(room.id, field, value);
   }, [room.id, updateRoom]);
 
-  // Fix the TypeScript error by using more precise type conditions
+  const isRoom2 = Number(room.roomNumber) === 2;
   const isTotalReadOnly = 
     (!room.backgroundColor && room.type !== 'M' && 
-    (room.type === 'N' || (room.type === 'W' && Number(room.roomNumber) !== 2)));
+    (room.type === 'N' || (room.type === 'W' && !isRoom2)));
 
   return (
     <tr 

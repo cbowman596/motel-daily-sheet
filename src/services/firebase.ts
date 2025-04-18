@@ -36,9 +36,26 @@ export const saveDataToFirebase = async (
   sheetId: string = "default"
 ): Promise<void> => {
   try {
+    // Ensure all fields, including empty ones, are explicitly included in the data
+    const processedRooms = roomsData.map(room => ({
+      ...room,
+      name: room.name ?? '',
+      location: room.location ?? '',
+      roomType: room.roomType ?? '',
+      pmt: room.pmt ?? '',
+      cacc: room.cacc ?? '',
+      rate: room.rate ?? '',
+      total: room.total ?? '',
+      checkIn: room.checkIn ?? '',
+      checkOut: room.checkOut ?? '',
+      vehicleDesc: room.vehicleDesc ?? '',
+      key: room.key ?? '',
+      type: room.type ?? '',
+    }));
+    
     const dataRef = ref(database, `sheets/${sheetId}`);
     await set(dataRef, {
-      rooms: roomsData,
+      rooms: processedRooms,
       footerValues: footerValues,
       lastUpdated: new Date().toISOString()
     });

@@ -58,11 +58,25 @@ const DataManager: React.FC<DataManagerProps> = ({
   const handleSave = async () => {
     setIsSaving(true);
     try {
-      // Create a deep copy of the rooms data to ensure all changes are captured
-      const roomsToSave = JSON.parse(JSON.stringify(rooms));
+      // Create a deep copy and ensure all fields are included
+      const roomsToSave = rooms.map(room => ({
+        ...JSON.parse(JSON.stringify(room)),
+        // Explicitly include empty strings for fields that might be null/undefined
+        name: room.name ?? '',
+        location: room.location ?? '',
+        roomType: room.roomType ?? '',
+        pmt: room.pmt ?? '',
+        cacc: room.cacc ?? '',
+        rate: room.rate ?? '',
+        total: room.total ?? '',
+        checkIn: room.checkIn ?? '',
+        checkOut: room.checkOut ?? '',
+        vehicleDesc: room.vehicleDesc ?? '',
+        key: room.key ?? '',
+        type: room.type ?? '',
+      }));
       
       // Firebase storage hook will handle the saving
-      // Send the deep copy to ensure all fields are saved properly
       await setRooms(roomsToSave);
       await setFooterValues({...footerValues});
       
