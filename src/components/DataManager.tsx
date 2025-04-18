@@ -81,7 +81,8 @@ const DataManager: React.FC<DataManagerProps> = ({
   };
 
   const handleReset = () => {
-    setRooms(prevRooms => prevRooms.map(currentRoom => {
+    // Create the new rooms array directly instead of using a function parameter
+    const resetRooms = rooms.map(currentRoom => {
       return {
         id: currentRoom.id,
         roomNumber: currentRoom.roomNumber,
@@ -100,8 +101,12 @@ const DataManager: React.FC<DataManagerProps> = ({
         key: '',
         type: ''
       };
-    }));
+    });
     
+    // Set the rooms with the new array directly
+    setRooms(resetRooms);
+    
+    // Set footer values directly
     setFooterValues({...initialFooterValues});
     
     toast.success('Sheet has been reset');
