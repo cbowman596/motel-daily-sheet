@@ -34,8 +34,9 @@ const TotalColumnInput: React.FC<TotalColumnInputProps> = ({
   
   // Determine if input should actually be readonly
   // Room 2 is a special case - it should always be editable
-  // Also, make sure rows with background colors can be edited if they aren't marked as readOnly
-  const actuallyReadOnly = isRoom2 ? false : readOnly;
+  // Also, make sure rows with background colors or type M/W can be edited
+  const actuallyReadOnly = isRoom2 ? false : 
+                          (rowType === 'M' || rowType === 'W' || backgroundColor) ? false : readOnly;
   
   // Handle change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

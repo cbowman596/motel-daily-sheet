@@ -1,4 +1,3 @@
-
 import React, { memo, useState, useCallback, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { RoomData } from '@/types';
@@ -38,7 +37,6 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     key: room.key || '',
   });
 
-  // Update local state when props change
   useEffect(() => {
     setLocalInputs(prev => ({
       ...prev,
@@ -57,7 +55,6 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     }));
   }, [room]);
 
-  // Set default values for location and roomType if not present
   useEffect(() => {
     if (!room.location) {
       updateRoom(room.id, 'location', defaultLocation);
@@ -81,11 +78,9 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     updateRoom(room.id, field, value);
   }, [room.id, updateRoom]);
 
-  // Determine if the Total column should be read-only based on type,
-  // but make sure to not make it read-only for colored cells
   const isTotalReadOnly = 
     (room.type === 'N' || (room.type === 'W' && Number(room.roomNumber) !== 2))
-    && !room.backgroundColor; // Allow editing if the row has a background color
+    && !room.backgroundColor && room.type !== 'M';
 
   return (
     <tr 
@@ -97,6 +92,7 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
       style={rowStyle}
       data-room-id={room.id}
       data-room-number={room.roomNumber}
+      data-room-type={localInputs.type}
     >
       <td className="border border-gray-300 p-1 text-center w-8">
         <div className="flex items-center justify-center">
@@ -177,7 +173,7 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
           style={inputStyle}
         />
       </td>
-      <td className={`border border-gray-300 p-1 text-center w-16 total-column ${Number(room.roomNumber) === 2 ? 'force-visible' : ''}`}>
+      <td className={`border border-gray-300 p-1 text-center w-16 total-column ${Number(room.roomNumber) === 2 || localInputs.type === 'M' ? 'force-visible' : ''}`}>
         <TotalColumnInput
           roomId={room.id}
           roomNumber={room.roomNumber}

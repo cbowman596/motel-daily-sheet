@@ -154,6 +154,7 @@ tr.blue .total-column input {
   color: #FFFFFF !important;
   opacity: 1 !important;
   pointer-events: auto !important;
+  user-select: text !important;
 }
 
 tr.bg-motel-yellow .total-column input,
@@ -161,6 +162,7 @@ tr.yellow .total-column input {
   color: #000000 !important;
   opacity: 1 !important;
   pointer-events: auto !important;
+  user-select: text !important;
 }
 
 /* Special handling for row 2 */
@@ -197,6 +199,21 @@ tr.bg-motel-yellow input,
 tr.yellow input {
   pointer-events: auto !important;
   opacity: 1 !important;
+}
+
+/* Ensure type M rows always have editable inputs */
+tr[data-room-type="M"] .total-column input,
+tr[data-room-type="M"] input {
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  user-select: text !important;
+}
+
+/* Additional override for readOnly styling on colored rows */
+.total-column input[readonly="false"] {
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  user-select: text !important;
 }
 
 @media print {
