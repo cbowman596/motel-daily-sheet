@@ -78,9 +78,10 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
     updateRoom(room.id, field, value);
   }, [room.id, updateRoom]);
 
+  // Fix the TypeScript error by using more precise type conditions
   const isTotalReadOnly = 
-    (room.type === 'N' || (room.type === 'W' && Number(room.roomNumber) !== 2))
-    && !room.backgroundColor && room.type !== 'M';
+    (!room.backgroundColor && room.type !== 'M' && 
+    (room.type === 'N' || (room.type === 'W' && Number(room.roomNumber) !== 2)));
 
   return (
     <tr 
