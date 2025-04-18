@@ -1,4 +1,3 @@
-
 import React, { memo, useState, useCallback, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { RoomData } from '@/types';
@@ -108,7 +107,6 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
           readOnly
         />
       </td>
-      {/* Location cell */}
       <td className="border border-gray-300 p-1 text-center w-10">
         <RoomInputCell
           value={localInputs.location || defaultLocation}
@@ -118,7 +116,6 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
           maxLength={3}
         />
       </td>
-      {/* Room type cell */}
       <td className="border border-gray-300 p-1 text-center w-12">
         <RoomInputCell
           value={localInputs.roomType || defaultRoomType}
@@ -128,7 +125,6 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
           maxLength={8}
         />
       </td>
-      {/* Duration type cell */}
       <td className="border border-gray-300 p-1 text-center w-8">
         <RoomInputCell
           value={localInputs.type}
@@ -138,7 +134,6 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
           maxLength={2}
         />
       </td>
-      {/* Name cell */}
       <td className="border border-gray-300 p-1 w-1/6">
         <RoomInputCell
           value={localInputs.name}
@@ -148,17 +143,14 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
           className="w-full bg-transparent focus:outline-none font-medium"
         />
       </td>
-      {/* Payment type cell */}
-      <td className="border border-gray-300 p-1 text-center w-8">
+      <td className="border border-gray-300 p-1 text-center w-16">
         <RoomInputCell
           value={localInputs.pmt}
           onChange={(value) => handleInputChange('pmt', value)}
           onBlur={(value) => handleInputBlur('pmt', value)}
           style={inputStyle}
-          maxLength={2}
         />
       </td>
-      {/* Cash/Credit cell */}
       <td className="border border-gray-300 p-1 text-center w-12">
         <RoomInputCell
           value={localInputs.cacc}
@@ -168,7 +160,6 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
           maxLength={2}
         />
       </td>
-      {/* Rate cell */}
       <td className="border border-gray-300 p-1 text-center w-24">
         <RoomInputCell
           value={localInputs.rate}
@@ -177,7 +168,6 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
           style={inputStyle}
         />
       </td>
-      {/* Total cell */}
       <td className={`border border-gray-300 p-1 text-center w-16 total-column ${Number(room.roomNumber) === 2 ? 'force-visible' : ''}`}>
         <TotalColumnInput
           roomId={room.id}
@@ -189,7 +179,6 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
           onUpdate={updateRoom}
         />
       </td>
-      {/* Check-in cell */}
       <td className="border border-gray-300 p-1 text-center w-16">
         <RoomInputCell
           value={localInputs.checkIn}
@@ -198,7 +187,6 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
           style={inputStyle}
         />
       </td>
-      {/* Check-out cell */}
       <td className="border border-gray-300 p-1 text-center w-16">
         <RoomInputCell
           value={localInputs.checkOut}
@@ -207,7 +195,6 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
           style={inputStyle}
         />
       </td>
-      {/* Key cell */}
       <td className="border border-gray-300 p-1 text-center w-8">
         <RoomInputCell
           value={localInputs.key}
@@ -217,7 +204,6 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
           maxLength={1}
         />
       </td>
-      {/* Vehicle description cell */}
       <td className="border border-gray-300 p-1 w-1/5">
         <RoomInputCell
           value={localInputs.vehicleDesc}
