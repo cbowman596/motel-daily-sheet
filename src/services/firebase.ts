@@ -72,6 +72,28 @@ export const loadDataFromFirebase = async (
   }
 };
 
+// Helper function to initialize data if it doesn't exist in Firebase
+export const initializeFirebaseData = async (
+  initialRooms: RoomData[],
+  initialFooterValues: FooterValues,
+  sheetId: string = "default"
+): Promise<boolean> => {
+  try {
+    const existingData = await loadDataFromFirebase(sheetId);
+    
+    if (!existingData) {
+      await saveDataToFirebase(initialRooms, initialFooterValues, sheetId);
+      console.log("Initialized Firebase data successfully");
+      return true;
+    }
+    
+    return false;
+  } catch (error) {
+    console.error("Error initializing Firebase data:", error);
+    return false;
+  }
+};
+
 // Listen for real-time updates (optional)
 export const subscribeToDataUpdates = (
   sheetId: string = "default",

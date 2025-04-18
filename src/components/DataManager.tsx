@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { RoomData, FooterValues } from '@/types';
 import { initialRooms, initialFooterValues } from '@/data/initialData';
@@ -8,9 +8,9 @@ import PrintHandler from '@/components/PrintHandler';
 
 interface DataManagerProps {
   rooms: RoomData[];
-  setRooms: React.Dispatch<React.SetStateAction<RoomData[]>>;
+  setRooms: (rooms: RoomData[]) => void;
   footerValues: FooterValues;
-  setFooterValues: React.Dispatch<React.SetStateAction<FooterValues>>;
+  setFooterValues: (footerValues: FooterValues) => void;
   roomTotals: {
     nightly: number;
     weekly: number;
@@ -34,7 +34,8 @@ const DataManager: React.FC<DataManagerProps> = ({
   selectedRoomIds,
   setSelectedRoomIds
 }) => {
-  const [saveStatus, setSaveStatus] = React.useState('');
+  const [saveStatus, setSaveStatus] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
 
   const applyColorToRooms = (roomIds: number[], bgColor: string, textColor: string) => {
     setRooms(rooms.map(room => 
@@ -54,9 +55,23 @@ const DataManager: React.FC<DataManagerProps> = ({
     setSelectedRoomIds([]);
   };
 
-  const handleSave = () => {
-    setSaveStatus('Saved!');
-    setTimeout(() => setSaveStatus(''), 2000);
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      // Firebase storage hook will handle the saving
+      // Just trigger a state update to save
+      setRooms([...rooms]);
+      setFooterValues({...footerValues});
+      
+      setSaveStatus('Saved!');
+      setTimeout(() => setSaveStatus(''), 2000);
+      toast.success('Data saved to cloud storage');
+    } catch (error) {
+      console.error('Error saving data:', error);
+      toast.error('Failed to save data');
+    } finally {
+      setIsSaving(false);
+    }
   };
   
   const handleDataImport = (importedRooms: RoomData[], importedFooterValues: FooterValues) => {
@@ -82,7 +97,7 @@ const DataManager: React.FC<DataManagerProps> = ({
         checkIn: '',
         checkOut: '',
         vehicleDesc: '',
-        key: '', // Added the key field here
+        key: '',
         type: ''
       };
     }));
@@ -112,7 +127,8 @@ const DataManager: React.FC<DataManagerProps> = ({
             handleReset={handleReset}
             roomsData={rooms}
             footerValues={footerValues}
-            handleDataImport={handleDataImport} 
+            handleDataImport={handleDataImport}
+            isSaving={isSaving}
           />
         </div>
       </div>

@@ -1,8 +1,9 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import { saveDataToFirebase, loadDataFromFirebase } from '@/services/firebase';
 import { toast } from 'sonner';
 
-export function useFirebaseStorage<T>(key: string, initialValue: T, sheetId: string = "default"): [T, (value: T) => void, boolean] {
+export function useFirebaseStorage<T>(key: string, initialValue: T, sheetId: string = "default"): [T, (value: T) => Promise<void>, boolean] {
   const [storedValue, setStoredValue] = useState<T>(initialValue);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [saveInProgress, setSaveInProgress] = useState<boolean>(false);
@@ -62,6 +63,7 @@ export function useFirebaseStorage<T>(key: string, initialValue: T, sheetId: str
     } catch (error) {
       console.error(`Error saving ${key} to Firebase:`, error);
       toast.error('Failed to save data to cloud');
+      throw error; // Re-throw to allow callers to handle errors
     } finally {
       setSaveInProgress(false);
     }

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
@@ -12,6 +13,7 @@ interface ActionButtonsProps {
   roomsData: RoomData[];
   footerValues: FooterValues;
   handleDataImport: (importedRooms: RoomData[], importedFooterValues: FooterValues) => void;
+  isSaving?: boolean;
 }
 
 const ActionButtons: React.FC<ActionButtonsProps> = ({ 
@@ -19,20 +21,17 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
   handleReset,
   roomsData,
   footerValues,
-  handleDataImport
+  handleDataImport,
+  isSaving = false
 }) => {
-  const [isSaving, setIsSaving] = React.useState(false);
-
   const handleSaveWithFeedback = async () => {
-    setIsSaving(true);
+    if (isSaving) return;
+    
     try {
-      handleSave();
-      toast.success('Data saved successfully');
+      await handleSave();
     } catch (error) {
       toast.error('Failed to save data');
       console.error('Save error:', error);
-    } finally {
-      setIsSaving(false);
     }
   };
 
