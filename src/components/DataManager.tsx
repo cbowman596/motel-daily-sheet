@@ -109,9 +109,12 @@ const DataManager: React.FC<DataManagerProps> = ({
             roomTotals={roomTotals}
           />
           <ActionButtons 
-            handleSave={handleSave} 
+            handleSave={handleSave}
             handlePrint={() => {}} // PrintHandler handles this
             handleReset={handleReset}
+            roomsData={rooms}
+            footerValues={footerValues}
+            handleDataImport={importData}
           />
           <DataTransfer
             roomsData={rooms}
