@@ -1,4 +1,3 @@
-
 import React, { memo, useState, useCallback, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { RoomData } from '@/types';
@@ -155,7 +154,6 @@ const MotelRow: React.FC<MotelRowProps> = memo(({ room, updateRoom, isSelected, 
           onChange={(value) => handleInputChange('pmt', value)}
           onBlur={(value) => handleInputBlur('pmt', value)}
           style={inputStyle}
-          maxLength={2}
         />
       </td>
       {/* Cash/Credit cell */}
