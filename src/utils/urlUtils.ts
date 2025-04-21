@@ -2,7 +2,12 @@
 import { RoomData, FooterValues } from '@/types';
 
 // Compress and encode data to a URL-safe string
-export const encodeDataToUrl = (rooms: RoomData[], footerValues: FooterValues): string => {
+export const encodeDataToUrl = (
+  rooms: RoomData[], 
+  footerValues: FooterValues, 
+  month: string, 
+  day: number
+): string => {
   try {
     // Create a minimal version of the data to reduce URL size
     const minimalData = {
@@ -17,13 +22,15 @@ export const encodeDataToUrl = (rooms: RoomData[], footerValues: FooterValues): 
         ci: room.checkIn || '',
         co: room.checkOut || '',
         v: room.vehicleDesc || '',
-        k: room.key || '', // Added key field
+        k: room.key || '', 
         bg: room.backgroundColor,
         tc: room.textColor,
         l: room.location,
         rt2: room.roomType
       })),
-      f: footerValues
+      f: footerValues,
+      m: month,   // Add month to the shared data
+      d: day      // Add day to the shared data
     };
     
     // Convert to JSON, compress using base64
@@ -38,7 +45,12 @@ export const encodeDataToUrl = (rooms: RoomData[], footerValues: FooterValues): 
 };
 
 // Decode data from URL and reconstruct the full objects
-export const decodeDataFromUrl = (encodedData: string): { rooms: RoomData[], footerValues: FooterValues } | null => {
+export const decodeDataFromUrl = (encodedData: string): { 
+  rooms: RoomData[], 
+  footerValues: FooterValues,
+  month?: string,
+  day?: number
+} | null => {
   try {
     // Decode base64 string
     const jsonStr = atob(encodedData);
@@ -56,7 +68,7 @@ export const decodeDataFromUrl = (encodedData: string): { rooms: RoomData[], foo
       checkIn: r.ci || '',
       checkOut: r.co || '',
       vehicleDesc: r.v || '',
-      key: r.k || '', // Added key field
+      key: r.k || '',
       backgroundColor: r.bg,
       textColor: r.tc,
       location: r.l,
@@ -65,7 +77,9 @@ export const decodeDataFromUrl = (encodedData: string): { rooms: RoomData[], foo
     
     return {
       rooms,
-      footerValues: minimalData.f
+      footerValues: minimalData.f,
+      month: minimalData.m,  // Extract month from the decoded data
+      day: minimalData.d     // Extract day from the decoded data
     };
   } catch (error) {
     console.error('Error decoding URL data:', error);

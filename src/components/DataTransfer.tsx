@@ -10,10 +10,23 @@ import { Input } from '@/components/ui/input';
 interface DataTransferProps {
   roomsData: RoomData[];
   footerValues: FooterValues;
-  importData: (importedRooms: RoomData[], importedFooterValues: FooterValues) => void;
+  importData: (
+    importedRooms: RoomData[], 
+    importedFooterValues: FooterValues, 
+    importedMonth?: string, 
+    importedDay?: number
+  ) => void;
+  month: string;
+  day: number;
 }
 
-const DataTransfer: React.FC<DataTransferProps> = ({ roomsData, footerValues, importData }) => {
+const DataTransfer: React.FC<DataTransferProps> = ({ 
+  roomsData, 
+  footerValues, 
+  importData,
+  month,
+  day
+}) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [shareUrl, setShareUrl] = useState<string>('');
 
@@ -22,6 +35,8 @@ const DataTransfer: React.FC<DataTransferProps> = ({ roomsData, footerValues, im
       const exportData = {
         rooms: roomsData,
         footerValues: footerValues,
+        month: month,
+        day: day,
         exportDate: new Date().toISOString()
       };
       
@@ -44,7 +59,7 @@ const DataTransfer: React.FC<DataTransferProps> = ({ roomsData, footerValues, im
   
   const generateShareableUrl = () => {
     try {
-      const encodedData = encodeDataToUrl(roomsData, footerValues);
+      const encodedData = encodeDataToUrl(roomsData, footerValues, month, day);
       const url = new URL(window.location.href);
       
       // Clear existing search params and set the new data
@@ -108,7 +123,13 @@ const DataTransfer: React.FC<DataTransferProps> = ({ roomsData, footerValues, im
         };
         
         // Import the data
-        importData(parsedData.rooms, importedFooterValues);
+        importData(
+          parsedData.rooms, 
+          importedFooterValues, 
+          parsedData.month, 
+          parsedData.day
+        );
+        
         toast.success('Data imported successfully');
         
         // Reset file input

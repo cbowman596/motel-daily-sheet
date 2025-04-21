@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import MotelHeader from '@/components/MotelHeader';
 import MotelFooter from '@/components/MotelFooter';
@@ -50,6 +51,16 @@ const Index = () => {
         if (decodedData) {
           setRooms(decodedData.rooms);
           setFooterValues(decodedData.footerValues);
+          
+          // Apply date information if available
+          if (decodedData.month) {
+            setMonth(decodedData.month);
+          }
+          
+          if (decodedData.day) {
+            setDay(decodedData.day);
+          }
+          
           toast.success('Data loaded from URL successfully');
         }
         
@@ -124,6 +135,25 @@ const Index = () => {
     ));
     setSelectedRoomIds([]);
   };
+  
+  // Import data handler with date support
+  const handleImportData = (
+    importedRooms: RoomData[], 
+    importedFooterValues: FooterValues,
+    importedMonth?: string,
+    importedDay?: number
+  ) => {
+    setRooms(importedRooms);
+    setFooterValues(importedFooterValues);
+    
+    if (importedMonth) {
+      setMonth(importedMonth);
+    }
+    
+    if (importedDay && importedDay > 0 && importedDay <= 31) {
+      setDay(importedDay);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">
@@ -166,6 +196,7 @@ const Index = () => {
         day={day}
         selectedRoomIds={selectedRoomIds}
         setSelectedRoomIds={setSelectedRoomIds}
+        importData={handleImportData}
       />
     </div>
   );

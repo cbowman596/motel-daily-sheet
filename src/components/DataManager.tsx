@@ -5,6 +5,7 @@ import { RoomData, FooterValues } from '@/types';
 import { initialRooms, initialFooterValues } from '@/data/initialData';
 import ActionButtons from '@/components/ActionButtons';
 import PrintHandler from '@/components/PrintHandler';
+import DataTransfer from '@/components/DataTransfer';
 
 interface DataManagerProps {
   rooms: RoomData[];
@@ -21,6 +22,12 @@ interface DataManagerProps {
   day: number;
   selectedRoomIds: number[];
   setSelectedRoomIds: React.Dispatch<React.SetStateAction<number[]>>;
+  importData: (
+    importedRooms: RoomData[], 
+    importedFooterValues: FooterValues,
+    importedMonth?: string,
+    importedDay?: number
+  ) => void;
 }
 
 const DataManager: React.FC<DataManagerProps> = ({ 
@@ -32,7 +39,8 @@ const DataManager: React.FC<DataManagerProps> = ({
   month,
   day,
   selectedRoomIds,
-  setSelectedRoomIds
+  setSelectedRoomIds,
+  importData
 }) => {
   const [saveStatus, setSaveStatus] = React.useState('');
 
@@ -59,12 +67,6 @@ const DataManager: React.FC<DataManagerProps> = ({
     setTimeout(() => setSaveStatus(''), 2000);
   };
   
-  const handleDataImport = (importedRooms: RoomData[], importedFooterValues: FooterValues) => {
-    setRooms(importedRooms);
-    setFooterValues(importedFooterValues);
-    toast.success('Data imported successfully');
-  };
-
   const handleReset = () => {
     setRooms(prevRooms => prevRooms.map(currentRoom => {
       return {
@@ -82,7 +84,7 @@ const DataManager: React.FC<DataManagerProps> = ({
         checkIn: '',
         checkOut: '',
         vehicleDesc: '',
-        key: '', // Added the key field here
+        key: '',
         type: ''
       };
     }));
@@ -110,9 +112,13 @@ const DataManager: React.FC<DataManagerProps> = ({
             handleSave={handleSave} 
             handlePrint={() => {}} // PrintHandler handles this
             handleReset={handleReset}
+          />
+          <DataTransfer
             roomsData={rooms}
             footerValues={footerValues}
-            handleDataImport={handleDataImport} 
+            importData={importData}
+            month={month}
+            day={day}
           />
         </div>
       </div>
