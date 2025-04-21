@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { RoomData, FooterValues } from '@/types';
 
@@ -125,6 +126,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         background-color: #6c5fc7 !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
+        color: #FFFFFF !important;
       }
       .purple-text {
         color: #FFFFFF !important;
@@ -133,11 +135,13 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         background-color: #fcd34d !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
+        color: #000000 !important;
       }
       .blue, .bg-motel-blue {
         background-color: #3b82f6 !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
+        color: #FFFFFF !important;
       }
       .blue-text {
         color: #FFFFFF !important;
@@ -146,6 +150,7 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         background-color: #4c9eeb !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
+        color: #FFFFFF !important;
       }
       .footer-section {
         display: grid;
@@ -231,12 +236,6 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
       .header-cell {
         color: #FFFFFF !important;
       }
-      td.bg-motel-purple, td.bg-motel-blue, td.bg-motel-yellow {
-        color: #FFFFFF !important;
-      }
-      td:not(.colored-cell) {
-        color: #000000 !important;
-      }
       .key-legend {
         display: flex;
         flex-direction: column;
@@ -247,6 +246,20 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         align-items: center;
         margin-bottom: 3px;
         font-size: 11px;
+      }
+      /* Fix for colored cells - override the default color */
+      td.purple, td.blue, td.bg-motel-purple, td.bg-motel-blue {
+        color: #FFFFFF !important;
+      }
+      td.purple *, td.blue *, td.bg-motel-purple *, td.bg-motel-blue * {
+        color: #FFFFFF !important;
+      }
+      td.yellow, td.bg-motel-yellow {
+        color: #000000 !important;
+      }
+      /* Fix for text color inheritance in cells */
+      .purple span, .blue span, .bg-motel-purple span, .bg-motel-blue span {
+        color: #FFFFFF !important;
       }
     `);
     printWindow.document.write('</style></head><body>');
@@ -291,21 +304,27 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
     
     rooms.forEach(room => {
       let rowClass = '';
-      let coloredCellClass = '';
+      let textColor = '#000000';
       const roomNum = Number(room.roomNumber);
       
+      // Determine row class and text color based on room properties
       if (room.backgroundColor) {
-        rowClass = ''; 
-        coloredCellClass = 'colored-cell';
+        if (room.backgroundColor === '#6c5fc7' || room.backgroundColor === '#3b82f6') {
+          rowClass = room.backgroundColor === '#6c5fc7' ? 'purple' : 'blue';
+          textColor = '#FFFFFF';
+        } else if (room.backgroundColor === '#fcd34d') {
+          rowClass = 'yellow';
+          textColor = '#000000';
+        }
       } else if (room.type === 'W') {
         rowClass = 'blue';
-        coloredCellClass = 'blue-text';
+        textColor = '#FFFFFF';
       } else if (room.type === 'M') {
         rowClass = 'purple';
-        coloredCellClass = 'purple-text';
+        textColor = '#FFFFFF';
       } else if (Number(room.roomNumber) === 16 || Number(room.roomNumber) === 27) {
         rowClass = 'yellow';
-        coloredCellClass = ''; // Yellow has black text
+        textColor = '#000000';
       }
       
       const getLocation = () => {
@@ -331,41 +350,32 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
         return '';
       };
       
-      const roomNumberCellClass = rowClass ? `${rowClass} ${coloredCellClass}` : '';
-      const locationCellClass = rowClass ? `${rowClass} ${coloredCellClass}` : '';
-      const roomTypeCellClass = rowClass ? `${rowClass} ${coloredCellClass}` : '';
-      const typeCellClass = rowClass ? `${rowClass} ${coloredCellClass}` : '';
-
-      const roomNumberCellStyle = room.backgroundColor ? `background-color: ${room.backgroundColor};` : '';
-      const locationCellStyle = room.backgroundColor ? `background-color: ${room.backgroundColor};` : '';
-      const roomTypeCellStyle = room.backgroundColor ? `background-color: ${room.backgroundColor};` : '';
-      const typeCellStyle = room.backgroundColor ? `background-color: ${room.backgroundColor};` : '';
-
-      const coloredTextStyle = room.backgroundColor ? 'color: #FFFFFF !important;' : '';
-
+      // Apply text color style directly to each colored cell
+      const colorStyle = textColor === '#FFFFFF' ? `color: ${textColor} !important;` : '';
+      
       tableHtml += `
         <tr>
-          <td class="${roomNumberCellClass}" style="text-align: center; ${roomNumberCellStyle} ${roomNumberCellClass ? coloredTextStyle : ''}">
-            ${room.roomNumber}
+          <td class="${rowClass}" style="text-align: center; ${colorStyle}">
+            <span style="${colorStyle}">${room.roomNumber}</span>
           </td>
-          <td class="${locationCellClass}" style="text-align: center; ${locationCellStyle} ${locationCellClass ? coloredTextStyle : ''}">
-            ${room.location || getLocation()}
+          <td class="${rowClass}" style="text-align: center; ${colorStyle}">
+            <span style="${colorStyle}">${room.location || getLocation()}</span>
           </td>
-          <td class="${roomTypeCellClass}" style="text-align: center; ${roomTypeCellStyle} ${roomTypeCellClass ? coloredTextStyle : ''}">
-            ${room.roomType || getRoomType()}
+          <td class="${rowClass}" style="text-align: center; ${colorStyle}">
+            <span style="${colorStyle}">${room.roomType || getRoomType()}</span>
           </td>
-          <td class="${typeCellClass}" style="text-align: center; ${typeCellStyle} ${typeCellClass ? coloredTextStyle : ''}">
-            ${room.type}
+          <td class="${rowClass}" style="text-align: center; ${colorStyle}">
+            <span style="${colorStyle}">${room.type}</span>
           </td>
-          <td style="color: #000000 !important;">${room.name}</td>
-          <td style="text-align: center; color: #000000 !important;">${room.pmt}</td>
-          <td style="text-align: center; color: #000000 !important;">${room.cacc || ''}</td>
-          <td style="text-align: center; color: #000000 !important;">${room.rate}</td>
-          <td style="text-align: center; color: #000000 !important;">${room.total}</td>
-          <td style="text-align: center; color: #000000 !important;">${room.checkIn}</td>
-          <td style="text-align: center; color: #000000 !important;">${room.checkOut}</td>
-          <td style="text-align: center; color: #000000 !important;">${room.key || ''}</td>
-          <td style="color: #000000 !important;">${room.vehicleDesc}</td>
+          <td>${room.name}</td>
+          <td style="text-align: center;">${room.pmt}</td>
+          <td style="text-align: center;">${room.cacc || ''}</td>
+          <td style="text-align: center;">${room.rate}</td>
+          <td style="text-align: center;">${room.total}</td>
+          <td style="text-align: center;">${room.checkIn}</td>
+          <td style="text-align: center;">${room.checkOut}</td>
+          <td style="text-align: center;">${room.key || ''}</td>
+          <td>${room.vehicleDesc}</td>
         </tr>
       `;
     });
@@ -460,3 +470,4 @@ const PrintHandler: React.FC<PrintHandlerProps> = ({
 };
 
 export default PrintHandler;
+
