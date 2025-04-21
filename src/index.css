@@ -146,23 +146,17 @@ input {
   color: #000000 !important;
 }
 
-/* Make sure total column inputs match their row's color and are always editable */
+/* Make sure total column inputs match their row's color */
 tr.bg-motel-purple .total-column input,
 tr.bg-motel-blue .total-column input,
 tr.purple .total-column input,
 tr.blue .total-column input {
   color: #FFFFFF !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-  user-select: text !important;
 }
 
 tr.bg-motel-yellow .total-column input,
 tr.yellow .total-column input {
   color: #000000 !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-  user-select: text !important;
 }
 
 /* Special handling for row 2 */
@@ -182,38 +176,11 @@ tr:nth-child(2) td.total-column input {
   opacity: 1 !important;
   visibility: visible !important;
   color: #000000 !important;
-  pointer-events: auto !important;
 }
 
 /* Additional utility class for responsive rows */
 .total-column {
   position: relative;
-}
-
-/* Ensure all colored inputs in any column remain editable */
-tr.bg-motel-purple input,
-tr.bg-motel-blue input,
-tr.purple input,
-tr.blue input,
-tr.bg-motel-yellow input,
-tr.yellow input {
-  pointer-events: auto !important;
-  opacity: 1 !important;
-}
-
-/* Ensure type M rows always have editable inputs */
-tr[data-room-type="M"] .total-column input,
-tr[data-room-type="M"] input {
-  pointer-events: auto !important;
-  opacity: 1 !important;
-  user-select: text !important;
-}
-
-/* Additional override for readOnly styling on colored rows */
-.total-column input[readonly="false"] {
-  pointer-events: auto !important;
-  opacity: 1 !important;
-  user-select: text !important;
 }
 
 @media print {

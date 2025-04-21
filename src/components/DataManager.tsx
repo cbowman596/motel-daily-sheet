@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { toast } from 'sonner';
 import { RoomData, FooterValues } from '@/types';
 import { initialRooms, initialFooterValues } from '@/data/initialData';
@@ -8,9 +8,9 @@ import PrintHandler from '@/components/PrintHandler';
 
 interface DataManagerProps {
   rooms: RoomData[];
-  setRooms: (rooms: RoomData[]) => void;
+  setRooms: React.Dispatch<React.SetStateAction<RoomData[]>>;
   footerValues: FooterValues;
-  setFooterValues: (footerValues: FooterValues) => void;
+  setFooterValues: React.Dispatch<React.SetStateAction<FooterValues>>;
   roomTotals: {
     nightly: number;
     weekly: number;
@@ -34,13 +34,12 @@ const DataManager: React.FC<DataManagerProps> = ({
   selectedRoomIds,
   setSelectedRoomIds
 }) => {
-  const [saveStatus, setSaveStatus] = useState('');
-  const [isSaving, setIsSaving] = useState(false);
+  const [saveStatus, setSaveStatus] = React.useState('');
 
   const applyColorToRooms = (roomIds: number[], bgColor: string, textColor: string) => {
     setRooms(rooms.map(room => 
       roomIds.includes(room.id) 
-        ? { ...room, backgroundColor: bgColor, textColor: textColor } 
+        ? { ...room, backgroundColor: bgColor, textColor: '#000000' } 
         : room
     ));
     setSelectedRoomIds([]);
@@ -55,40 +54,9 @@ const DataManager: React.FC<DataManagerProps> = ({
     setSelectedRoomIds([]);
   };
 
-  const handleSave = async () => {
-    setIsSaving(true);
-    try {
-      // Create a deep copy and ensure all fields are included
-      const roomsToSave = rooms.map(room => ({
-        ...JSON.parse(JSON.stringify(room)),
-        // Explicitly include empty strings for fields that might be null/undefined
-        name: room.name ?? '',
-        location: room.location ?? '',
-        roomType: room.roomType ?? '',
-        pmt: room.pmt ?? '',
-        cacc: room.cacc ?? '',
-        rate: room.rate ?? '',
-        total: room.total ?? '',
-        checkIn: room.checkIn ?? '',
-        checkOut: room.checkOut ?? '',
-        vehicleDesc: room.vehicleDesc ?? '',
-        key: room.key ?? '',
-        type: room.type ?? '',
-      }));
-      
-      // Firebase storage hook will handle the saving
-      await setRooms(roomsToSave);
-      await setFooterValues({...footerValues});
-      
-      setSaveStatus('Saved!');
-      setTimeout(() => setSaveStatus(''), 2000);
-      toast.success('Data saved to cloud storage');
-    } catch (error) {
-      console.error('Error saving data:', error);
-      toast.error('Failed to save data');
-    } finally {
-      setIsSaving(false);
-    }
+  const handleSave = () => {
+    setSaveStatus('Saved!');
+    setTimeout(() => setSaveStatus(''), 2000);
   };
   
   const handleDataImport = (importedRooms: RoomData[], importedFooterValues: FooterValues) => {
@@ -98,8 +66,7 @@ const DataManager: React.FC<DataManagerProps> = ({
   };
 
   const handleReset = () => {
-    // Create the new rooms array directly instead of using a function parameter
-    const resetRooms = rooms.map(currentRoom => {
+    setRooms(prevRooms => prevRooms.map(currentRoom => {
       return {
         id: currentRoom.id,
         roomNumber: currentRoom.roomNumber,
@@ -115,15 +82,11 @@ const DataManager: React.FC<DataManagerProps> = ({
         checkIn: '',
         checkOut: '',
         vehicleDesc: '',
-        key: '',
+        key: '', // Added the key field here
         type: ''
       };
-    });
+    }));
     
-    // Set the rooms with the new array directly
-    setRooms(resetRooms);
-    
-    // Set footer values directly
     setFooterValues({...initialFooterValues});
     
     toast.success('Sheet has been reset');
@@ -149,8 +112,7 @@ const DataManager: React.FC<DataManagerProps> = ({
             handleReset={handleReset}
             roomsData={rooms}
             footerValues={footerValues}
-            handleDataImport={handleDataImport}
-            isSaving={isSaving}
+            handleDataImport={handleDataImport} 
           />
         </div>
       </div>

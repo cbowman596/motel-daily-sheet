@@ -1,13 +1,16 @@
 
-import { initializeFirebaseData } from '@/services/firebase';
+import { saveDataToFirebase, loadDataFromFirebase } from '@/services/firebase';
 import { initialRooms, initialFooterValues } from '@/data/initialData';
 import { toast } from 'sonner';
 
 export async function populateInitialData(sheetId: string = 'default'): Promise<boolean> {
   try {
-    const result = await initializeFirebaseData(initialRooms, initialFooterValues, sheetId);
+    // Check if data already exists in Firebase
+    const existingData = await loadDataFromFirebase(sheetId);
     
-    if (result) {
+    // If no data exists or we want to overwrite it
+    if (!existingData) {
+      await saveDataToFirebase(initialRooms, initialFooterValues, sheetId);
       console.log('Initial data successfully populated in Firebase');
       return true;
     }
@@ -15,7 +18,6 @@ export async function populateInitialData(sheetId: string = 'default'): Promise<
     return false;
   } catch (error) {
     console.error('Error populating initial data:', error);
-    toast.error('Failed to initialize data');
     return false;
   }
 }

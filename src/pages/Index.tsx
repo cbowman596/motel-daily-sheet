@@ -1,10 +1,9 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import MotelHeader from '@/components/MotelHeader';
 import MotelFooter from '@/components/MotelFooter';
 import RoomManager from '@/components/RoomManager';
 import DataManager from '@/components/DataManager';
-import { useFirebaseStorage } from '@/hooks/useFirebaseStorage';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { initialRooms, initialFooterValues } from '@/data/initialData';
 import { RoomData, FooterValues } from '@/types';
 import { decodeDataFromUrl } from '@/utils/urlUtils';
@@ -16,9 +15,9 @@ const Index = () => {
   const [month, setMonth] = useState(today.toLocaleString('default', { month: 'long' }));
   const [day, setDay] = useState(today.getDate());
   
-  // Room and footer data state with Firebase storage
-  const [rooms, setRooms, isLoadingRooms] = useFirebaseStorage<RoomData[]>('motelRooms', initialRooms);
-  const [footerValues, setFooterValues, isLoadingFooter] = useFirebaseStorage<FooterValues>('motelFooterValues', initialFooterValues);
+  // Room and footer data state with local storage
+  const [rooms, setRooms] = useLocalStorage<RoomData[]>('motelRooms', initialRooms);
+  const [footerValues, setFooterValues] = useLocalStorage<FooterValues>('motelFooterValues', initialFooterValues);
   const [selectedRoomIds, setSelectedRoomIds] = useState<number[]>([]);
   const [roomTotals, setRoomTotals] = useState({ nightly: 0, weekly: 0, monthly: 0, airbnb: 0 });
   const [isLoading, setIsLoading] = useState(true);
@@ -28,11 +27,11 @@ const Index = () => {
 
   // Set loading state
   useEffect(() => {
-    // Wait until Firebase data is loaded
-    if (!isLoadingRooms && !isLoadingFooter) {
+    // Simulate loading for a brief moment to maintain UX consistency
+    setTimeout(() => {
       setIsLoading(false);
-    }
-  }, [isLoadingRooms, isLoadingFooter]);
+    }, 500);
+  }, []);
 
   // Check for URL parameters on mount and handle shared data once
   useEffect(() => {
@@ -42,6 +41,9 @@ const Index = () => {
         const encodedData = urlParams.get('data');
         
         if (!encodedData) return;
+        
+        // Clear local storage when loading shared URL data
+        localStorage.clear();
         
         // Decode and apply the data
         const decodedData = decodeDataFromUrl(encodedData);

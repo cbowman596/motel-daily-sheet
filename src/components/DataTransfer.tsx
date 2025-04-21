@@ -7,41 +7,6 @@ import { encodeDataToUrl } from '@/utils/urlUtils';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Input } from '@/components/ui/input';
 
-// Helper to escape CSV values
-function csvEscape(val: string | number | undefined) {
-  if (val === undefined || val === null) return '';
-  const str = String(val);
-  if (str.includes('"') || str.includes(',') || str.includes('\n')) {
-    return `"${str.replace(/"/g, '""')}"`;
-  }
-  return str;
-}
-
-// Export all rooms and footer values as CSV
-function convertDataToCSV(rooms: RoomData[], footer: FooterValues) {
-  // Gather headers
-  const headers = [
-    'id', 'roomNumber', 'location', 'roomType', 'type',
-    'name', 'pmt', 'cacc', 'rate', 'total',
-    'checkIn', 'checkOut', 'vehicleDesc', 'key',
-    'backgroundColor', 'textColor'
-  ];
-
-  const csvRows = [
-    headers.join(','),
-    ...rooms.map(room => headers.map(field => csvEscape((room as any)[field])).join(','))
-  ];
-
-  // Footer values as a final row with column names in first col and value in the second
-  csvRows.push('');
-  csvRows.push('Footer Values');
-  Object.entries(footer).forEach(([key, value]) => {
-    csvRows.push(`${csvEscape(key)},${csvEscape(value)}`);
-  });
-
-  return csvRows.join('\r\n');
-}
-
 interface DataTransferProps {
   roomsData: RoomData[];
   footerValues: FooterValues;
@@ -76,34 +41,16 @@ const DataTransfer: React.FC<DataTransferProps> = ({ roomsData, footerValues, im
       toast.error('Error exporting data. Please try again.');
     }
   };
-
-  // New handler for CSV export
-  const handleExportCsv = () => {
-    try {
-      const csv = convertDataToCSV(roomsData, footerValues);
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = URL.createObjectURL(blob);
-
-      const filename = `motel_data_${new Date().toLocaleDateString().replace(/\//g, '-')}.csv`;
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = filename;
-      link.click();
-
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
-      toast.success('CSV file exported for Google Sheets');
-    } catch (error) {
-      toast.error('Failed to export CSV');
-      console.error('CSV export error:', error);
-    }
-  };
   
   const generateShareableUrl = () => {
     try {
       const encodedData = encodeDataToUrl(roomsData, footerValues);
       const url = new URL(window.location.href);
+      
+      // Clear existing search params and set the new data
       url.search = '';
       url.searchParams.set('data', encodedData);
+      
       setShareUrl(url.toString());
       return url.toString();
     } catch (error) {
@@ -141,9 +88,13 @@ const DataTransfer: React.FC<DataTransferProps> = ({ roomsData, footerValues, im
       try {
         const content = e.target?.result as string;
         const parsedData = JSON.parse(content);
+        
+        // Validate imported data structure
         if (!parsedData.rooms || !parsedData.footerValues) {
           throw new Error('Invalid data format');
         }
+        
+        // Ensure footerValues has all required properties
         const importedFooterValues: FooterValues = {
           showers: parsedData.footerValues.showers || '',
           bhd: parsedData.footerValues.bhd || '',
@@ -155,8 +106,12 @@ const DataTransfer: React.FC<DataTransferProps> = ({ roomsData, footerValues, im
           card: parsedData.footerValues.card || '',
           gt: parsedData.footerValues.gt || ''
         };
+        
+        // Import the data
         importData(parsedData.rooms, importedFooterValues);
         toast.success('Data imported successfully');
+        
+        // Reset file input
         if (fileInputRef.current) {
           fileInputRef.current.value = '';
         }
@@ -165,6 +120,7 @@ const DataTransfer: React.FC<DataTransferProps> = ({ roomsData, footerValues, im
         console.error('Import error:', error);
       }
     };
+    
     reader.readAsText(file);
   };
   
@@ -177,15 +133,6 @@ const DataTransfer: React.FC<DataTransferProps> = ({ roomsData, footerValues, im
         className="bg-purple-100 hover:bg-purple-200 text-purple-900 border-purple-300"
       >
         Export Data
-      </Button>
-      {/* NEW CSV EXPORT BUTTON */}
-      <Button
-        onClick={handleExportCsv}
-        variant="outline"
-        size="sm"
-        className="bg-yellow-100 hover:bg-yellow-200 text-yellow-900 border-yellow-300"
-      >
-        Export as CSV
       </Button>
       <Button 
         onClick={handleImportClick}
@@ -243,4 +190,3 @@ const DataTransfer: React.FC<DataTransferProps> = ({ roomsData, footerValues, im
 };
 
 export default DataTransfer;
-
